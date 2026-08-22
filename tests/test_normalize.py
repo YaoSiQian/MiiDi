@@ -73,3 +73,31 @@ def test_empty_tracks_returns_none():
 def test_unknown_duration_is_error_not_default():
     res = normalize_raw({"tracks": [{"notes": [{"pitch": 60, "duration": "?"}]}]})
     assert res.errors
+
+
+def test_non_finite_durations_reported_not_raised():
+    for bad in (float("inf"), float("-inf"), float("nan"), "inf", "Infinity", "-inf"):
+        res = normalize_raw({"tracks": [{"notes": [{"pitch": 60, "duration": bad}]}]})
+        assert res.errors, f"no error reported for duration={bad!r}"
+
+
+def test_inf_among_valid_notes_partial_success():
+    res = normalize_raw({"tracks": [{"notes": [
+        {"pitch": 60, "duration": float("inf")},
+        {"pitch": 60, "duration": "inf"},
+        {"pitch": 62, "duration": "4"},
+    ]}]})
+    assert any("note[0]" in e for e in res.errors)
+    assert any("note[1]" in e for e in res.errors)
+    assert res.composition is not None
+    assert [n[2] for n in res.composition.tracks[0].notes] == [62]
+
+
+def test_non_finite_onset_reported_not_raised():
+    res = normalize_raw({"tracks": [{"notes": [
+        {"pitch": 60, "duration": "4", "onset": float("inf")},
+        {"pitch": 62, "duration": "4"},
+    ]}]})
+    assert any("note[0]" in e for e in res.errors)
+    assert res.composition is not None
+    assert [n[2] for n in res.composition.tracks[0].notes] == [62]

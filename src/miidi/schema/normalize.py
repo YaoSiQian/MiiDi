@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass, field
 
 from pydantic import ValidationError
@@ -61,6 +62,8 @@ def _parse_duration(value: object) -> int | None:
     if isinstance(value, bool):
         return None
     if isinstance(value, (int, float)):
+        if isinstance(value, float) and not math.isfinite(value):
+            return None
         if value > 0:
             return max(1, round(value * PPQ))
         return None
@@ -72,7 +75,7 @@ def _parse_duration(value: object) -> int | None:
             beats = float(s)
         except ValueError:
             return None
-        if beats > 0:
+        if math.isfinite(beats) and beats > 0:
             return max(1, round(beats * PPQ))
     return None
 
@@ -102,7 +105,7 @@ def _coerce_note(raw: object, cursor: int) -> tuple[int, int, int, int] | None:
         o = _as_int(raw.get("onset"))
         if o is None or o < 0:
             o2 = raw.get("onset")
-            if isinstance(o2, (int, float)) and o2 >= 0:
+            if isinstance(o2, (int, float)) and math.isfinite(o2) and o2 >= 0:
                 onset = int(o2)
             else:
                 return None
