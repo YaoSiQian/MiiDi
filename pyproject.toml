@@ -1,0 +1,22 @@
+[project]
+name = "miidi"
+version = "0.1.0"
+description = "LLM symbolic music generation with dual-track evaluation"
+requires-python = ">=3.11"
+dependencies = ["pydantic>=2.7", "midiutil>=1.2"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "mido>=1.3"]
+web = ["fastapi>=0.111", "uvicorn>=0.30"]
+judge = ["httpx>=0.27"]
+evaltools = ["numpy", "scipy", "pandas", "PyYAML"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

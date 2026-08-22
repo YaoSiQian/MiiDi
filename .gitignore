@@ -1,0 +1,10 @@
+__pycache__/
+*.egg-info/
+.env
+.venv/
+dist/
+evals/results/runs/
+node_modules/
+webapp/frontend/dist/
+output/
+sessions/
