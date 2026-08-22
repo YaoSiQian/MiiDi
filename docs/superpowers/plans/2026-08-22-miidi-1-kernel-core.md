@@ -924,7 +924,11 @@ class Violation:
 
 def validate_composition(comp: Composition) -> list[Violation]:
     out: list[Violation] = []
-    limit = comp.piece_end_tick()
+    if comp.structure:
+        bar = comp.bar_ticks
+        limit = int(max(s.start_bar + s.bars for s in comp.structure) * bar)
+    else:
+        limit = comp.piece_end_tick()
     for track in comp.tracks:
         prefix = track.name
         if track.is_drum != (track.role == "drums"):
