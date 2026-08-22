@@ -145,7 +145,7 @@ from miidi.schema.chords import ChordParseError, chord_root_degree, parse_chord
         ("Asus2", 9, frozenset({9, 11, 4})),
         ("Cadd9", 0, frozenset({0, 2, 4, 7})),
         ("C6", 0, frozenset({0, 4, 7, 9})),
-        ("Am6", 9, frozenset({9, 0, 4, 7})),
+        ("Am6", 9, frozenset({9, 0, 4, 6})),
         ("F#m", 6, frozenset({6, 9, 1})),
         ("Bb", 10, frozenset({10, 2, 5})),
         ("Eb7", 3, frozenset({3, 7, 10, 1})),
