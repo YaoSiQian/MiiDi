@@ -8,3 +8,4 @@ node_modules/
 webapp/frontend/dist/
 output/
 sessions/
+.pytest_cache/

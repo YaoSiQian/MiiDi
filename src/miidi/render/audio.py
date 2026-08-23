@@ -19,10 +19,13 @@ def midi_to_wav(midi_path: Path, wav_path: Path | None = None,
     if not sf or not Path(sf).is_file():
         raise AudioUnavailableError(f"soundfont not found: {sf!r}")
     wav_path = wav_path or midi_path.with_suffix(".wav")
-    result = subprocess.run(
-        [binary, "-ni", "-g", "1.0", "-F", str(wav_path), str(sf), str(midi_path)],
-        capture_output=True, timeout=120,
-    )
+    try:
+        result = subprocess.run(
+            [binary, "-ni", "-g", "1.0", "-F", str(wav_path), str(sf), str(midi_path)],
+            capture_output=True, timeout=120,
+        )
+    except subprocess.TimeoutExpired:
+        raise AudioUnavailableError("fluidsynth timed out")
     if result.returncode != 0 or not wav_path.exists():
         raise AudioUnavailableError(f"fluidsynth failed: {result.stderr.decode()[:400]}")
     return wav_path
