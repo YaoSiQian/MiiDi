@@ -245,3 +245,141 @@ def axis_rhythm(ctx: EvaluationContext) -> AxisResult:
         "drum_pattern_fit": drum_fit,
         "swing_consistency": swing_consistency,
     })
+
+
+import math as _math
+import re as _re
+
+
+def _family(name: str) -> str:
+    return _re.sub(r"\d+$", "", name.strip().lower()) or name.strip().lower()
+
+
+def _section_vectors(ctx: EvaluationContext) -> list[dict]:
+    vectors = []
+    for si, (name, start, end) in enumerate(ctx.sections):
+        notes = [n for n in ctx.flat_notes() if start <= n.onset < end]
+        hist = [0.0] * 12
+        for n in notes:
+            hist[n.pitch % 12] += n.dur
+        total = sum(hist) or 1.0
+        hist = [h / total for h in hist]
+        bars = max(1e-9, (end - start) / ctx.bar_ticks)
+        density = len(notes) / bars
+        vel = _mean([float(n.velocity) for n in notes]) or 0.0
+        vectors.append({"name": name, "hist": hist, "density": density, "vel": vel})
+    return vectors
+
+
+def _cosine(a: list[float], b: list[float]) -> float:
+    dot = sum(x * y for x, y in zip(a, b))
+    na = _math.sqrt(sum(x * x for x in a))
+    nb = _math.sqrt(sum(y * y for y in b))
+    if na == 0.0 or nb == 0.0:
+        return 0.0
+    return dot / (na * nb)
+
+
+def axis_structure(ctx: EvaluationContext) -> AxisResult:
+    spans = sorted(ctx.sections, key=lambda s: s[1])
+    covered = 0
+    cursor = 0
+    for _n, s, e in spans:
+        start = max(s, cursor)
+        if e > start:
+            covered += e - start
+        cursor = max(cursor, e)
+    coverage = covered / max(ctx.piece_end, 1)
+    coverage_component = 1.0 - min(max(1.0 - coverage, 0.0) * 4, 1.0)
+
+    vecs = _section_vectors(ctx)
+    sims: dict[tuple[str, str], float] = {}
+    for i in range(len(vecs)):
+        for j in range(i + 1, len(vecs)):
+            fa, fb = _family(vecs[i]["name"]), _family(vecs[j]["name"])
+            va = vecs[i]["hist"] + [vecs[i]["density"] / 16.0, vecs[i]["vel"] / 128.0]
+            vb = vecs[j]["hist"] + [vecs[j]["density"] / 16.0, vecs[j]["vel"] / 128.0]
+            sims[(fa, fb)] = _cosine(va, vb)
+    repeat_vals = [s for (fa, fb), s in sims.items() if fa == fb]
+    contrast_vals = [s for (fa, fb), s in sims.items() if fa != fb]
+    repeat_sim = _mean(repeat_vals) if repeat_vals else None
+    contrast_sim = _mean(contrast_vals) if contrast_vals else None
+    repeat_component = band(repeat_sim, 0.55, 0.70, 1.01, 1.01, floor=0.2) \
+        if repeat_sim is not None else 0.8
+    contrast_component = (1.0 - band(contrast_sim, 0.90, 0.95, 1.01, 1.01, floor=0.0)) \
+        if contrast_sim is not None else 0.8
+
+    densities = [v["density"] for v in vecs]
+    shape = band(_std(densities), 0.3, 0.8, 8.0, 12.0, floor=0.2) \
+        if len(densities) >= 2 else 0.8
+
+    melody = ctx.track_of_role("melody")
+    recall = 0.8
+    if melody and len(ctx.sections) >= 2 and len(melody.notes) >= 4:
+        first = [n for n in sorted(melody.notes, key=lambda n: n[0])
+                 if ctx.section_of_tick(n[0]) == 0]
+        rest = [n for n in sorted(melody.notes, key=lambda n: n[0])
+                if ctx.section_of_tick(n[0]) > 0]
+        if len(first) >= 4 and rest:
+            target = _contour(first[:8])
+            found = any(_has_contour(rest[i:i + 8], target)
+                        for i in range(max(len(rest) - 7, 0))) if len(target) >= 2 else False
+            recall = 1.0 if found else 0.3
+
+    score = (0.25 * coverage_component + 0.25 * repeat_component
+             + 0.25 * contrast_component + 0.15 * shape + 0.10 * recall)
+    return AxisResult(score=max(0.0, min(1.0, score)), details={
+        "coverage": coverage_component,
+        "repeat_family_sim": repeat_sim if repeat_sim is not None else -1.0,
+        "contrast_family_sim": contrast_sim if contrast_sim is not None else -1.0,
+        "contour_shape": shape,
+        "motif_recall": recall,
+    })
+
+
+def _std(xs: list[float]) -> float:
+    m = _mean(xs)
+    if m is None:
+        return 0.0
+    return _math.sqrt(sum((x - m) ** 2 for x in xs) / len(xs))
+
+
+def _contour(notes) -> list[int]:
+    seq = sorted(notes, key=lambda n: n[0])
+    out: list[int] = []
+    for a, b in zip(seq, seq[1:]):
+        d = b[2] - a[2]
+        out.append((d > 0) - (d < 0))
+    while out and out[0] == 0:
+        out.pop(0)
+    return out
+
+
+def _has_contour(notes, target: list[int]) -> bool:
+    return bool(target) and _contour(notes) == target
+
+
+_CHORUS = {"chorus", "refrain", "hook"}
+_VERSE = {"verse", "couplet"}
+
+
+def axis_dynamics(ctx: EvaluationContext) -> AxisResult:
+    vels = [float(n.velocity) for n in ctx.flat_notes()]
+    sigma = _std(vels)
+    spread_component = band(sigma, 4, 8, 45, 60, floor=0.1)
+
+    chorus_vels = [v["vel"] for v in _section_vectors(ctx)
+                   if _family(v["name"]) in _CHORUS]
+    verse_vels = [v["vel"] for v in _section_vectors(ctx)
+                  if _family(v["name"]) in _VERSE]
+    if chorus_vels and verse_vels:
+        diff = _mean(chorus_vels) - _mean(verse_vels)
+        gradient = band(diff, -5.0, 0.0, 60.0, 61.0, floor=0.2)
+    else:
+        gradient = 0.8
+
+    score = 0.6 * spread_component + 0.4 * gradient
+    return AxisResult(score=max(0.0, min(1.0, score)), details={
+        "velocity_spread": spread_component,
+        "gradient_ok": gradient,
+    })
