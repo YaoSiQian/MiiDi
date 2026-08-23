@@ -1,6 +1,6 @@
 import pytest
 
-from miidi.eval.axes import axis_dynamics, axis_structure
+from miidi.eval.axes import _cosine, _section_vectors, axis_dynamics, axis_structure
 from miidi.eval.context import EvaluationContext, StyleDefaults
 from miidi.schema.model import Composition
 
@@ -95,3 +95,33 @@ def test_smooth_contour_directionality_high():
     comp = bar_factory([[v] * 8 for v in [70, 75, 80, 85, 90, 95]])
     res = axis_dynamics(ctx_of(comp))
     assert res.details["directionality"] == pytest.approx(1.0)
+
+
+def three_section_comp(pitch_sets, vels):
+    notes = []
+    for b, (pitches, vel) in enumerate(zip(pitch_sets, vels)):
+        notes += [((b * 8 + i) * 240, 240, p, vel)
+                  for i, p in enumerate(pitches)]
+    return Composition(
+        meta={},
+        structure=[{"name": n, "start_bar": b, "bars": 1}
+                   for b, n in enumerate(["verse", "chorus", "chorus1"])],
+        tracks=[{"name": "M", "role": "melody", "program": 73, "notes": notes}],
+    )
+
+
+def test_family_pair_sims_averaged_not_overwritten():
+    comp = three_section_comp([[72] * 8, [76] * 8, [67] * 8], [96, 112, 104])
+    ctx = ctx_of(comp)
+    vecs = _section_vectors(ctx)
+
+    def pair_sim(a, b):
+        va = a["hist"] + [a["density"] / 16.0, a["vel"] / 128.0]
+        vb = b["hist"] + [b["density"] / 16.0, b["vel"] / 128.0]
+        return _cosine(va, vb)
+
+    s_vc = pair_sim(vecs[0], vecs[1])
+    s_vc1 = pair_sim(vecs[0], vecs[2])
+    assert s_vc != pytest.approx(s_vc1)
+    res = axis_structure(ctx)
+    assert res.details["contrast_family_sim"] == pytest.approx((s_vc + s_vc1) / 2)

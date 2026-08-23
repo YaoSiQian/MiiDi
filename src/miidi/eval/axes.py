@@ -293,15 +293,16 @@ def axis_structure(ctx: EvaluationContext) -> AxisResult:
     coverage_component = 1.0 - min(max(1.0 - coverage, 0.0) * 4, 1.0)
 
     vecs = _section_vectors(ctx)
-    sims: dict[tuple[str, str], float] = {}
+    sims: dict[tuple[str, str], list[float]] = {}
     for i in range(len(vecs)):
         for j in range(i + 1, len(vecs)):
             fa, fb = _family(vecs[i]["name"]), _family(vecs[j]["name"])
             va = vecs[i]["hist"] + [vecs[i]["density"] / 16.0, vecs[i]["vel"] / 128.0]
             vb = vecs[j]["hist"] + [vecs[j]["density"] / 16.0, vecs[j]["vel"] / 128.0]
-            sims[(fa, fb)] = _cosine(va, vb)
-    repeat_vals = [s for (fa, fb), s in sims.items() if fa == fb]
-    contrast_vals = [s for (fa, fb), s in sims.items() if fa != fb]
+            key = (fa, fb) if fa <= fb else (fb, fa)
+            sims.setdefault(key, []).append(_cosine(va, vb))
+    repeat_vals = [v for (fa, fb), vs in sims.items() if fa == fb for v in vs]
+    contrast_vals = [v for (fa, fb), vs in sims.items() if fa != fb for v in vs]
     repeat_sim = _mean(repeat_vals) if repeat_vals else None
     contrast_sim = _mean(contrast_vals) if contrast_vals else None
     repeat_component = band(repeat_sim, 0.55, 0.70, 1.01, 1.01, floor=0.2) \
