@@ -101,3 +101,36 @@ def test_non_finite_onset_reported_not_raised():
     assert any("note[0]" in e for e in res.errors)
     assert res.composition is not None
     assert [n[2] for n in res.composition.tracks[0].notes] == [62]
+
+
+def test_non_finite_structure_bars_reported_not_raised():
+    for bad in (float("inf"), float("-inf"), float("nan"), "inf", "Infinity", "-inf"):
+        res = normalize_raw({
+            "tracks": [{"notes": [[0, 240, 69, 80]]}],
+            "structure": [{"name": "A", "start_bar": 0, "bars": bad}],
+        })
+        assert any("structure[0]" in e for e in res.errors), f"no error for bars={bad!r}"
+        assert res.composition is not None
+        assert res.composition.structure == []
+
+
+def test_inf_structure_among_valid_partial_success():
+    res = normalize_raw({
+        "tracks": [{"notes": [[0, 240, 69, 80]]}],
+        "structure": [{"name": "A", "bars": float("inf")},
+                      {"name": "B", "start_bar": 0, "bars": 4}],
+    })
+    assert any("structure[0]" in e for e in res.errors)
+    assert res.composition is not None
+    assert [s.name for s in res.composition.structure] == ["B"]
+
+
+def test_non_finite_harmony_dur_reported_not_raised():
+    for bad in (float("inf"), float("-inf"), float("nan"), "inf", "Infinity"):
+        res = normalize_raw({
+            "tracks": [{"notes": [[0, 240, 69, 80]]}],
+            "harmony": [{"bar": 0, "dur_bars": bad, "symbol": "C"}],
+        })
+        assert any("harmony[0]" in e for e in res.errors), f"no error for dur={bad!r}"
+        assert res.composition is not None
+        assert res.composition.harmony == []

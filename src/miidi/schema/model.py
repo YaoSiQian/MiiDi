@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Annotated, Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 PPQ = 480
 
@@ -10,6 +10,8 @@ TrackRole = Literal["melody", "harmony", "bass", "counter", "color", "drums"]
 
 OnsetTick = Annotated[int, Field(ge=0)]
 Velocity = Annotated[int, Field(ge=0, le=127)]
+
+_TIME_SIGNATURE_DENOMINATORS = (2, 4, 8, 16)
 
 
 class KeySig(BaseModel):
@@ -23,6 +25,14 @@ class Meta(BaseModel):
     time_signature: tuple[int, int] = (4, 4)
     key: KeySig = KeySig(tonic_pc=0)
     style: str = "pop"
+
+    @field_validator("time_signature")
+    @classmethod
+    def check_time_signature(cls, value: tuple[int, int]) -> tuple[int, int]:
+        num, den = value
+        if num < 1 or den not in _TIME_SIGNATURE_DENOMINATORS:
+            raise ValueError("time_signature needs numerator >= 1 and denominator in (2, 4, 8, 16)")
+        return value
 
 
 class Section(BaseModel):

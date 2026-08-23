@@ -50,3 +50,10 @@ def test_bpm_bounds():
     with pytest.raises(ValidationError):
         base_meta(bpm=10)
     assert base_meta(bpm=300).bpm == 300
+
+
+def test_time_signature_constrained():
+    assert base_meta(time_signature=(6, 8)).time_signature == (6, 8)
+    for bad in ([4, 0], [0, 4], [4, 3], [4, 32], [-2, 4]):
+        with pytest.raises(ValidationError):
+            base_meta(time_signature=bad)

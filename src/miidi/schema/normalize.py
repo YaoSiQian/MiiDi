@@ -190,7 +190,7 @@ def normalize_raw(data: object) -> NormalizeResult:
             except (TypeError, ValueError):
                 errors.append(f"structure[{i}] bars={bars!r}; skipped")
                 continue
-            if bars_f <= 0:
+            if not math.isfinite(bars_f) or bars_f <= 0:
                 errors.append(f"structure[{i}] bars={bars_f}; skipped")
                 continue
             start = _as_int(item.get("start_bar"))
@@ -216,6 +216,8 @@ def normalize_raw(data: object) -> NormalizeResult:
             try:
                 dur_f = float(item.get("dur_bars", 1.0))
             except (TypeError, ValueError):
+                dur_f = None
+            if dur_f is None or not math.isfinite(dur_f):
                 errors.append(f"harmony[{i}] dur_bars invalid; skipped")
                 continue
             if bar is None or bar < 0 or dur_f <= 0 or not isinstance(symbol, str):
