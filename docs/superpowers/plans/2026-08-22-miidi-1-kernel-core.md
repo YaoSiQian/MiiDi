@@ -1872,7 +1872,7 @@ git commit -m "feat: format gate and harmony axis"
 
 **Interfaces:**
 - Produces:
-  - `axis_voice(ctx) -> AxisResult`, details `range_fit, parallel_count, leap_rate, register_gap`; inner weights 0.40/0.25/0.20/0.15; parallels component `1 - min(count,3)/3`; leap component `declining(rate, 0.10, 0.40)`; register gap band `(gap, 8, 14, 48, 60, floor=0.4)`, neutral 0.8 if either role missing
+  - `axis_voice(ctx) -> AxisResult`, details `range_fit, parallel_count, leap_rate, register_gap`; inner weights 0.40/0.25/0.20/0.15; range_fit uses WORST-TRACK (min) aggregation of play/comf fractions per track (execution ruling: mean cannot satisfy the <0.95 test); parallels component `1 - min(count,3)/3`; leap component `declining(rate, 0.10, 0.40)`; register gap band `(gap, 8, 14, 48, 60, floor=0.4)`, neutral 0.8 if either role missing
   - `axis_rhythm(ctx) -> AxisResult`, details `grid_adherence, density_fit, drum_pattern_fit, swing_consistency`; weights 0.30/0.30/0.25/0.15; neutral 1.0 for components without applicable data
   - Grid legality: onset legal iff ∃k∈{1,2,3,4,6,8,12}: (onset·k)%480==0, or onset%480 ∈ defaults.swing_offsets
 
