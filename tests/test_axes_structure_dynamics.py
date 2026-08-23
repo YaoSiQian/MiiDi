@@ -125,3 +125,25 @@ def test_family_pair_sims_averaged_not_overwritten():
     assert s_vc != pytest.approx(s_vc1)
     res = axis_structure(ctx)
     assert res.details["contrast_family_sim"] == pytest.approx((s_vc + s_vc1) / 2)
+
+
+def melody_comp(second_pitches):
+    first = [72, 74, 76, 74, 72, 74, 76, 79]
+    notes = [(i * 240, 240, p, 96) for i, p in enumerate(first)]
+    notes += [(1920 + i * 240, 240, p, 96) for i, p in enumerate(second_pitches)]
+    return Composition(
+        meta={},
+        structure=[{"name": "verse", "start_bar": 0, "bars": 1},
+                   {"name": "verse2", "start_bar": 1, "bars": 1}],
+        tracks=[{"name": "M", "role": "melody", "program": 73, "notes": notes}],
+    )
+
+
+def test_motif_recall_full_when_contour_recurs():
+    res = axis_structure(ctx_of(melody_comp([60, 62, 64, 62, 60, 62, 64, 67])))
+    assert res.details["motif_recall"] == 1.0
+
+
+def test_motif_recall_floor_when_contour_absent():
+    res = axis_structure(ctx_of(melody_comp([72, 74, 76, 78, 80, 82, 84, 86])))
+    assert res.details["motif_recall"] == 0.3

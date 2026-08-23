@@ -1,3 +1,5 @@
+import pytest
+
 from miidi.eval.axes import axis_rhythm, axis_voice
 from miidi.eval.context import EvaluationContext, StyleDefaults
 from miidi.schema.model import Composition
@@ -100,3 +102,35 @@ def test_drum_pattern_match():
                                             "hat": [240, 720, 1200, 1680]})
     res = axis_rhythm(ctx_of(tracks, style="lofi", defaults=defaults))
     assert res.details["drum_pattern_fit"] >= 0.95
+
+
+def test_density_ref_in_band_scores_high():
+    defaults = StyleDefaults(density_ref={"melody": (3.0, 10.0)})
+    res = axis_rhythm(ctx_of(good_tracks(), defaults=defaults))
+    assert res.details["density_fit"] == pytest.approx(1.0)
+
+
+def test_absurd_density_ref_penalized():
+    defaults = StyleDefaults(density_ref={"melody": (40.0, 60.0)})
+    res = axis_rhythm(ctx_of(good_tracks(), defaults=defaults))
+    assert res.details["density_fit"] == pytest.approx(0.3)
+
+
+def _offbeat_track(onsets):
+    return [{
+        "name": "Mel", "role": "melody", "program": 73,
+        "notes": [(o, 220, p, 96)
+                  for o, p in zip(onsets, [72, 74, 76, 77])],
+    }]
+
+
+def test_swing_consistent_offbeats_rewarded():
+    tight = axis_rhythm(ctx_of(_offbeat_track([220, 700, 1180, 1660]), style="jazz"))
+    assert tight.details["swing_consistency"] == pytest.approx(1.0)
+
+
+def test_scattered_offbeats_penalized():
+    tight = axis_rhythm(ctx_of(_offbeat_track([220, 700, 1180, 1660]), style="jazz"))
+    loose = axis_rhythm(ctx_of(_offbeat_track([220, 340, 1180, 1420]), style="jazz"))
+    assert loose.details["swing_consistency"] == pytest.approx(0.2)
+    assert loose.score < tight.score

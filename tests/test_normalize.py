@@ -134,3 +134,29 @@ def test_non_finite_harmony_dur_reported_not_raised():
         assert any("harmony[0]" in e for e in res.errors), f"no error for dur={bad!r}"
         assert res.composition is not None
         assert res.composition.harmony == []
+
+
+def test_structure_start_bar_cursor_fill_repairs():
+    res = normalize_raw({
+        "tracks": [{"notes": [[0, 240, 69, 80]]}],
+        "structure": [
+            {"name": "A", "bars": 4},
+            {"name": "B", "bars": 4},
+            {"name": "C", "bars": 2, "start_bar": 20},
+        ],
+    })
+    assert res.composition is not None
+    starts = [s.start_bar for s in res.composition.structure]
+    assert starts == [0, 4, 20]
+    assert any("structure[0] start_bar filled to 0" in r for r in res.repairs)
+    assert any("structure[1] start_bar filled to 4" in r for r in res.repairs)
+    assert not any("structure[2]" in r for r in res.repairs)
+
+
+def test_harmony_dur_bars_defaults_to_one_bar():
+    res = normalize_raw({
+        "tracks": [{"notes": [[0, 240, 69, 80]]}],
+        "harmony": [{"bar": 0, "symbol": "C"}, {"bar": 1, "dur_bars": 2, "symbol": "G"}],
+    })
+    assert res.composition is not None
+    assert [(h.bar, h.dur_bars) for h in res.composition.harmony] == [(0, 1.0), (1, 2.0)]
