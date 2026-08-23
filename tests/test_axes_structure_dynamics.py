@@ -1,3 +1,5 @@
+import pytest
+
 from miidi.eval.axes import axis_dynamics, axis_structure
 from miidi.eval.context import EvaluationContext, StyleDefaults
 from miidi.schema.model import Composition
@@ -61,3 +63,35 @@ def test_gradient_velocity_scores_higher():
                                      104, 108, 112, 108, 104, 108, 112, 116])))
     assert shaped.score > flat.score
     assert shaped.details["gradient_ok"] == 1.0
+
+
+def bar_factory(bar_vels):
+    notes = []
+    for bi, vels in enumerate(bar_vels):
+        notes += [((bi * 8 + i) * 240, 240, p, vels[i])
+                  for i, p in enumerate([72, 74, 76, 74, 72, 74, 76, 79])]
+    return Composition(meta={}, tracks=[
+        {"name": "M", "role": "melody", "program": 73, "notes": notes}])
+
+
+def test_alternating_jitter_scores_lower_than_shaped_gradient():
+    jitter = axis_dynamics(ctx_of(two_section_comp(
+        ("verse", "chorus"), velocities=[16, 116] * 8)))
+    shaped = axis_dynamics(ctx_of(
+        two_section_comp(("verse", "chorus"),
+                         velocities=[82, 84, 86, 84, 82, 84, 86, 88,
+                                     104, 108, 112, 108, 104, 108, 112, 116])))
+    assert jitter.details["directionality"] == 0.8
+    assert jitter.score < shaped.score
+
+
+def test_random_jitter_directionality_low():
+    comp = bar_factory([[80] * 8, [110] * 8, [80] * 8, [110] * 8])
+    res = axis_dynamics(ctx_of(comp))
+    assert res.details["directionality"] == pytest.approx(0.0)
+
+
+def test_smooth_contour_directionality_high():
+    comp = bar_factory([[v] * 8 for v in [70, 75, 80, 85, 90, 95]])
+    res = axis_dynamics(ctx_of(comp))
+    assert res.details["directionality"] == pytest.approx(1.0)

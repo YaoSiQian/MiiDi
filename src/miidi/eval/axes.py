@@ -363,10 +363,35 @@ _CHORUS = {"chorus", "refrain", "hook"}
 _VERSE = {"verse", "couplet"}
 
 
+def _bar_mean_velocities(ctx: EvaluationContext) -> list[float]:
+    bar = ctx.bar_ticks
+    buckets: dict[int, list[float]] = {}
+    for n in ctx.flat_notes():
+        buckets.setdefault(n.onset // bar, []).append(float(n.velocity))
+    return [_mean(vs) for _b, vs in sorted(buckets.items())]
+
+
+def _lag1_autocorr(xs: list[float]) -> float | None:
+    m = _mean(xs)
+    if m is None or len(xs) < 4:
+        return None
+    var = sum((x - m) ** 2 for x in xs)
+    if var <= 0.0:
+        return None
+    num = sum((xs[i] - m) * (xs[i + 1] - m) for i in range(len(xs) - 1))
+    return num / var
+
+
 def axis_dynamics(ctx: EvaluationContext) -> AxisResult:
     vels = [float(n.velocity) for n in ctx.flat_notes()]
     sigma = _std(vels)
     spread_component = band(sigma, 4, 8, 45, 60, floor=0.1)
+
+    ac = _lag1_autocorr(_bar_mean_velocities(ctx))
+    if ac is None:
+        directionality = 0.8
+    else:
+        directionality = band(ac, 0.15, 0.30, 1.01, 1.01, floor=0.0)
 
     chorus_vels = [v["vel"] for v in _section_vectors(ctx)
                    if _family(v["name"]) in _CHORUS]
@@ -378,8 +403,9 @@ def axis_dynamics(ctx: EvaluationContext) -> AxisResult:
     else:
         gradient = 0.8
 
-    score = 0.6 * spread_component + 0.4 * gradient
+    score = 0.5 * spread_component + 0.25 * directionality + 0.25 * gradient
     return AxisResult(score=max(0.0, min(1.0, score)), details={
         "velocity_spread": spread_component,
+        "directionality": directionality,
         "gradient_ok": gradient,
     })
