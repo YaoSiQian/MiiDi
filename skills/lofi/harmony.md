@@ -1,7 +1,7 @@
 # Harmony Vocabulary
 
 Warm, jazzy color vocabulary: maj7/min7/9 colors over simple roots. Core symbols:
-Fmaj7, Em7, Dm7, Cmaj7, Am7, Bm7b5, G7, plus soft colors Emsus4 and Fadd9.
+Fmaj7, Em7, Dm7, Cmaj7, Am7, Bm7b5, G7, plus soft colors Esus4 and Fadd9.
 
 ## Characteristic Progressions
 
