@@ -1,0 +1,15 @@
+{
+  "bpm_range": [110, 208],
+  "density_ref": {
+    "__global__": [6, 32],
+    "melody": [4, 14],
+    "harmony": [3, 12],
+    "bass": [2, 8]
+  },
+  "swing_offsets": [200],
+  "drum_patterns": {
+    "kick": [0, 960],
+    "snare": [480, 1440],
+    "hat": [240, 720, 1200, 1680]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "bpm_range": [60, 168],
+  "density_ref": {
+    "__global__": [2, 16],
+    "melody": [2, 8],
+    "harmony": [1, 6],
+    "bass": [1, 4]
+  },
+  "swing_offsets": []
+}
