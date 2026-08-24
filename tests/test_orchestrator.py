@@ -158,3 +158,21 @@ def test_self_review_breaks_immediately_when_invalid_at_round_start():
     assert client.calls == []
     assert len(traj) == 1 and traj[0]["round"] == 0
     assert "action" in traj[0]
+
+
+def test_revise_regenerate_does_not_persist_gated_piece(tmp_path):
+    from miidi.session.store import SessionStore
+    store = SessionStore(tmp_path / "s")
+    client = FakeClient([BRIEF, lead_ok(None, None), bass_ok(None, None),
+                         {"track": None}])
+    first = run_pipeline("x", "pop", client, store=store)
+    sid = first.sid
+    versions_before = len(store.list_versions(sid))
+    client2 = FakeClient([{"layer": "regenerate"}, BRIEF,
+                          lead_20_bars(None, None), bass_ok(None, None),
+                          {"track": None}])
+    out = revise(store, client2, sid, "make it much longer")
+    assert out.comp is not None
+    assert any("validation failed" in s for s in out.stage_log)
+    assert any("nothing persisted" in s for s in out.stage_log)
+    assert len(store.list_versions(sid)) == versions_before

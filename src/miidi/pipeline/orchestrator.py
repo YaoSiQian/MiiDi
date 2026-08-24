@@ -147,11 +147,15 @@ def revise(store: SessionStore, client, sid: str, feedback: str,
 
     merged_prompt = meta["prompt"] + "\nRevision request: " + feedback
     result = run_pipeline(merged_prompt, meta["style"], client, out_dir=out_dir)
-    if result.comp is not None:
+    gated = "validation failed" in result.stage_log
+    if result.comp is not None and not gated:
         version = store.save_version(sid, "revised-regenerated", result.comp,
                                      {"feedback": feedback,
                                       "trajectory": result.trajectory})
         result.stage_log.append(f"saved revised-regenerated v{version} under {sid}")
+    elif gated:
+        result.stage_log.append("regeneration rejected by whole-piece validation; "
+                                "nothing persisted")
     result.sid = sid
     return result
 
