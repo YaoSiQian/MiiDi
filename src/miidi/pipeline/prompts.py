@@ -126,3 +126,20 @@ def review_user(report_text: str, track_options: list[str],
         'Fix the highest-impact violations. Output ONLY the JSON decision: '
         '{"track": "<name>", "notes": [...]} or {"track": null}.'
     )
+
+
+def classify_revision_system() -> str:
+    return (
+        "You route a user's revision request for a generated song to the right layer.\n"
+        'Respond ONLY JSON: {"layer": "track|harmony|structure|regenerate", '
+        '"track": "<name>" or null}\n'
+        "- 'track': feedback targets ONE instrument's performance (density, register, "
+        "pattern, feel). Set track to that instrument's name.\n"
+        "- 'harmony': feedback targets chord choices/progression.\n"
+        "- 'structure': feedback targets form/section layout.\n"
+        "- 'regenerate': anything else or ambiguous."
+    )
+
+
+def classify_revision_user(feedback: str, track_names: list[str]) -> str:
+    return f"TRACKS: {', '.join(track_names)}\nFEEDBACK: {feedback}"
