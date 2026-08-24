@@ -137,6 +137,9 @@ def self_review(client: LLMClient, comp: Composition, defaults: StyleDefaults,
     for round_index in range(max_rounds):
         report = evaluate_rules(current, defaults)
         trajectory.append({"round": round_index, "R_rule": round(report.R_rule, 2)})
+        if report.invalid:
+            trajectory[-1]["action"] = "invalid composition; review stopped"
+            break
         if report.R_rule - prev_score < 1.0 and round_index > 0:
             break
         prev_score = report.R_rule

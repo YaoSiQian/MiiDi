@@ -14,6 +14,7 @@ from miidi.pipeline.stages import (
 )
 from miidi.render.midi import generate_midi
 from miidi.schema.model import Composition
+from miidi.schema.validate import validate_composition
 from miidi.session.store import SessionStore
 from miidi.skills.loader import StylePack, load_style_pack
 
@@ -81,8 +82,13 @@ def run_pipeline(user_prompt: str, style: str, client,
     reviewed, trajectory = self_review(client, assembled, pack.defaults,
                                        max_rounds=max_review_rounds)
     log.append(f"self-review done ({len(trajectory)} rounds)")
+    violations = validate_composition(reviewed)
+    if violations:
+        log.append("validation failed")
+        log.extend(f"{v.location}: {v.message}" for v in violations[:10])
+        return PipelineResult(comp=reviewed, brief=brief, midi_path=None,
+                              trajectory=trajectory, stage_log=log)
     if store is not None:
-        sid = store.list_sessions()[-1]
         store.save_version(sid, "reviewed", reviewed,
                            {"trajectory": trajectory})
         log.append("saved reviewed version")

@@ -40,6 +40,11 @@ def bass_ok(_sys, _usr):
     return {"notes": [[0, 960, 36, 88], [960, 960, 43, 88]]}
 
 
+def lead_20_bars(_sys, _usr):
+    pitches = [72, 74] * 80
+    return {"notes": [[o * 240, 240, p, 90] for o, p in enumerate(pitches)]}
+
+
 def test_run_pipeline_end_to_end_with_fake_llm(tmp_path):
     client = FakeClient([BRIEF, lead_ok(None, None), bass_ok(None, None),
                          {"track": None}])
@@ -85,3 +90,28 @@ def test_revise_regenerates_track(tmp_path):
     out = revise(store, client2, sid, "make lead quieter")
     lead = next(t for t in out.comp.tracks if t.name == "Lead")
     assert lead.notes[-1][3] == 40
+
+
+def test_validation_gate_blocks_midi_for_oversized_piece(tmp_path):
+    client = FakeClient([BRIEF, lead_20_bars(None, None), bass_ok(None, None),
+                         {"track": None}])
+    result = run_pipeline("a long lead over a tiny form", "pop", client,
+                          out_dir=tmp_path)
+    assert result.comp is not None
+    assert any("validation failed" in s for s in result.stage_log)
+    assert result.midi_path is None
+    assert list(tmp_path.iterdir()) == []
+
+
+def test_self_review_breaks_immediately_when_invalid_at_round_start():
+    from miidi.eval.style import StyleDefaults
+    from miidi.pipeline.stages import self_review
+    from miidi.schema.model import Composition, Track
+    comp = Composition(structure=[{"name": "verse", "start_bar": 0, "bars": 2}],
+                       tracks=[Track(name="L", role="melody",
+                                     notes=[(0, 19200, 60, 96)])])
+    client = FakeClient([])
+    _out, traj = self_review(client, comp, StyleDefaults(), max_rounds=2)
+    assert client.calls == []
+    assert len(traj) == 1 and traj[0]["round"] == 0
+    assert "action" in traj[0]
