@@ -70,6 +70,19 @@ def test_run_pipeline_saves_versions_when_store_given(tmp_path):
     assert store.latest(sid) >= 2
 
 
+def test_run_pipeline_versions_land_in_own_session(tmp_path):
+    from miidi.session.store import SessionStore
+    store = SessionStore(tmp_path / "sessions")
+    decoy = store.create("decoy prompt", "pop")
+    client = FakeClient([BRIEF, lead_ok(None, None), bass_ok(None, None),
+                         {"track": None}])
+    result = run_pipeline("x", "pop", client, store=store)
+    assert result.sid is not None and result.sid != decoy
+    labels = [v["label"] for v in store.list_versions(result.sid)]
+    assert labels == ["assembled", "reviewed"]
+    assert store.list_versions(decoy) == []
+
+
 def test_planner_failure_returns_partial(tmp_path):
     client = FakeClient([LLMError("down")])
     result = run_pipeline("x", "pop", client)
@@ -90,6 +103,27 @@ def test_revise_regenerates_track(tmp_path):
     out = revise(store, client2, sid, "make lead quieter")
     lead = next(t for t in out.comp.tracks if t.name == "Lead")
     assert lead.notes[-1][3] == 40
+    assert out.sid == sid
+
+
+def test_revise_regenerate_preserves_session_lineage(tmp_path):
+    from miidi.session.store import SessionStore
+    store = SessionStore(tmp_path / "s")
+    client = FakeClient([BRIEF, lead_ok(None, None), bass_ok(None, None),
+                         {"track": None}])
+    first = run_pipeline("x", "pop", client, store=store)
+    sid = first.sid
+    sessions_before = len(store.list_sessions())
+    versions_before = len(store.list_versions(sid))
+    client2 = FakeClient([{"layer": "regenerate"}, BRIEF, lead_ok(None, None),
+                          bass_ok(None, None), {"track": None}])
+    out = revise(store, client2, sid, "make it brighter")
+    assert out.sid == sid
+    assert len(store.list_versions(sid)) == versions_before + 1
+    assert len(store.list_sessions()) == sessions_before
+    latest = store.load_version(sid, store.latest(sid))
+    assert latest["label"] == "revised-regenerated"
+    assert latest["extra"]["feedback"] == "make it brighter"
 
 
 def test_validation_gate_blocks_midi_for_oversized_piece(tmp_path):

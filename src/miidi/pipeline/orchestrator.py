@@ -28,6 +28,7 @@ class PipelineResult:
     midi_path: Path | None
     trajectory: list[dict] = field(default_factory=list)
     stage_log: list[str] = field(default_factory=list)
+    sid: str | None = None
 
 
 def _context_for(role: str, prior: dict) -> str:
@@ -56,11 +57,13 @@ def run_pipeline(user_prompt: str, style: str, client,
                  store: SessionStore | None = None) -> PipelineResult:
     log: list[str] = []
     pack: StylePack = load_style_pack(style)
+    sid = store.create(user_prompt, style) if store is not None else None
     try:
         brief = make_brief(client, pack, user_prompt)
     except Exception as exc:
         log.append(f"brief failed: {exc}")
-        return PipelineResult(comp=None, brief=None, midi_path=None, stage_log=log)
+        return PipelineResult(comp=None, brief=None, midi_path=None,
+                              stage_log=log, sid=sid)
     log.append("brief ok")
     comp = brief.to_skeleton()
 
@@ -76,14 +79,13 @@ def run_pipeline(user_prompt: str, style: str, client,
         except Exception as exc:
             log.append(f"compose {spec.name} failed: {exc}")
             return PipelineResult(comp=None, brief=brief, midi_path=None,
-                                  stage_log=log)
+                                  stage_log=log, sid=sid)
         prior[track.name] = track
         comp = comp.model_copy(update={
             "tracks": [track if t.name == track.name else t for t in comp.tracks]})
         log.append(f"composed {track.name}" + (f" ({len(repairs)} repairs)" if repairs else ""))
     assembled = comp
     if store is not None:
-        sid = store.create(user_prompt, style)
         store.save_version(sid, "assembled", assembled, None)
         log.append(f"session {sid}: saved assembled")
 
@@ -105,7 +107,7 @@ def run_pipeline(user_prompt: str, style: str, client,
         log.append("validation failed")
         log.extend(f"{v.location}: {v.message}" for v in violations[:10])
         return PipelineResult(comp=reviewed, brief=brief, midi_path=None,
-                              trajectory=trajectory, stage_log=log)
+                              trajectory=trajectory, stage_log=log, sid=sid)
     if store is not None:
         store.save_version(sid, "reviewed", reviewed,
                            {"trajectory": trajectory})
@@ -116,7 +118,7 @@ def run_pipeline(user_prompt: str, style: str, client,
         midi_path = generate_midi(reviewed, Path(out_dir))
         log.append(f"midi written: {midi_path}")
     return PipelineResult(comp=reviewed, brief=brief, midi_path=midi_path,
-                          trajectory=trajectory, stage_log=log)
+                          trajectory=trajectory, stage_log=log, sid=sid)
 
 
 def revise(store: SessionStore, client, sid: str, feedback: str,
@@ -140,11 +142,18 @@ def revise(store: SessionStore, client, sid: str, feedback: str,
         midi_path = generate_midi(updated, out_dir) if out_dir else None
         return PipelineResult(comp=updated, brief=_brief_from_comp(latest),
                               midi_path=midi_path,
-                              stage_log=[f"revised track {target} as v{version}"])
+                              stage_log=[f"revised track {target} as v{version}"],
+                              sid=sid)
 
     merged_prompt = meta["prompt"] + "\nRevision request: " + feedback
-    return run_pipeline(merged_prompt, meta["style"], client,
-                        out_dir=out_dir, store=store)
+    result = run_pipeline(merged_prompt, meta["style"], client, out_dir=out_dir)
+    if result.comp is not None:
+        version = store.save_version(sid, "revised-regenerated", result.comp,
+                                     {"feedback": feedback,
+                                      "trajectory": result.trajectory})
+        result.stage_log.append(f"saved revised-regenerated v{version} under {sid}")
+    result.sid = sid
+    return result
 
 
 def _specs_from(comp: Composition) -> list[InstrumentSpec]:
