@@ -1290,7 +1290,7 @@ git commit -m "feat: plan/compose/self-review stages with repair ladders"
     → assemble Composition → self_review loop → generate_midi when out_dir given.
     Every stage appends to `stage_log`; LLM/Stage errors abort with partial result (comp=None if before assembly).
     When `store` given: save_version("plan+compose") after assembly and save_version("reviewed") after loop.
-  - `revise(store, client, pack_of, sid, feedback: str, out_dir=None) -> PipelineResult`
+  - `revise(store, client, sid, feedback: str, out_dir=None) -> PipelineResult`
     loads latest version; one LLM call classifies target layer via new prompt pair in prompts.py:
     `classify_revision_system()` / `classify_revision_user(feedback, track_names)` returning
     `{"layer": "harmony|structure|track|regenerate", "track": name|null}`; then:
@@ -1419,7 +1419,7 @@ def test_revise_regenerates_track(tmp_path):
     quieter = {"notes": [[0, 1920, 60, 40]]}
     client2 = FakeClient([{"layer": "track", "track": "Lead"},
                           quieter, {"track": None}])
-    out = revise(store, client2, "x", sid, "make lead quieter")
+    out = revise(store, client2, sid, "make lead quieter")
     lead = next(t for t in out.comp.tracks if t.name == "Lead")
     assert lead.notes[-1][3] == 40
 ```
@@ -1617,8 +1617,8 @@ def run_pipeline(user_prompt: str, style: str, client,
                           trajectory=trajectory, stage_log=log)
 
 
-def revise(store: SessionStore, client, prompt_hint: str, sid: str,
-           feedback: str, out_dir: Path | None = None) -> PipelineResult:
+def revise(store: SessionStore, client, sid: str, feedback: str,
+           out_dir: Path | None = None) -> PipelineResult:
     meta = store.session_meta(sid)
     latest = store.load_composition(sid, store.latest(sid))
     pack = load_style_pack(meta["style"])
