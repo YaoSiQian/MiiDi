@@ -103,6 +103,15 @@ def test_validation_gate_blocks_midi_for_oversized_piece(tmp_path):
     assert list(tmp_path.iterdir()) == []
 
 
+def test_self_review_llm_failure_returns_assembled_with_uniform_shape():
+    client = FakeClient([BRIEF, lead_ok(None, None), bass_ok(None, None),
+                         LLMError("review endpoint down")])
+    result = run_pipeline("x", "pop", client)
+    assert result.comp is not None and len(result.comp.tracks) == 2
+    assert result.trajectory == []
+    assert any(s.startswith("self-review failed") for s in result.stage_log)
+
+
 def test_self_review_breaks_immediately_when_invalid_at_round_start():
     from miidi.eval.style import StyleDefaults
     from miidi.pipeline.stages import self_review

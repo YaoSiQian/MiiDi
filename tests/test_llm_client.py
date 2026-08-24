@@ -98,3 +98,12 @@ def test_garbage_reply_raises_llm_error():
     client = LLMClient(make_config(), transport=httpx.MockTransport(handler))
     with pytest.raises(LLMError):
         client.respond_json("s", "u")
+
+
+def test_malformed_json_body_raises_llm_error_not_decode_error():
+    def handler(request):
+        return httpx.Response(200, text="not-json")
+
+    client = LLMClient(make_config(), transport=httpx.MockTransport(handler))
+    with pytest.raises(LLMError):
+        client.respond_json("s", "u")

@@ -145,10 +145,14 @@ def self_review(client: LLMClient, comp: Composition, defaults: StyleDefaults,
         prev_score = report.R_rule
         options = [t.name for t in current.tracks if not t.is_drum] or \
                   [t.name for t in current.tracks]
-        reply = client.respond_json(
-            review_system(),
-            review_user(_report_text(current, defaults), options,
-                        json.dumps(current.meta.model_dump())))
+        try:
+            reply = client.respond_json(
+                review_system(),
+                review_user(_report_text(current, defaults), options,
+                            json.dumps(current.meta.model_dump())))
+        except Exception as exc:
+            trajectory[-1]["action"] = f"review aborted: {exc}"
+            break
         track_name = reply.get("track")
         notes = reply.get("notes")
         if not track_name or not isinstance(notes, list):

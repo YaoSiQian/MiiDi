@@ -43,6 +43,14 @@ def _context_for(role: str, prior: dict) -> str:
     return ""
 
 
+def _aborted_reason(trajectory: list[dict]) -> str | None:
+    for entry in reversed(trajectory):
+        action = entry.get("action")
+        if isinstance(action, str) and action.startswith("review aborted:"):
+            return action.split(":", 1)[1].strip()
+    return None
+
+
 def run_pipeline(user_prompt: str, style: str, client,
                  out_dir: Path | None = None, max_review_rounds: int = 2,
                  store: SessionStore | None = None) -> PipelineResult:
@@ -79,9 +87,19 @@ def run_pipeline(user_prompt: str, style: str, client,
         store.save_version(sid, "assembled", assembled, None)
         log.append(f"session {sid}: saved assembled")
 
-    reviewed, trajectory = self_review(client, assembled, pack.defaults,
-                                       max_rounds=max_review_rounds)
-    log.append(f"self-review done ({len(trajectory)} rounds)")
+    try:
+        reviewed, trajectory = self_review(client, assembled, pack.defaults,
+                                           max_rounds=max_review_rounds)
+    except Exception as exc:
+        log.append(f"self-review failed: {exc}")
+        reviewed, trajectory = assembled, []
+    else:
+        aborted = _aborted_reason(trajectory)
+        if aborted is not None:
+            log.append(f"self-review failed: {aborted}")
+            trajectory = []
+        else:
+            log.append(f"self-review done ({len(trajectory)} rounds)")
     violations = validate_composition(reviewed)
     if violations:
         log.append("validation failed")

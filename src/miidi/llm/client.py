@@ -105,7 +105,11 @@ class LLMClient:
                     json=payload, headers=headers)
                 if resp.status_code >= 400:
                     raise LLMError(f"HTTP {resp.status_code}: {resp.text[:300]}")
-                return extract_json(_reply_text(resp.json()))
+                try:
+                    data = resp.json()
+                except ValueError as exc:
+                    raise LLMError(f"malformed JSON body: {exc}") from exc
+                return extract_json(_reply_text(data))
             except (LLMError, httpx.HTTPError) as exc:
                 last_error = exc
                 retryable = isinstance(exc, httpx.HTTPError)
