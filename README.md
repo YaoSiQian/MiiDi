@@ -19,3 +19,9 @@ Kernel 核心（schema / 渲染 / 规则评估器）已实现；生成流水线�
 
 - 规格：docs/superpowers/specs/2026-08-22-miidi-design.md
 - 计划：docs/superpowers/plans/
+
+## 命令行使用（配置好 .env 后）
+
+    python -m miidi styles
+    python -m miidi generate --style lofi --prompt "雨夜的咖啡馆" --out output/
+    python -m miidi evaluate --json output/path/to/composition.json
