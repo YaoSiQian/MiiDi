@@ -71,11 +71,15 @@ def test_404_for_unknown_session(client):
     assert resp.status_code == 404
 
 
-def test_get_midi_404(client):
-    resp = client.post("/api/sessions", json={"prompt": "test", "style": "touhou"})
+def test_get_midi_on_demand(tmp_path):
+    store = SessionStore(tmp_path / "sessions")
+    app = create_app(store, FakeClient(), tmp_path)
+    c = TestClient(app)
+    resp = c.post("/api/sessions", json={"prompt": "test", "style": "touhou"})
     sid = resp.json()["sid"]
-    resp = client.get(f"/api/sessions/{sid}/midi")
-    assert resp.status_code == 404
+    resp = c.get(f"/api/sessions/{sid}/midi")
+    assert resp.status_code == 200
+    assert resp.headers["content-type"] == "audio/midi"
 
 
 def test_get_audio_501(client):
@@ -93,6 +97,17 @@ def test_get_versions(client):
     data = resp.json()
     assert "versions" in data
     assert len(data["versions"]) > 0
+
+
+def test_empty_session_returns_404(tmp_path):
+    store = SessionStore(tmp_path / "sessions")
+    sid = store.create("empty", "touhou")
+    app = create_app(store, FakeClient(), tmp_path)
+    c = TestClient(app)
+    resp = c.get(f"/api/sessions/{sid}/status")
+    assert resp.status_code == 404
+    resp = c.get(f"/api/sessions/{sid}/composition")
+    assert resp.status_code == 404
 
 
 def test_evaluate(client):
@@ -136,6 +151,11 @@ def test_rollback(tmp_path):
     c = TestClient(app)
     resp = c.post("/api/sessions", json={"prompt": "test", "style": "touhou"})
     sid = resp.json()["sid"]
+    versions_before = len(store.list_versions(sid))
     resp = c.post(f"/api/sessions/{sid}/versions/1/rollback")
     assert resp.status_code == 200
     assert resp.json()["stage"] == "rolled_back"
+    assert len(store.list_versions(sid)) == versions_before + 1
+    latest = store.latest(sid)
+    v = store.load_version(sid, latest)
+    assert v["label"] == "rollback to v1"

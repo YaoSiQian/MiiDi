@@ -53,9 +53,10 @@ async def get_status(sid: str) -> StatusResponse:
         _store.session_meta(sid)
     except FileNotFoundError:
         raise HTTPException(404, f"session {sid} not found")
-    latest = _store.latest(sid)
-    if latest is None:
-        return StatusResponse(sid=sid, stage="empty", trajectory=[], stage_log=[])
+    try:
+        latest = _store.latest(sid)
+    except ValueError:
+        raise HTTPException(404, "no versions")
     ver = _store.load_version(sid, latest)
     return StatusResponse(
         sid=sid,
@@ -70,10 +71,12 @@ async def get_composition(sid: str) -> dict:
     if _store is None:
         raise HTTPException(503, "server not initialized")
     try:
-        latest = _store.latest(sid)
+        _store.session_meta(sid)
     except FileNotFoundError:
         raise HTTPException(404, f"session {sid} not found")
-    if latest is None:
+    try:
+        latest = _store.latest(sid)
+    except ValueError:
         raise HTTPException(404, "no versions")
     ver = _store.load_version(sid, latest)
     return ver.get("composition", {})
@@ -81,11 +84,23 @@ async def get_composition(sid: str) -> dict:
 
 @router.get("/sessions/{sid}/midi")
 async def get_midi(sid: str) -> FileResponse:
+    if _store is None:
+        raise HTTPException(503, "server not initialized")
+    try:
+        _store.session_meta(sid)
+    except FileNotFoundError:
+        raise HTTPException(404, f"session {sid} not found")
     midi_dir = _root / "midi" if _root else Path("midi")
     midi_path = midi_dir / f"{sid}.mid"
     if not midi_path.exists():
-        raise HTTPException(404, "MIDI not found")
-    return FileResponse(midi_path, media_type="audio/midi", filename=f"{sid}.mid")
+        try:
+            latest = _store.latest(sid)
+        except ValueError:
+            raise HTTPException(404, "no versions")
+        comp = _store.load_composition(sid, latest)
+        from miidi.render.midi import generate_midi
+        midi_path = generate_midi(comp, midi_dir)
+    return FileResponse(midi_path, media_type="audio/midi", filename=midi_path.name)
 
 
 @router.get("/sessions/{sid}/audio")
@@ -128,12 +143,13 @@ async def rollback(sid: str, version: int) -> StatusResponse:
         _store.load_version(sid, version)
     except FileNotFoundError:
         raise HTTPException(404, f"version {version} not found")
-    _store.session_meta(sid)
+    comp = _store.load_composition(sid, version)
+    new_ver = _store.save_version(sid, f"rollback to v{version}", comp, None)
     return StatusResponse(
         sid=sid,
         stage="rolled_back",
         trajectory=[],
-        stage_log=[f"rolled back to version {version}"],
+        stage_log=[f"rolled back to version {version} as v{new_ver}"],
     )
 
 
@@ -142,10 +158,12 @@ async def evaluate(sid: str) -> EvaluateResponse:
     if _store is None:
         raise HTTPException(503, "server not initialized")
     try:
-        latest = _store.latest(sid)
+        _store.session_meta(sid)
     except FileNotFoundError:
         raise HTTPException(404, f"session {sid} not found")
-    if latest is None:
+    try:
+        latest = _store.latest(sid)
+    except ValueError:
         raise HTTPException(404, "no versions")
     ver = _store.load_version(sid, latest)
     from miidi.schema.model import Composition
