@@ -1,9 +1,11 @@
 # Touhou Style
 
 ## Identity
-High-energy doujin denpa-rock at fast tempo (150-192 BPM): a soaring trumpet lead
-on program 56 over driving piano arpeggios on program 0, with high chorus energy
-pushed from first bar to last. Straight 16th drive, bright minor keys, zero chill.
+High-energy doujin electronic rock at 120-170 BPM: multi-layered harmonic beds
+(strings + harpsichord + piano + organ) stacked for dense chord pads, synth bass
+with locked 8th-note drive, and square/saw leads carrying bright minor-key
+melodies. Straight 16th drive, zero swing, relentless energy from first bar to
+last. Cadences land on hard authentic closes (E7-Am) with full-band accent.
 
 ## Workflow
 - Planning stage reads: harmony.md (progressions), instruments.md (palette).
