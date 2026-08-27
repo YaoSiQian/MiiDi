@@ -18,3 +18,34 @@ def create_app(store: SessionStore, client: LLMClient, root: Path) -> FastAPI:
         app.mount("/", StaticFiles(directory=str(frontend), html=True), name="static")
 
     return app
+
+
+def run_dev():
+    """Run FastAPI + Vite dev server."""
+    import subprocess
+    import sys
+    import os
+
+    from miidi.session.store import SessionStore
+    from miidi.llm.client import make_client
+
+    root = Path(os.environ.get("MIIDI_ROOT", "."))
+    store = SessionStore(str(root / "sessions"))
+    client = make_client()
+    app = create_app(store, client, root)
+
+    # Start Vite in background
+    frontend = root / "webapp" / "frontend"
+    vite = subprocess.Popen(
+        ["npx", "vite", "--port", "5173"],
+        cwd=str(frontend),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+
+    try:
+        import uvicorn
+
+        uvicorn.run(app, host="0.0.0.0", port=8000)
+    finally:
+        vite.terminate()
