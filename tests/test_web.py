@@ -159,3 +159,53 @@ def test_rollback(tmp_path):
     latest = store.latest(sid)
     v = store.load_version(sid, latest)
     assert v["label"] == "rollback to v1"
+
+
+class LifecycleFakeClient:
+    def __init__(self):
+        self._replies = [
+            BRIEF, LEAD_NOTES, BASS_NOTES,
+            {"track": None},
+            {"layer": "track", "track": "Lead"},
+            {"notes": [[i * 480, 480, 62, 80] for i in range(4)]},
+        ]
+        self._idx = 0
+
+    def respond_json(self, system, user, temperature=0.0):
+        reply = self._replies[self._idx]
+        self._idx += 1
+        return reply
+
+
+def test_full_lifecycle(tmp_path):
+    store = SessionStore(tmp_path / "sessions")
+    app = create_app(store, LifecycleFakeClient(), tmp_path)
+    c = TestClient(app)
+
+    resp = c.post("/api/sessions", json={"prompt": "dark and moody", "style": "jazz"})
+    assert resp.status_code == 200
+    sid = resp.json()["sid"]
+
+    resp = c.get(f"/api/sessions/{sid}/status")
+    assert resp.status_code == 200
+
+    resp = c.get(f"/api/sessions/{sid}/composition")
+    assert resp.status_code == 200
+
+    resp = c.post(f"/api/sessions/{sid}/evaluate")
+    assert resp.status_code == 200
+    assert "report" in resp.json()
+
+    resp = c.get(f"/api/sessions/{sid}/versions")
+    assert resp.status_code == 200
+    versions_before = resp.json()["versions"]
+
+    resp = c.post(f"/api/sessions/{sid}/revise", json={"feedback": "make it brighter"})
+    assert resp.status_code == 200
+
+    resp = c.get(f"/api/sessions/{sid}/versions")
+    assert resp.status_code == 200
+    assert len(resp.json()["versions"]) > len(versions_before)
+
+    resp = c.get(f"/api/sessions/{sid}/midi")
+    assert resp.status_code in (200, 404)
