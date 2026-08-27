@@ -48,7 +48,7 @@ def test_defaults_match_contract():
         "classical": {"bpm": (60, 168), "swing": []},
         "jazz": {"bpm": (110, 208), "swing": [200]},
         "lofi": {"bpm": (66, 92), "swing": [180]},
-        "touhou": {"bpm": (150, 192), "swing": []},
+        "touhou": {"bpm": (120, 170), "swing": []},
     }
     for name, want in contract.items():
         d = load_style_pack(name).defaults

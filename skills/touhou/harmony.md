@@ -49,7 +49,7 @@ with E minor appearing in slower pieces. Relative major keys (C, F, Bb)
 surface in brighter or more playful arrangements. Accidentals from the
 harmonic minor scale (G# in A minor) appear at cadences.
 
-## Cadence Patterns
+## Cadences
 
 Choruses end on a hard authentic close: E7 - Am with full-band accent on the
 arrival. Verses can half-cadence on G or suspend on Asus4 to keep momentum.
