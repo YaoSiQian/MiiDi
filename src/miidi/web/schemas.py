@@ -28,3 +28,13 @@ class VersionResponse(BaseModel):
 
 class EvaluateResponse(BaseModel):
     report: dict
+
+
+class GenerateStageRequest(BaseModel):
+    stages: list[str]
+
+
+class GenerateStageResponse(BaseModel):
+    sid: str
+    stage_log: list[str]
+    comp: dict | None = None

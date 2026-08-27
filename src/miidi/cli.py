@@ -22,7 +22,8 @@ def cmd_generate(args) -> int:
         return 1
     result = run_pipeline(args.prompt, args.style, client,
                           out_dir=Path(args.out) if args.out else None,
-                          max_review_rounds=0 if args.no_review else args.rounds)
+                          max_review_rounds=0 if args.no_review else args.rounds,
+                          stages=args.stages.split(",") if args.stages else None)
     for line in result.stage_log:
         print(line)
     if result.comp is None:
@@ -64,6 +65,8 @@ def main(argv: list[str] | None = None) -> int:
     g.add_argument("--out", default=None)
     g.add_argument("--rounds", type=int, default=2)
     g.add_argument("--no-review", action="store_true")
+    g.add_argument("--stages", default=None,
+                   help="Comma-separated stages: plan,core,arrange (default: all)")
     g.set_defaults(func=cmd_generate)
 
     s = sub.add_parser("styles")

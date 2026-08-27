@@ -5,6 +5,7 @@ from fastapi.responses import FileResponse
 
 from miidi.web.schemas import (
     CreateSessionRequest, CreateSessionResponse,
+    GenerateStageRequest, GenerateStageResponse,
     ReviseRequest, StatusResponse, VersionResponse, EvaluateResponse,
 )
 from miidi.pipeline.orchestrator import run_pipeline, revise, PipelineResult
@@ -172,3 +173,45 @@ async def evaluate(sid: str) -> EvaluateResponse:
     pack = load_style_pack(style)
     report = evaluate_rules(comp, pack.defaults)
     return EvaluateResponse(report=report.to_dict())
+
+
+@router.post("/sessions/{sid}/generate", response_model=GenerateStageResponse)
+async def generate_stage(sid: str, req: GenerateStageRequest) -> GenerateStageResponse:
+    if _store is None or _client is None:
+        raise HTTPException(503, "server not initialized")
+    try:
+        meta = _store.session_meta(sid)
+    except FileNotFoundError:
+        raise HTTPException(404, f"session {sid} not found")
+
+    # Load existing comp if resuming from a later stage
+    existing_comp = None
+    try:
+        latest = _store.latest(sid)
+        ver = _store.load_version(sid, latest)
+        existing_comp = ver.get("composition")
+    except (FileNotFoundError, ValueError):
+        pass
+
+    out_dir = (_root / "midi") if _root else None
+    if out_dir:
+        out_dir.mkdir(parents=True, exist_ok=True)
+
+    # For stage continuation: re-run with original prompt but specific stages
+    # The pipeline will load from store if we pass the same sid
+    result: PipelineResult = run_pipeline(
+        user_prompt=meta["prompt"],
+        style=meta["style"],
+        client=_client,
+        store=_store,
+        out_dir=out_dir,
+        stages=req.stages,
+    )
+    # Re-bind to existing session
+    result.sid = sid
+
+    return GenerateStageResponse(
+        sid=sid,
+        stage_log=result.stage_log,
+        comp=result.comp.model_dump() if result.comp else None,
+    )

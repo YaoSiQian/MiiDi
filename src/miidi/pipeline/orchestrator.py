@@ -19,6 +19,9 @@ from miidi.session.store import SessionStore
 from miidi.skills.loader import StylePack, load_style_pack
 
 _ROLE_ORDER = ["melody", "bass", "harmony", "counter", "color", "drums"]
+_CORE_ROLES = {"melody", "bass", "drums"}
+_ARRANGE_ROLES = {"harmony", "counter", "color"}
+_ALL_STAGES = {"plan", "core", "arrange"}
 
 
 @dataclass
@@ -52,43 +55,101 @@ def _aborted_reason(trajectory: list[dict]) -> str | None:
     return None
 
 
+def _compose_tracks(client, pack, brief, comp, specs, roles, log):
+    """Compose tracks whose role is in `roles`. Returns updated comp + prior dict."""
+    ordered = sorted(
+        [s for s in specs.values() if s.role in roles],
+        key=lambda s: (_ROLE_ORDER.index(s.role) if s.role in _ROLE_ORDER else 3),
+    )
+    prior: dict[str, object] = {}
+    for spec in ordered:
+        ctx = _context_for(spec.role, prior)
+        track, repairs = compose_track(client, pack, brief, spec, ctx)
+        prior[track.name] = track
+        comp = comp.model_copy(update={
+            "tracks": [track if t.name == track.name else t for t in comp.tracks]})
+        log.append(f"composed {track.name}" + (f" ({len(repairs)} repairs)" if repairs else ""))
+    return comp, prior
+
+
 def run_pipeline(user_prompt: str, style: str, client,
                  out_dir: Path | None = None, max_review_rounds: int = 2,
-                 store: SessionStore | None = None) -> PipelineResult:
+                 store: SessionStore | None = None,
+                 stages: list[str] | None = None) -> PipelineResult:
+    """Run the generation pipeline.
+
+    stages controls which phases execute:
+      None or ["plan","core","arrange"] → full pipeline (backward-compatible)
+      ["plan"]         → brief + structure + key only
+      ["plan","core"]  → brief + melody/bass/drums
+      ["plan","core","arrange"] → full
+    """
+    if stages is None:
+        stages = ["plan", "core", "arrange"]
+    invalid = set(stages) - _ALL_STAGES
+    if invalid:
+        raise ValueError(f"invalid stages: {invalid}")
+
     log: list[str] = []
     pack: StylePack = load_style_pack(style)
     sid = store.create(user_prompt, style) if store is not None else None
+
+    # ── Stage: plan ──────────────────────────────────────────────
     try:
         brief = make_brief(client, pack, user_prompt)
     except Exception as exc:
         log.append(f"brief failed: {exc}")
         return PipelineResult(comp=None, brief=None, midi_path=None,
                               stage_log=log, sid=sid)
-    log.append("brief ok")
+    log.append("plan: brief ok")
     comp = brief.to_skeleton()
 
+    if stages == ["plan"]:
+        if store is not None:
+            store.save_version(sid, "planned", comp, {"brief": brief.model_dump()})
+            log.append(f"session {sid}: saved planned")
+        return PipelineResult(comp=comp, brief=brief, midi_path=None,
+                              stage_log=log, sid=sid)
+
+    # ── Stage: core (melody + bass + drums) ──────────────────────
     specs = {s.name: s for s in brief.instruments}
-    ordered = sorted(brief.instruments,
-                     key=lambda s: (_ROLE_ORDER.index(s.role)
-                                    if s.role in _ROLE_ORDER else 3))
-    prior: dict[str, object] = {}
-    for spec in ordered:
-        ctx = _context_for(spec.role, prior)
-        try:
-            track, repairs = compose_track(client, pack, brief, spec, ctx)
-        except Exception as exc:
-            log.append(f"compose {spec.name} failed: {exc}")
-            return PipelineResult(comp=None, brief=brief, midi_path=None,
-                                  stage_log=log, sid=sid)
-        prior[track.name] = track
-        comp = comp.model_copy(update={
-            "tracks": [track if t.name == track.name else t for t in comp.tracks]})
-        log.append(f"composed {track.name}" + (f" ({len(repairs)} repairs)" if repairs else ""))
+    try:
+        comp, core_prior = _compose_tracks(
+            client, pack, brief, comp, specs, _CORE_ROLES, log)
+    except Exception as exc:
+        log.append(f"core failed: {exc}")
+        return PipelineResult(comp=None, brief=brief, midi_path=None,
+                              stage_log=log, sid=sid)
+    log.append("core: done")
+
+    if store is not None:
+        store.save_version(sid, "core", comp, None)
+        log.append(f"session {sid}: saved core")
+
+    if stages == ["plan", "core"]:
+        midi_path = None
+        if out_dir is not None:
+            midi_path = generate_midi(comp, Path(out_dir))
+            log.append(f"midi written: {midi_path}")
+        return PipelineResult(comp=comp, brief=brief, midi_path=midi_path,
+                              stage_log=log, sid=sid)
+
+    # ── Stage: arrange (harmony + counter + color) ───────────────
+    try:
+        comp, _ = _compose_tracks(
+            client, pack, brief, comp, specs, _ARRANGE_ROLES, log)
+    except Exception as exc:
+        log.append(f"arrange failed: {exc}")
+        return PipelineResult(comp=None, brief=brief, midi_path=None,
+                              stage_log=log, sid=sid)
+    log.append("arrange: done")
     assembled = comp
+
     if store is not None:
         store.save_version(sid, "assembled", assembled, None)
         log.append(f"session {sid}: saved assembled")
 
+    # ── Self-review ──────────────────────────────────────────────
     try:
         reviewed, trajectory = self_review(client, assembled, pack.defaults,
                                            max_rounds=max_review_rounds)
@@ -102,12 +163,14 @@ def run_pipeline(user_prompt: str, style: str, client,
             trajectory = []
         else:
             log.append(f"self-review done ({len(trajectory)} rounds)")
+
     violations = validate_composition(reviewed)
     if violations:
         log.append("validation failed")
         log.extend(f"{v.location}: {v.message}" for v in violations[:10])
         return PipelineResult(comp=reviewed, brief=brief, midi_path=None,
                               trajectory=trajectory, stage_log=log, sid=sid)
+
     if store is not None:
         store.save_version(sid, "reviewed", reviewed,
                            {"trajectory": trajectory})
