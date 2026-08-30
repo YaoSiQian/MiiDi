@@ -57,3 +57,73 @@ def test_time_signature_constrained():
     for bad in ([4, 0], [0, 4], [4, 3], [4, 32], [-2, 4]):
         with pytest.raises(ValidationError):
             base_meta(time_signature=bad)
+
+
+def test_clamp_to_boundary_truncates_overlapping_notes():
+    comp = Composition(
+        meta=base_meta(),
+        structure=[Section(name="A", start_bar=0, bars=4)],
+        tracks=[
+            {"name": "Lead", "program": 73, "role": "melody",
+             "notes": [[0, 240, 69, 96], [7600, 240, 71, 96]]},
+        ],
+    )
+    # bar_ticks=1920, total_bars=4, limit=7680
+    # note at 7600+240=7840 > 7680 → truncated to 7680-7600=80
+    clamped = comp.clamp_to_boundary()
+    assert clamped.tracks[0].notes[0] == (0, 240, 69, 96)
+    assert clamped.tracks[0].notes[1] == (7600, 80, 71, 96)
+
+
+def test_clamp_to_boundary_removes_notes_starting_beyond_limit():
+    comp = Composition(
+        meta=base_meta(),
+        structure=[Section(name="A", start_bar=0, bars=4)],
+        tracks=[
+            {"name": "Lead", "program": 73, "role": "melody",
+             "notes": [[0, 240, 69, 96], [8000, 240, 71, 96]]},
+        ],
+    )
+    # note at 8000 >= 7680 → removed
+    clamped = comp.clamp_to_boundary()
+    assert len(clamped.tracks[0].notes) == 1
+    assert clamped.tracks[0].notes[0] == (0, 240, 69, 96)
+
+
+def test_clamp_to_boundary_no_change_when_within_limit():
+    comp = Composition(
+        meta=base_meta(),
+        structure=[Section(name="A", start_bar=0, bars=4)],
+        tracks=[
+            {"name": "Lead", "program": 73, "role": "melody",
+             "notes": [[0, 240, 69, 96], [7200, 240, 71, 96]]},
+        ],
+    )
+    # 7200+240=7440 < 7680 → no change
+    clamped = comp.clamp_to_boundary()
+    assert clamped.tracks[0].notes == comp.tracks[0].notes
+
+
+def test_clamp_to_boundary_no_op_without_structure():
+    comp = Composition(
+        meta=base_meta(),
+        tracks=[
+            {"name": "Lead", "program": 73, "role": "melody",
+             "notes": [[0, 240, 69, 96]]},
+        ],
+    )
+    clamped = comp.clamp_to_boundary()
+    assert clamped.tracks[0].notes == comp.tracks[0].notes
+
+
+def test_piece_end_tick_computed_from_structure():
+    comp = Composition(
+        meta=base_meta(),
+        structure=[Section(name="A", start_bar=0, bars=8)],
+        tracks=[
+            {"name": "Lead", "program": 73, "role": "melody",
+             "notes": [[0, 240, 69, 96]]},
+        ],
+    )
+    # 8 bars * 1920 = 15360
+    assert comp.piece_end_tick() == 15360

@@ -39,6 +39,21 @@ def test_compose_prompts_carry_grid_rules(pack):
     assert "[[0,480,72,96]]" in usr_text
 
 
+def test_compose_user_includes_piece_end_tick(pack):
+    spec = {"name": "Lead", "program": 73, "role": "melody",
+            "description": "singing quarter-note melody"}
+    usr_text = compose_user('{"bpm": 100}', spec, "", piece_end_tick=7680)
+    assert "7680" in usr_text
+    assert "PIECE BOUNDARY" in usr_text
+
+
+def test_compose_user_no_boundary_when_none(pack):
+    spec = {"name": "Lead", "program": 73, "role": "melody",
+            "description": "singing quarter-note melody"}
+    usr_text = compose_user('{"bpm": 100}', spec, "")
+    assert "PIECE BOUNDARY" not in usr_text
+
+
 def test_review_prompt_lists_tracks():
     sys_text = review_system()
     usr = review_user("bar5 bass not chord tone", ["Bs", "Pad"], '{"bpm": 100}')
