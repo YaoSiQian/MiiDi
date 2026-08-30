@@ -7,9 +7,8 @@ periods. No drum track is used; pulse lives entirely in the notation of the
 instruments themselves.
 
 ## Workflow
-- Planning stage reads: harmony.md (progressions), instruments.md (palette).
-- Composition stage reads: rhythm.md (meter and articulation), instruments.md (registers).
-- Never read files not listed for your stage.
+- Planning stage: design tempo, key, sections, chords, and instrument roster.
+- Composition stage: write each track's notes over the full structure.
 
 ## Output Rules
 Return ONLY JSON matching the requested schema. Onsets/durations are integer ticks

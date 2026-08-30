@@ -6,9 +6,8 @@ comping pianos under a horn-led melody. Seventh chords are the default quality;
 everything colors toward ii-V-I motion with a relaxed swing feel.
 
 ## Workflow
-- Planning stage reads: harmony.md (progressions), instruments.md (palette).
-- Composition stage reads: rhythm.md (swing grids), instruments.md (registers).
-- Never read files not listed for your stage.
+- Planning stage: design tempo, key, sections, chords, and instrument roster.
+- Composition stage: write each track's notes over the full structure.
 
 ## Output Rules
 Return ONLY JSON matching the requested schema. Onsets/durations are integer ticks

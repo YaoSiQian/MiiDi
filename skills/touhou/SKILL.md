@@ -8,9 +8,8 @@ melodies. Straight 16th drive, zero swing, relentless energy from first bar to
 last. Cadences land on hard authentic closes (E7-Am) with full-band accent.
 
 ## Workflow
-- Planning stage reads: harmony.md (progressions), instruments.md (palette).
-- Composition stage reads: rhythm.md (drive grids), instruments.md (registers).
-- Never read files not listed for your stage.
+- Planning stage: design tempo, key, sections, chords, and instrument roster.
+- Composition stage: write each track's notes over the full structure.
 
 ## Output Rules
 Return ONLY JSON matching the requested schema. Onsets/durations are integer ticks
