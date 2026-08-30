@@ -41,6 +41,16 @@ class MusicBrief(BaseModel):
     def brief_json(self) -> str:
         return self.model_dump_json()
 
+    def piece_end_tick(self) -> int:
+        """Compute the piece end tick from structure and time signature."""
+        from miidi.schema.model import PPQ
+        if not self.structure:
+            return 0
+        num, den = self.time_signature
+        bar_ticks = int(PPQ * 4 * num / den)
+        total_bars = max(s.start_bar + s.bars for s in self.structure)
+        return int(total_bars * bar_ticks)
+
     @classmethod
     def validate_symbols(cls, spans: list[ChordSpan]) -> list[str]:
         errors = []
