@@ -1,4 +1,6 @@
 from __future__ import annotations
+import asyncio
+import threading
 from pathlib import Path
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
@@ -20,6 +22,10 @@ _store: SessionStore | None = None
 _client: LLMClient | None = None
 _root: Path | None = None
 
+# Track in-flight background pipeline tasks: sid -> {"status": "running"|"done"|"error", "log": [...]}
+_bg_tasks: dict[str, dict] = {}
+_bg_lock = threading.Lock()
+
 
 def init(store: SessionStore, client: LLMClient, root: Path) -> None:
     global _store, _client, _root
@@ -28,21 +34,57 @@ def init(store: SessionStore, client: LLMClient, root: Path) -> None:
     _root = root
 
 
+def _run_pipeline_bg(sid: str, prompt: str, style: str, stages: list[str]) -> None:
+    """Run pipeline in a background thread."""
+    try:
+        result = run_pipeline(
+            user_prompt=prompt,
+            style=style,
+            client=_client,
+            store=_store,
+            out_dir=_root / "midi" if _root else None,
+            stages=stages,
+            sid=sid,
+        )
+        with _bg_lock:
+            _bg_tasks[sid] = {"status": "done", "log": result.stage_log}
+    except Exception as exc:
+        with _bg_lock:
+            _bg_tasks[sid] = {"status": "error", "log": [str(exc)]}
+
+
 @router.post("/sessions", response_model=CreateSessionResponse)
 async def create_session(req: CreateSessionRequest) -> CreateSessionResponse:
     if _store is None or _client is None:
         raise HTTPException(503, "server not initialized")
     out_dir = _root / "midi"
     out_dir.mkdir(parents=True, exist_ok=True)
-    result: PipelineResult = run_pipeline(
-        user_prompt=req.prompt,
-        style=req.style,
-        client=_client,
-        store=_store,
-        out_dir=out_dir,
+    # Run plan stage only (fast ~10s), return sid immediately
+    loop = asyncio.get_running_loop()
+    result: PipelineResult = await loop.run_in_executor(
+        None,
+        lambda: run_pipeline(
+            user_prompt=req.prompt,
+            style=req.style,
+            client=_client,
+            store=_store,
+            out_dir=out_dir,
+            stages=["plan"],
+        ),
     )
     if result.sid is None:
         raise HTTPException(500, "pipeline produced no session")
+    # Fire background thread for remaining stages
+    if len(req.stages) > 1:
+        remaining = [s for s in req.stages if s != "plan"]
+        with _bg_lock:
+            _bg_tasks[result.sid] = {"status": "running", "log": []}
+        t = threading.Thread(
+            target=_run_pipeline_bg,
+            args=(result.sid, req.prompt, req.style, remaining),
+            daemon=True,
+        )
+        t.start()
     return CreateSessionResponse(sid=result.sid)
 
 
@@ -54,10 +96,23 @@ async def get_status(sid: str) -> StatusResponse:
         _store.session_meta(sid)
     except FileNotFoundError:
         raise HTTPException(404, f"session {sid} not found")
+
+    # Check if a background task is still running
+    with _bg_lock:
+        bg = _bg_tasks.get(sid)
+
+    if bg and bg["status"] == "running":
+        return StatusResponse(
+            sid=sid,
+            stage="generating",
+            trajectory=[],
+            stage_log=["Generating..."],
+        )
+
     try:
         latest = _store.latest(sid)
     except ValueError:
-        raise HTTPException(404, "no versions")
+        return StatusResponse(sid=sid, stage="planned", trajectory=[], stage_log=[])
     ver = _store.load_version(sid, latest)
     return StatusResponse(
         sid=sid,
@@ -104,17 +159,16 @@ async def get_midi(sid: str) -> FileResponse:
     return FileResponse(midi_path, media_type="audio/midi", filename=midi_path.name)
 
 
-@router.get("/sessions/{sid}/audio")
-async def get_audio(sid: str):
-    raise HTTPException(501, "FluidSynth not available")
-
-
 @router.post("/sessions/{sid}/revise")
 async def revise_session(sid: str, req: ReviseRequest) -> StatusResponse:
     if _store is None or _client is None:
         raise HTTPException(503, "server not initialized")
     try:
-        result: PipelineResult = revise(_store, _client, sid, req.feedback)
+        loop = asyncio.get_running_loop()
+        result: PipelineResult = await loop.run_in_executor(
+            None,
+            lambda: revise(_store, _client, sid, req.feedback),
+        )
     except Exception as e:
         raise HTTPException(500, str(e))
     return StatusResponse(
@@ -172,7 +226,20 @@ async def evaluate(sid: str) -> EvaluateResponse:
     style = ver.get("style", "touhou")
     pack = load_style_pack(style)
     report = evaluate_rules(comp, pack.defaults)
-    return EvaluateResponse(report=report.to_dict())
+    composite_dict = None
+    if not report.invalid:
+        try:
+            from miidi.eval.judge import evaluate_judge
+            from miidi.eval.composite import compute_composite
+            from miidi.llm.client import load_config, LLMClient
+            client = LLMClient(load_config())
+            judge = evaluate_judge(comp, report, client, style)
+            comp_report = compute_composite(report, judge)
+            composite_dict = comp_report.to_dict()
+            client.close()
+        except Exception:
+            pass
+    return EvaluateResponse(report=report.to_dict(), composite=composite_dict)
 
 
 @router.post("/sessions/{sid}/generate", response_model=GenerateStageResponse)
@@ -197,19 +264,19 @@ async def generate_stage(sid: str, req: GenerateStageRequest) -> GenerateStageRe
     if out_dir:
         out_dir.mkdir(parents=True, exist_ok=True)
 
-    # For stage continuation: re-run with original prompt but specific stages
-    # The pipeline will load from store if we pass the same sid
-    result: PipelineResult = run_pipeline(
-        user_prompt=meta["prompt"],
-        style=meta["style"],
-        client=_client,
-        store=_store,
-        out_dir=out_dir,
-        stages=req.stages,
+    loop = asyncio.get_running_loop()
+    result: PipelineResult = await loop.run_in_executor(
+        None,
+        lambda: run_pipeline(
+            user_prompt=meta["prompt"],
+            style=meta["style"],
+            client=_client,
+            store=_store,
+            out_dir=out_dir,
+            stages=req.stages,
+            sid=sid,
+        ),
     )
-    # Re-bind to existing session
-    result.sid = sid
-
     return GenerateStageResponse(
         sid=sid,
         stage_log=result.stage_log,

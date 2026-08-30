@@ -5,6 +5,7 @@ from pydantic import BaseModel
 class CreateSessionRequest(BaseModel):
     prompt: str
     style: str
+    stages: list[str] = ["plan"]
 
 
 class CreateSessionResponse(BaseModel):
@@ -28,6 +29,7 @@ class VersionResponse(BaseModel):
 
 class EvaluateResponse(BaseModel):
     report: dict
+    composite: dict | None = None
 
 
 class GenerateStageRequest(BaseModel):
