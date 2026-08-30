@@ -79,3 +79,26 @@ class Composition(BaseModel):
         structural = int(self.total_bars() * self.bar_ticks) if self.structure else 0
         played = max((t.end_tick for t in self.tracks), default=0)
         return max(structural, played)
+
+    def clamp_to_boundary(self) -> Composition:
+        """Truncate notes that extend beyond the piece boundary.
+
+        Notes starting beyond the boundary are removed.
+        Notes ending beyond the boundary have their duration truncated.
+        """
+        if not self.structure:
+            return self
+        limit = int(self.total_bars() * self.bar_ticks)
+        new_tracks = []
+        for track in self.tracks:
+            clamped_notes = []
+            for onset, dur, pitch, vel in track.notes:
+                if onset >= limit:
+                    continue
+                end = onset + dur
+                if end > limit:
+                    dur = limit - onset
+                if dur >= 1:
+                    clamped_notes.append((onset, dur, pitch, vel))
+            new_tracks.append(track.model_copy(update={"notes": clamped_notes}))
+        return self.model_copy(update={"tracks": new_tracks})
