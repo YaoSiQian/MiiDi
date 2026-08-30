@@ -1,0 +1,6 @@
+id: hard_05
+style: lofi
+prompt: "A lo-fi track with complex jazz harmony (maj9, min11, altered dominants)"
+expectations:
+  style_features: ["extended chords", "lo-fi aesthetic", "jazzy"]
+  challenge: "harmonic complexity"

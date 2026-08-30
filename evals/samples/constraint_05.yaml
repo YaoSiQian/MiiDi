@@ -1,0 +1,9 @@
+id: constraint_05
+style: touhou
+prompt: "A Touhou arrangement at 170 BPM in B minor, featuring piano and drums"
+constraints:
+  bpm: 170
+  key: "B minor"
+  instruments: ["piano", "drums"]
+expectations:
+  explicit_requirements: ["bpm=170", "key=B minor"]

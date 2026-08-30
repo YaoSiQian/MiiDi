@@ -58,3 +58,36 @@ def test_load_all_basic_samples():
     assert len(loaded) == 20
     styles = {s.style for s in loaded}
     assert styles == {"pop", "classical", "jazz", "lofi", "touhou"}
+
+
+def test_load_all_constraint_samples():
+    samples_dir = Path(__file__).parent.parent / "evals" / "samples"
+    loaded = []
+    for f in sorted(samples_dir.glob("constraint_*.yaml")):
+        with open(f) as fh:
+            data = yaml.safe_load(fh)
+        sample = EvalSample(**data)
+        loaded.append(sample)
+    assert len(loaded) == 8
+
+
+def test_load_all_hard_samples():
+    samples_dir = Path(__file__).parent.parent / "evals" / "samples"
+    loaded = []
+    for f in sorted(samples_dir.glob("hard_*.yaml")):
+        with open(f) as fh:
+            data = yaml.safe_load(fh)
+        sample = EvalSample(**data)
+        loaded.append(sample)
+    assert len(loaded) == 6
+
+
+def test_load_all_adversarial_samples():
+    samples_dir = Path(__file__).parent.parent / "evals" / "samples"
+    loaded = []
+    for f in sorted(samples_dir.glob("adversarial_*.yaml")):
+        with open(f) as fh:
+            data = yaml.safe_load(fh)
+        sample = EvalSample(**data)
+        loaded.append(sample)
+    assert len(loaded) == 4

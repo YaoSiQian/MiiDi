@@ -1,0 +1,6 @@
+id: hard_01
+style: jazz
+prompt: "A full jazz piece using only ii-V-I progressions throughout all sections"
+expectations:
+  style_features: ["ii-V-I only", "jazz harmony", "voice leading"]
+  challenge: "strict harmonic constraint"

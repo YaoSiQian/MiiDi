@@ -1,0 +1,6 @@
+id: adversarial_04
+style: lofi
+prompt: "A lo-fi track at 200 BPM with aggressive distorted guitars"
+expectations:
+  contradiction: "lo-fi aesthetic vs aggressive distortion"
+  expected_behavior: "style mismatch handling"

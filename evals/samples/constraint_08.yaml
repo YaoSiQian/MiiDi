@@ -1,0 +1,9 @@
+id: constraint_08
+style: lofi
+prompt: "A lo-fi track at exactly 75 BPM, 64 bars, in C minor"
+constraints:
+  bpm: 75
+  key: "C minor"
+  duration_bars: 64
+expectations:
+  explicit_requirements: ["bpm=75", "key=C minor", "duration=64 bars"]

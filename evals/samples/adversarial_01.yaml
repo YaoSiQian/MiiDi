@@ -1,0 +1,6 @@
+id: adversarial_01
+style: pop
+prompt: "Write a 300 BPM lullaby that is both extremely fast and very soothing"
+expectations:
+  contradiction: "high tempo vs soothing mood"
+  expected_behavior: "graceful degradation or explanation"

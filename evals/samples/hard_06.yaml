@@ -1,0 +1,6 @@
+id: hard_06
+style: pop
+prompt: "A minimal pop piece with only 4 bars and a single melody line"
+expectations:
+  style_features: ["minimal", "short form", "single voice"]
+  challenge: "boundary value - minimal"

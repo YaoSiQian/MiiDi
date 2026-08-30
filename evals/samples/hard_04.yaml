@@ -1,0 +1,6 @@
+id: hard_04
+style: classical
+prompt: "A fugue with 3 voices in G minor, demonstrating stretto and inversion"
+expectations:
+  style_features: ["fugal texture", "counterpoint", "development"]
+  challenge: "contrapuntal writing"

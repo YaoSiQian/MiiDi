@@ -1,0 +1,9 @@
+id: constraint_07
+style: jazz
+prompt: "A jazz waltz in 3/4 time at 120 BPM in F major"
+constraints:
+  bpm: 120
+  key: "F major"
+  time_signature: [3, 4]
+expectations:
+  explicit_requirements: ["bpm=120", "key=F major", "time=3/4"]

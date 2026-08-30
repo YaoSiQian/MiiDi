@@ -1,0 +1,6 @@
+id: hard_02
+style: touhou
+prompt: "A Touhou piece at 190 BPM with maximum note density in the chorus"
+expectations:
+  style_features: ["high BPM", "dense chorus", "virtuosic"]
+  challenge: "extreme density"

@@ -1,0 +1,6 @@
+id: adversarial_03
+style: jazz
+prompt: "A jazz piece that uses no seventh chords and has no swing feel"
+expectations:
+  contradiction: "jazz without defining features"
+  expected_behavior: "adaptation or explanation"

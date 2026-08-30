@@ -1,0 +1,6 @@
+id: adversarial_02
+style: classical
+prompt: "A classical piece in 3/4 and 4/4 time simultaneously"
+expectations:
+  contradiction: "conflicting time signatures"
+  expected_behavior: "rejection or clarification"

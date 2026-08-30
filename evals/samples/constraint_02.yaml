@@ -1,0 +1,9 @@
+id: constraint_02
+style: jazz
+prompt: "A jazz piece featuring trumpet and piano, tempo 140 BPM, in Eb major"
+constraints:
+  bpm: 140
+  key: "Eb major"
+  instruments: ["trumpet", "piano"]
+expectations:
+  explicit_requirements: ["bpm=140", "key=Eb major", "instruments=trumpet+piano"]

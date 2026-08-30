@@ -1,0 +1,10 @@
+id: constraint_03
+style: classical
+prompt: "A classical string quartet piece in D minor, 48 bars, allegro tempo"
+constraints:
+  bpm: 140
+  key: "D minor"
+  duration_bars: 48
+  instruments: ["strings"]
+expectations:
+  explicit_requirements: ["bpm=140", "key=D minor", "duration=48 bars"]

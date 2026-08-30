@@ -1,0 +1,8 @@
+id: constraint_04
+style: lofi
+prompt: "A lo-fi beat at 85 BPM in Ab major with vinyl texture"
+constraints:
+  bpm: 85
+  key: "Ab major"
+expectations:
+  explicit_requirements: ["bpm=85", "key=Ab major"]

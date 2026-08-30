@@ -1,0 +1,9 @@
+id: constraint_01
+style: pop
+prompt: "A pop song at exactly 120 BPM in the key of G major, 32 bars long"
+constraints:
+  bpm: 120
+  key: "G major"
+  duration_bars: 32
+expectations:
+  explicit_requirements: ["bpm=120", "key=G major", "duration=32 bars"]

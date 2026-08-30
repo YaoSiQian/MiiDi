@@ -1,0 +1,6 @@
+id: hard_03
+style: pop
+prompt: "A pop song that modulates from C major to Eb major in the bridge"
+expectations:
+  style_features: ["modulation", "bridge section", "key change"]
+  challenge: "key modulation"

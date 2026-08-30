@@ -1,0 +1,9 @@
+id: constraint_06
+style: pop
+prompt: "A 16-bar pop intro with just piano and vocals, key of C major"
+constraints:
+  duration_bars: 16
+  key: "C major"
+  instruments: ["piano"]
+expectations:
+  explicit_requirements: ["duration=16 bars", "key=C major"]
