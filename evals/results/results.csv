@@ -1,0 +1,4 @@
+sample_id,style,R_rule,J1,J2,J3,composite,note_count,track_count,duration_bars,error
+adversarial_01,pop,0.0,0.0,0.0,0.0,0.0,0,0,0,generation failed
+adversarial_02,classical,0.0,0.0,0.0,0.0,0.0,0,0,0,generation failed
+adversarial_03,jazz,0.0,0.0,0.0,0.0,0.0,0,0,0,generation failed
