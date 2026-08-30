@@ -233,15 +233,17 @@ async def evaluate(sid: str) -> EvaluateResponse:
         from miidi.eval.judge import evaluate_judge
         from miidi.eval.composite import compute_composite
         from miidi.llm.client import load_config, LLMClient
-        client = LLMClient(load_config())
+        client = None
         try:
+            client = LLMClient(load_config())
             judge = evaluate_judge(comp, report, client, style)
             comp_report = compute_composite(report, judge)
             composite_dict = comp_report.to_dict()
         except Exception:
             logger.warning("judge/composite computation failed for session %s", sid, exc_info=True)
         finally:
-            client.close()
+            if client is not None:
+                client.close()
     return EvaluateResponse(report=report.to_dict(), composite=composite_dict)
 
 
