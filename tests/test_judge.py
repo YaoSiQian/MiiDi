@@ -33,7 +33,8 @@ def test_evaluate_judge_returns_report():
     }
     comp = _make_comp()
     rule_report = RuleReport(invalid=False, R_rule=65.0)
-    report = evaluate_judge(comp, rule_report, client, "pop")
+    report = evaluate_judge(comp, rule_report, client, "pop",
+                            prompt="Write a catchy pop verse with piano and drums at 120 BPM.")
     assert isinstance(report, JudgeReport)
     assert 0 <= report.J1 <= 100
     assert 0 <= report.J2 <= 100

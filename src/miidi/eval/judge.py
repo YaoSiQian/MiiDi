@@ -1,5 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass, field
+from miidi.eval.score import RuleReport
 from miidi.llm.client import LLMClient
 from miidi.schema.model import Composition
 from miidi.skills.loader import StylePack, load_style_pack
@@ -61,29 +62,30 @@ def _j3_user(comp_dict: dict, rule_summary: str) -> str:
     import json
     return f"RULE TRACK RESULTS:\n{rule_summary}\n\nCOMPOSITION:\n{json.dumps(comp_dict, indent=2)}\n\nEvaluate musicality."
 
-def _normalize_score(raw: dict, key: str) -> float:
+def _normalize_score(raw: dict) -> float:
     score = raw.get("score", 50.0)
     if isinstance(score, (int, float)):
         return max(0.0, min(100.0, float(score)))
     return 50.0
 
-def evaluate_judge(comp: Composition, rule_report, client: LLMClient,
-                   style: str) -> JudgeReport:
+def evaluate_judge(comp: Composition, rule_report: RuleReport, client: LLMClient,
+                   style: str, prompt: str | None = None) -> JudgeReport:
     pack = load_style_pack(style)
     comp_dict = comp.model_dump()
     rule_summary = f"R_rule={rule_report.R_rule:.1f}" if hasattr(rule_report, 'R_rule') else "N/A"
+    j2_prompt = prompt or "Evaluate prompt following for this composition."
 
     # J1: Style adherence
     raw_j1 = client.respond_json(_j1_system(pack), _j1_user(comp_dict))
-    j1_score = _normalize_score(raw_j1, "J1")
+    j1_score = _normalize_score(raw_j1)
 
     # J2: Prompt following
-    raw_j2 = client.respond_json(_j2_system(), _j2_user(comp_dict, style))
-    j2_score = _normalize_score(raw_j2, "J2")
+    raw_j2 = client.respond_json(_j2_system(), _j2_user(comp_dict, j2_prompt))
+    j2_score = _normalize_score(raw_j2)
 
     # J3: Musicality
     raw_j3 = client.respond_json(_j3_system(), _j3_user(comp_dict, rule_summary))
-    j3_score = _normalize_score(raw_j3, "J3")
+    j3_score = _normalize_score(raw_j3)
 
     all_evidence = []
     all_per_item = {}
