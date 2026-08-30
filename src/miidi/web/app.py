@@ -14,8 +14,10 @@ def create_app(store: SessionStore, client: LLMClient, root: Path) -> FastAPI:
     app.include_router(router, prefix="/api")
 
     frontend = Path(__file__).resolve().parents[3] / "webapp" / "frontend"
-    if frontend.is_dir():
-        app.mount("/", StaticFiles(directory=str(frontend), html=True), name="static")
+    dist = frontend / "dist"
+    static_dir = dist if dist.is_dir() else frontend
+    if static_dir.is_dir():
+        app.mount("/", StaticFiles(directory=str(static_dir), html=True), name="static")
 
     return app
 

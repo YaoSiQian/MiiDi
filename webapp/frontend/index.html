@@ -8,26 +8,76 @@
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
-  <div class="menu-bar">
-    <span class="menu-bar-title">MiiDi</span>
-    <span class="menu-bar-item" id="menu-session">Session</span>
-    <span class="menu-bar-item" id="menu-about">About</span>
+  <ul role="menu-bar">
+    <li role="menu-item" tabindex="0" aria-haspopup="false">MiiDi</li>
+    <li role="menu-item" tabindex="0" aria-haspopup="true">
+      Session
+      <ul role="menu">
+        <li role="menu-item"><a href="#new">New Session</a></li>
+        <li role="menu-item"><a href="#versions">Version History</a></li>
+      </ul>
+    </li>
+    <li role="menu-item" tabindex="0" aria-haspopup="true">
+      About
+      <ul role="menu">
+        <li role="menu-item"><a href="https://github.com" target="_blank">GitHub</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="flow-bar" id="flow-bar">
+    <span class="flow-step active" data-step="0">Intro</span>
+    <span class="flow-connector">→</span>
+    <span class="flow-step future" data-step="1">1. Compose</span>
+    <span class="flow-connector">→</span>
+    <span class="flow-step future" data-step="2">2. Preview</span>
+    <span class="flow-connector">→</span>
+    <span class="flow-step future" data-step="3">3. Evaluate</span>
+    <span class="flow-connector">→</span>
+    <span class="flow-step future" data-step="4">4. Revise</span>
   </div>
+  <div class="flow-hint" id="flow-hint">Welcome to MiiDi</div>
 
   <div class="desktop">
+
+    <div class="window" id="window-intro" style="left:40px;top:40px;width:420px;">
+      <div class="title-bar">
+        <h1 class="title">Welcome to MiiDi</h1>
+      </div>
+      <div class="separator"></div>
+      <div class="window-pane">
+        <p>AI-powered symbolic music generation with a custom dual-track evaluation system.</p>
+        <h3>How it works</h3>
+        <div class="flow-overview">
+          <div class="flow-overview-step">1. Compose — Write a prompt and choose a style</div>
+          <div class="flow-overview-step">2. Preview — See your composition as a piano roll</div>
+          <div class="flow-overview-step">3. Evaluate — Review automatic quality scores</div>
+          <div class="flow-overview-step">4. Revise — Give feedback and regenerate</div>
+        </div>
+        <button class="btn" id="btn-get-started">Get Started</button>
+      </div>
+    </div>
+
     <div class="window" id="window-composer" style="left:40px;top:40px;width:420px;">
-      <div class="title-bar"><h1 class="title">Composer</h1></div>
-      <div class="window-content">
+      <div class="title-bar">
+        <h1 class="title">Composer</h1>
+      </div>
+      <div class="separator"></div>
+      <div class="window-pane">
         <div class="form-group">
           <label>Prompt</label>
           <textarea id="prompt-input" rows="3" placeholder="Describe your piece..."></textarea>
         </div>
         <div class="form-group">
           <label>Style</label>
-          <div class="style-buttons" id="style-buttons"></div>
+          <div class="field-row"><input id="style-pop" type="radio" name="style" value="pop"><label for="style-pop">Pop</label></div>
+          <div class="field-row"><input id="style-classical" type="radio" name="style" value="classical"><label for="style-classical">Classical</label></div>
+          <div class="field-row"><input id="style-jazz" type="radio" name="style" value="jazz"><label for="style-jazz">Jazz</label></div>
+          <div class="field-row"><input id="style-lofi" type="radio" name="style" value="lofi"><label for="style-lofi">Lofi</label></div>
+          <div class="field-row"><input id="style-touhou" type="radio" name="style" value="touhou" checked><label for="style-touhou">Touhou</label></div>
         </div>
         <div class="form-group">
-          <button class="btn btn-primary" id="btn-generate">Generate</button>
+          <button class="btn" id="btn-generate">Generate</button>
         </div>
         <div class="form-group">
           <div class="progress-bar" id="progress-bar" style="display:none;">
@@ -39,9 +89,19 @@
     </div>
 
     <div class="window" id="window-pianoroll" style="left:480px;top:40px;width:520px;">
-      <div class="title-bar"><h1 class="title">Piano Roll</h1></div>
-      <div class="window-content">
-        <canvas id="pianoroll-canvas" width="500" height="300"></canvas>
+      <div class="title-bar">
+        <h1 class="title">Piano Roll</h1>
+      </div>
+      <div class="separator"></div>
+      <div class="window-pane">
+        <div id="pianoroll-empty" class="pianoroll-empty">
+          Generate a composition to see the piano roll
+          <div style="margin-top:12px;">
+            <button class="btn" id="btn-upload-midi">Upload MIDI</button>
+            <input type="file" id="midi-file-input" accept=".mid,.midi" style="display:none;">
+          </div>
+        </div>
+        <canvas id="pianoroll-canvas" width="500" height="300" style="display:none;"></canvas>
         <div class="transport-bar">
           <button class="btn" id="btn-play">Play</button>
           <button class="btn" id="btn-stop">Stop</button>
@@ -50,8 +110,11 @@
     </div>
 
     <div class="window" id="window-evaluator" style="left:40px;top:380px;width:420px;">
-      <div class="title-bar"><h1 class="title">Evaluator</h1></div>
-      <div class="window-content">
+      <div class="title-bar">
+        <h1 class="title">Evaluator</h1>
+      </div>
+      <div class="separator"></div>
+      <div class="window-pane">
         <div id="eval-scores"></div>
         <div id="eval-violations"></div>
         <div id="eval-trajectory"></div>
@@ -59,8 +122,11 @@
     </div>
 
     <div class="window" id="window-feedback" style="left:480px;top:380px;width:520px;">
-      <div class="title-bar"><h1 class="title">Feedback</h1></div>
-      <div class="window-content">
+      <div class="title-bar">
+        <h1 class="title">Feedback</h1>
+      </div>
+      <div class="separator"></div>
+      <div class="window-pane">
         <div class="form-group">
           <label>Revision instructions</label>
           <textarea id="feedback-input" rows="2" placeholder="What should change?"></textarea>
@@ -71,6 +137,7 @@
         <div id="version-timeline"></div>
       </div>
     </div>
+
   </div>
 
   <script type="module" src="./js/app.js"></script>

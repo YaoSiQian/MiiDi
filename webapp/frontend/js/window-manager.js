@@ -1,5 +1,5 @@
 // Macintosh System 6 window manager
-// Handles: drag, click-to-focus, fold/unfold
+// Handles: drag, click-to-focus, fold/unfold, close button
 
 export class WindowManager {
   constructor() {
@@ -11,6 +11,7 @@ export class WindowManager {
     document.querySelectorAll(".window").forEach((win) => {
       this.setupDrag(win);
       this.setupFocus(win);
+      this.setupFold(win);
     });
   }
 
@@ -23,6 +24,7 @@ export class WindowManager {
     let dragging = false;
 
     titleBar.addEventListener("mousedown", (e) => {
+      if (e.target.closest("button")) return;
       dragging = true;
       offsetX = e.clientX - win.offsetLeft;
       offsetY = e.clientY - win.offsetTop;
@@ -39,20 +41,25 @@ export class WindowManager {
     document.addEventListener("mouseup", () => {
       dragging = false;
     });
-
-    // Double-click to fold
-    titleBar.addEventListener("dblclick", () => {
-      const content = win.querySelector(".window-content");
-      if (content) {
-        content.style.display =
-          content.style.display === "none" ? "block" : "none";
-      }
-    });
   }
 
   setupFocus(win) {
     win.addEventListener("mousedown", () => {
       this.focus(win);
+    });
+  }
+
+  setupFold(win) {
+    const titleBar = win.querySelector(".title-bar");
+    if (!titleBar) return;
+
+    titleBar.addEventListener("dblclick", (e) => {
+      if (e.target.closest("button")) return;
+      const pane = win.querySelector(".window-pane");
+      const separator = win.querySelector(".separator");
+      const hidden = pane && pane.style.display === "none";
+      if (pane) pane.style.display = hidden ? "block" : "none";
+      if (separator) separator.style.display = hidden ? "flex" : "none";
     });
   }
 
