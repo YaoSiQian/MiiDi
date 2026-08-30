@@ -1,5 +1,6 @@
 from __future__ import annotations
 import asyncio
+import logging
 import threading
 from pathlib import Path
 from fastapi import APIRouter, HTTPException
@@ -17,6 +18,7 @@ from miidi.skills.loader import load_style_pack
 from miidi.eval.score import evaluate_rules
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 _store: SessionStore | None = None
 _client: LLMClient | None = None
@@ -228,17 +230,18 @@ async def evaluate(sid: str) -> EvaluateResponse:
     report = evaluate_rules(comp, pack.defaults)
     composite_dict = None
     if not report.invalid:
+        from miidi.eval.judge import evaluate_judge
+        from miidi.eval.composite import compute_composite
+        from miidi.llm.client import load_config, LLMClient
+        client = LLMClient(load_config())
         try:
-            from miidi.eval.judge import evaluate_judge
-            from miidi.eval.composite import compute_composite
-            from miidi.llm.client import load_config, LLMClient
-            client = LLMClient(load_config())
             judge = evaluate_judge(comp, report, client, style)
             comp_report = compute_composite(report, judge)
             composite_dict = comp_report.to_dict()
-            client.close()
         except Exception:
-            pass
+            logger.warning("judge/composite computation failed for session %s", sid, exc_info=True)
+        finally:
+            client.close()
     return EvaluateResponse(report=report.to_dict(), composite=composite_dict)
 
 
