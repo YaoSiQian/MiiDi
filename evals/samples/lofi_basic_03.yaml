@@ -1,0 +1,6 @@
+id: lofi_basic_03
+style: lofi
+prompt: "A rainy day lo-fi piece with rain sounds and melancholic Rhodes"
+expectations:
+  style_features: ["ambient texture", "simple harmony", "relaxed groove"]
+  genre: "lofi"

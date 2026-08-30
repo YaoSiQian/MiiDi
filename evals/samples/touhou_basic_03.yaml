@@ -1,0 +1,6 @@
+id: touhou_basic_03
+style: touhou
+prompt: "A playful Touhou melody with bouncy rhythm and bright timbres"
+expectations:
+  style_features: ["catchy melody", "energetic drums", "bright piano"]
+  genre: "touhou"

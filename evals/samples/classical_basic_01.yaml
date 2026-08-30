@@ -1,0 +1,6 @@
+id: classical_basic_01
+style: classical
+prompt: "A serene adagio in C major, evoking a peaceful lake at dawn"
+expectations:
+  style_features: ["functional harmony", "voice leading", "no drums"]
+  genre: "classical"

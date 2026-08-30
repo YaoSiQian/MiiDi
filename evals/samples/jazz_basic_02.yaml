@@ -1,0 +1,6 @@
+id: jazz_basic_02
+style: jazz
+prompt: "A hard bop blues in F, energetic with walking bass and ride cymbal"
+expectations:
+  style_features: ["blues form", "walking bass", "swing eighth notes"]
+  genre: "jazz"

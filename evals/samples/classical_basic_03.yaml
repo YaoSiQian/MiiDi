@@ -1,0 +1,6 @@
+id: classical_basic_03
+style: classical
+prompt: "A graceful minuet in 3/4 time with a trio section"
+expectations:
+  style_features: ["triple meter", "binary form", "ornamental melody"]
+  genre: "classical"

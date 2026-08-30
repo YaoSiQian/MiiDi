@@ -1,3 +1,7 @@
+from pathlib import Path
+
+import yaml
+
 from evals.samples.schema import EvalSample
 
 
@@ -41,3 +45,16 @@ def test_sample_type_property():
     # Test adversarial type
     sample = EvalSample(id="adversarial_01", style="pop", prompt="test")
     assert sample.sample_type == "adversarial"
+
+
+def test_load_all_basic_samples():
+    samples_dir = Path(__file__).parent.parent / "evals" / "samples"
+    loaded = []
+    for f in sorted(samples_dir.glob("*_basic_*.yaml")):
+        with open(f) as fh:
+            data = yaml.safe_load(fh)
+        sample = EvalSample(**data)
+        loaded.append(sample)
+    assert len(loaded) == 20
+    styles = {s.style for s in loaded}
+    assert styles == {"pop", "classical", "jazz", "lofi", "touhou"}

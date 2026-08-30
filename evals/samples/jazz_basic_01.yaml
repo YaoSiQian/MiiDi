@@ -1,0 +1,6 @@
+id: jazz_basic_01
+style: jazz
+prompt: "A relaxed bossa nova in Bb major with a flute melody"
+expectations:
+  style_features: ["bossa nova rhythm", "extended chords", "gentle swing"]
+  genre: "jazz"

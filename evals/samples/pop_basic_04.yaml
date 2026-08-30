@@ -1,0 +1,6 @@
+id: pop_basic_04
+style: pop
+prompt: "A mellow acoustic pop tune about finding peace in a quiet garden"
+expectations:
+  style_features: ["gentle rhythm", "warm harmony", "intimate feel"]
+  genre: "pop"

@@ -1,0 +1,6 @@
+id: pop_basic_03
+style: pop
+prompt: "A danceable pop track with a catchy hook, perfect for a summer playlist"
+expectations:
+  style_features: ["strong downbeat", "repetitive hook", "build-up to chorus"]
+  genre: "pop"

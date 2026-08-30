@@ -1,0 +1,6 @@
+id: touhou_basic_04
+style: touhou
+prompt: "An intense Touhou battle theme with rapid-fire notes and driving bass"
+expectations:
+  style_features: ["high density", "aggressive drums", "virtuosic piano"]
+  genre: "touhou"

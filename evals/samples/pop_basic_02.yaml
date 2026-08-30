@@ -1,0 +1,6 @@
+id: pop_basic_02
+style: pop
+prompt: "A bittersweet pop ballad about saying goodbye to a friend moving abroad"
+expectations:
+  style_features: ["verse-chorus structure", "emotional dynamics", "clean production"]
+  genre: "pop"

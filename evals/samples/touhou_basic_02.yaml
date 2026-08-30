@@ -1,0 +1,6 @@
+id: touhou_basic_02
+style: touhou
+prompt: "A dramatic orchestral Touhou piece with choir and brass"
+expectations:
+  style_features: ["epic build", "layered orchestration", "emotional climax"]
+  genre: "touhou"

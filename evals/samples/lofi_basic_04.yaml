@@ -1,0 +1,6 @@
+id: lofi_basic_04
+style: lofi
+prompt: "An upbeat lo-fi track with funky bass and jazzy chords"
+expectations:
+  style_features: ["groove-oriented", "jazzy harmony", "head-nodding rhythm"]
+  genre: "lofi"

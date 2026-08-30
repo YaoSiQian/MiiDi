@@ -1,0 +1,6 @@
+id: classical_basic_02
+style: classical
+prompt: "A dramatic sonata-allegro movement with development and recapitulation"
+expectations:
+  style_features: ["sonata form", "thematic development", "cadential patterns"]
+  genre: "classical"

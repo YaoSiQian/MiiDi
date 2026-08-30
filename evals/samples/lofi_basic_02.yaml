@@ -1,0 +1,6 @@
+id: lofi_basic_02
+style: lofi
+prompt: "A nostalgic lo-fi track with reversed samples and muted guitar"
+expectations:
+  style_features: ["chill vibe", "imperfect timing", "filtered sound"]
+  genre: "lofi"

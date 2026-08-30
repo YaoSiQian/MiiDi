@@ -1,0 +1,6 @@
+id: jazz_basic_03
+style: jazz
+prompt: "A cool jazz ballad, thoughtful and understated with muted trumpet"
+expectations:
+  style_features: ["slow tempo", "sparse texture", "modal harmony"]
+  genre: "jazz"

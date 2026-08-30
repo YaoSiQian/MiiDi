@@ -1,0 +1,6 @@
+id: jazz_basic_04
+style: jazz
+prompt: "A bebop showcase with rapid chord changes and virtuosic alto sax"
+expectations:
+  style_features: ["fast tempo", "ii-V-I progressions", "chromatic passing tones"]
+  genre: "jazz"

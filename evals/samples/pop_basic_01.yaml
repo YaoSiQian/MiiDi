@@ -1,0 +1,6 @@
+id: pop_basic_01
+style: pop
+prompt: "A bright, upbeat pop song about the joy of a sunny morning walk"
+expectations:
+  style_features: ["four-on-the-floor kick", "syncopated melody", "I-V-vi-IV progression"]
+  genre: "pop"

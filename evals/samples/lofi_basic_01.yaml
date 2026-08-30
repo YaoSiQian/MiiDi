@@ -1,0 +1,6 @@
+id: lofi_basic_01
+style: lofi
+prompt: "A dreamy lo-fi hip hop beat for studying, with vinyl crackle and soft piano"
+expectations:
+  style_features: ["slow tempo 70-90 BPM", "swing drums", "warm pads"]
+  genre: "lofi"

@@ -1,0 +1,6 @@
+id: touhou_basic_01
+style: touhou
+prompt: "A high-energy Touhou-style arrangement with fast piano arpeggios and trumpet melody"
+expectations:
+  style_features: ["150-190 BPM", "dense piano", "soaring melody"]
+  genre: "touhou"

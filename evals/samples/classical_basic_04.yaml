@@ -1,0 +1,6 @@
+id: classical_basic_04
+style: classical
+prompt: "A lively scherzo with rapid scales and playful dynamics"
+expectations:
+  style_features: ["fast tempo", "dynamic contrasts", "virtuosic passages"]
+  genre: "classical"
