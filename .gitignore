@@ -9,3 +9,4 @@ webapp/frontend/dist/
 output/
 sessions/
 .pytest_cache/
+midi/
