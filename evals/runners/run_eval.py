@@ -71,7 +71,7 @@ def run_single_sample(
 
 
 def run_eval(
-    samples_dir: Path, out_dir: Path, client: LLMClient | None = None
+    samples_dir: Path, out_dir: Path, client: LLMClient | None = None, limit: int | None = None
 ) -> list[EvalResult]:
     if client is None:
         client = LLMClient(load_config())
@@ -81,6 +81,8 @@ def run_eval(
         with open(f) as fh:
             data = yaml.safe_load(fh)
         samples.append(EvalSample(**data))
+    if limit is not None:
+        samples = samples[:limit]
     results = []
     for i, sample in enumerate(samples):
         print(f"[{i + 1}/{len(samples)}] {sample.id} ({sample.style})")
@@ -126,5 +128,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--samples", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument("--limit", type=int, default=None, help="Max number of samples to evaluate")
     args = parser.parse_args()
-    run_eval(args.samples, args.out)
+    run_eval(args.samples, args.out, limit=args.limit)
