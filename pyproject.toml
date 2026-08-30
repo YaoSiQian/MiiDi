@@ -10,7 +10,7 @@ miidi = "miidi.cli:main"
 miidi-dev = "miidi.web.app:run_dev"
 
 [project.optional-dependencies]
-dev = ["pytest>=8", "mido>=1.3"]
+dev = ["pytest>=8", "pyyaml>=6.0"]
 web = ["fastapi>=0.111", "uvicorn>=0.30"]
 evaltools = ["numpy", "scipy", "pandas", "PyYAML"]
 
