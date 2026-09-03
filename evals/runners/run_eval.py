@@ -6,7 +6,7 @@ from pathlib import Path
 
 import yaml
 
-from evals.samples.schema import EvalSample
+from evals.schema import EvalSample
 from miidi.eval.composite import compute_composite
 from miidi.eval.judge import evaluate_judge
 from miidi.eval.score import evaluate_rules

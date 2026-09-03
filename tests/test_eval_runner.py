@@ -39,7 +39,7 @@ def test_eval_result_error_field():
 
 
 def test_run_single_sample_generation_failure():
-    from evals.samples.schema import EvalSample
+    from evals.schema import EvalSample
 
     sample = EvalSample(
         id="pop_basic_01",
@@ -57,7 +57,7 @@ def test_run_single_sample_generation_failure():
 
 
 def test_run_single_sample_exception_handling():
-    from evals.samples.schema import EvalSample
+    from evals.schema import EvalSample
 
     sample = EvalSample(
         id="pop_basic_01",
@@ -73,7 +73,7 @@ def test_run_single_sample_exception_handling():
 
 
 def test_run_single_sample_invalid_composition():
-    from evals.samples.schema import EvalSample
+    from evals.schema import EvalSample
     from miidi.eval.score import RuleReport
 
     sample = EvalSample(

@@ -2,7 +2,7 @@ from pathlib import Path
 
 import yaml
 
-from evals.samples.schema import EvalSample
+from evals.schema import EvalSample
 
 
 def test_eval_sample_minimal():
