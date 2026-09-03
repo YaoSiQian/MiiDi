@@ -15,7 +15,7 @@ def create_app(store: SessionStore, client: LLMClient, root: Path) -> FastAPI:
     init(store, client, root)
     app.include_router(router, prefix="/api")
 
-    frontend = Path(__file__).resolve().parents[3] / "webapp" / "frontend"
+    frontend = Path(__file__).resolve().parents[3] / "web"
     dist = frontend / "dist"
     static_dir = dist if dist.is_dir() else frontend
     if static_dir.is_dir():
@@ -38,7 +38,7 @@ def run_dev():
     app = create_app(store, client, root)
 
     # Start Vite in background
-    frontend = root / "webapp" / "frontend"
+    frontend = root / "web"
     vite = subprocess.Popen(
         ["npx", "vite", "--port", "5173"],
         cwd=str(frontend),
