@@ -4,15 +4,12 @@ import json
 import os
 import sys
 from collections import Counter, defaultdict
-from pathlib import Path
 
 import mido
 
 from midi_utils import find_midi_files
 
-# Add project root to path for schema import
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from src.miidi.schema.chords import parse_chord, ChordParseError
+from miidi.schema.chords import parse_chord, ChordParseError
 
 # MIDI note name mapping
 _PC_TO_NAME = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
