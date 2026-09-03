@@ -5,7 +5,7 @@ __pycache__/
 dist/
 evals/results/runs/
 node_modules/
-webapp/frontend/dist/
+web/dist/
 output/
 sessions/
 .pytest_cache/
