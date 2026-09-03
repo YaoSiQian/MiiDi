@@ -8,6 +8,8 @@ from pathlib import Path
 
 import mido
 
+from midi_utils import find_midi_files
+
 # GM Drum Map (note numbers)
 DRUM_NAMES = {
     36: "kick", 35: "kick",
@@ -33,15 +35,6 @@ DRUM_MAP = {
     39: 50, 50: 50,  # high toms
     54: 54, 56: 56,  # aux
 }
-
-
-def find_midi_files(root: str) -> list[str]:
-    files = []
-    for dirpath, _, filenames in os.walk(root):
-        for f in filenames:
-            if f.lower().endswith(".mid"):
-                files.append(os.path.join(dirpath, f))
-    return sorted(files)
 
 
 def analyze_percussion(filepath: str) -> dict | None:

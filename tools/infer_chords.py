@@ -8,6 +8,8 @@ from pathlib import Path
 
 import mido
 
+from midi_utils import find_midi_files
+
 # Add project root to path for schema import
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from src.miidi.schema.chords import parse_chord, ChordParseError
@@ -48,15 +50,6 @@ def classify_chord(pcs: frozenset[int]) -> str | None:
                     best_score = score
                     best = _PC_TO_NAME[root_pc] + suffix
     return best
-
-
-def find_midi_files(root: str) -> list[str]:
-    files = []
-    for dirpath, _, filenames in os.walk(root):
-        for f in filenames:
-            if f.lower().endswith(".mid"):
-                files.append(os.path.join(dirpath, f))
-    return sorted(files)
 
 
 def extract_chords_from_file(filepath: str) -> list[str]:

@@ -10,6 +10,8 @@ import mido
 import mido.midifiles.meta as _meta
 import types as _types
 
+from midi_utils import find_midi_files
+
 # Patch mido's key_signature decoder to tolerate malformed files (empty data).
 _spec_ks = _meta._META_SPECS[89]
 _orig_ks_decode = _spec_ks.decode
@@ -26,16 +28,6 @@ def _tolerant_ks_decode(self_msg, msg, data):
         msg.key = "C"
 
 _spec_ks.decode = _types.MethodType(_tolerant_ks_decode, _spec_ks)
-
-
-def find_midi_files(root: str) -> list[str]:
-    """Find all .mid files under root."""
-    files = []
-    for dirpath, _, filenames in os.walk(root):
-        for f in filenames:
-            if f.lower().endswith(".mid"):
-                files.append(os.path.join(dirpath, f))
-    return sorted(files)
 
 
 def analyze_file(filepath: str) -> dict:
