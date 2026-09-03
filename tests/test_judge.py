@@ -24,6 +24,28 @@ def test_judge_report_structure():
     assert d["J3"] == 70.0
     assert "composite" not in d
 
+def test_build_rule_summary_with_violations():
+    from miidi.eval.judge import _build_rule_summary
+    from miidi.eval.score import RuleReport
+    from miidi.eval.axes import AxisResult
+    from miidi.schema.validate import Violation
+
+    violations = (
+        Violation("Piano/note3", "PITCH_RANGE", "pitch 128 outside [0,127]"),
+        Violation("Drums", "DRUM_ROLE", "is_drum=True conflicts with role='melody'"),
+    )
+    report = RuleReport(
+        invalid=False,
+        R_rule=75.0,
+        axes={"harmony": AxisResult(score=80.0, details={"ok": True})},
+        gates={"pitch_range": 0.9},
+        violations=violations,
+    )
+    summary = _build_rule_summary(report)
+    assert "Piano/note3" in summary
+    assert "Drums" in summary
+    assert "pitch 128 outside" in summary
+
 def test_evaluate_judge_returns_report():
     client = MagicMock()
     client.respond_json.return_value = {
