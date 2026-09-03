@@ -84,7 +84,7 @@ python -m miidi evaluate --json output/path/to/composition.json
 
 ```bash
 # 一键启动
-miidi-serve
+python src/miidi/serve.py
 ```
 
 浏览器访问 `http://localhost:8000`，通过复古桌面界面进行可视化创作。
