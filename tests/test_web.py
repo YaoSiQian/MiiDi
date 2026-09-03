@@ -3,9 +3,8 @@ from __future__ import annotations
 import pytest
 from fastapi.testclient import TestClient
 
-from miidi.web.app import create_app
 from miidi.session.store import SessionStore
-
+from miidi.web.app import create_app
 
 BRIEF = {
     "title": "Test Piece",
@@ -106,6 +105,7 @@ def test_empty_session_returns_planned(tmp_path):
 
 class _MockJudgeClient:
     """Minimal mock for LLMClient used by evaluate_judge."""
+
     def __init__(self):
         self._replies = [
             {"score": 80, "per_item": [], "evidence": []},
@@ -125,14 +125,17 @@ class _MockJudgeClient:
 
 def test_evaluate(tmp_path):
     from unittest.mock import patch
+
     store = SessionStore(tmp_path / "sessions")
     app = create_app(store, FakeClient(), tmp_path)
     c = TestClient(app)
     resp = c.post("/api/sessions", json={"prompt": "test", "style": "touhou"})
     sid = resp.json()["sid"]
     mock_client = _MockJudgeClient()
-    with patch("miidi.llm.client.LLMClient", return_value=mock_client), \
-         patch("miidi.llm.client.load_config", return_value=None):
+    with (
+        patch("miidi.llm.client.LLMClient", return_value=mock_client),
+        patch("miidi.llm.client.load_config", return_value=None),
+    ):
         resp = c.post(f"/api/sessions/{sid}/evaluate")
     assert resp.status_code == 200
     data = resp.json()
@@ -142,14 +145,17 @@ def test_evaluate(tmp_path):
 
 def test_evaluate_composite(tmp_path):
     from unittest.mock import patch
+
     store = SessionStore(tmp_path / "sessions")
     app = create_app(store, FakeClient(), tmp_path)
     c = TestClient(app)
     resp = c.post("/api/sessions", json={"prompt": "test", "style": "touhou"})
     sid = resp.json()["sid"]
     mock_client = _MockJudgeClient()
-    with patch("miidi.llm.client.LLMClient", return_value=mock_client), \
-         patch("miidi.llm.client.load_config", return_value=None):
+    with (
+        patch("miidi.llm.client.LLMClient", return_value=mock_client),
+        patch("miidi.llm.client.load_config", return_value=None),
+    ):
         resp = c.post(f"/api/sessions/{sid}/evaluate")
     assert resp.status_code == 200
     data = resp.json()
@@ -163,7 +169,10 @@ def test_evaluate_composite(tmp_path):
 class ReviseFakeClient:
     def __init__(self):
         self._replies = [
-            BRIEF, LEAD_NOTES, BASS_NOTES, REVIEW_NULL,
+            BRIEF,
+            LEAD_NOTES,
+            BASS_NOTES,
+            REVIEW_NULL,
             {"layer": "track", "track": "Lead"},
             {"notes": [[i * 480, 480, 62, 80] for i in range(4)]},
         ]
@@ -211,7 +220,8 @@ class LifecycleFakeClient:
             # 2. generate plan+core+arrange: make_brief (fresh pipeline)
             BRIEF,
             # 3. generate core: compose melody + bass
-            LEAD_NOTES, BASS_NOTES,
+            LEAD_NOTES,
+            BASS_NOTES,
             # 4. generate arrange_coordinate (NEW)
             {"analysis": {}, "adjustments": []},
             # 5. generate self_review (after arrange)
@@ -245,9 +255,12 @@ def test_full_lifecycle(tmp_path):
     assert resp.status_code == 200
 
     from unittest.mock import patch
+
     mock_client = _MockJudgeClient()
-    with patch("miidi.llm.client.LLMClient", return_value=mock_client), \
-         patch("miidi.llm.client.load_config", return_value=None):
+    with (
+        patch("miidi.llm.client.LLMClient", return_value=mock_client),
+        patch("miidi.llm.client.load_config", return_value=None),
+    ):
         resp = c.post(f"/api/sessions/{sid}/evaluate")
     assert resp.status_code == 200
     assert "report" in resp.json()
@@ -256,8 +269,7 @@ def test_full_lifecycle(tmp_path):
     assert resp.status_code == 200
     versions_before = resp.json()["versions"]
 
-    resp = c.post(f"/api/sessions/{sid}/generate",
-                  json={"stages": ["plan", "core", "arrange"]})
+    resp = c.post(f"/api/sessions/{sid}/generate", json={"stages": ["plan", "core", "arrange"]})
     assert resp.status_code == 200
 
     resp = c.get(f"/api/sessions/{sid}/versions")

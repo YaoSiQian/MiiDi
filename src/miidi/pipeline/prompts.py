@@ -2,8 +2,10 @@ from __future__ import annotations
 
 from miidi.skills.loader import StylePack
 
-_JSON_ONLY = ("Output ONLY a single JSON object matching the schema. "
-              "No markdown fences, no commentary, no trailing text.")
+_JSON_ONLY = (
+    "Output ONLY a single JSON object matching the schema. "
+    "No markdown fences, no commentary, no trailing text."
+)
 
 _BRIEF_SCHEMA = """{
   "title": "string",
@@ -95,8 +97,9 @@ def compose_system(track_spec: dict, pack: StylePack) -> str:
     )
 
 
-def compose_user(brief_json: str, track_spec: dict, context_block: str,
-                 piece_end_tick: int | None = None) -> str:
+def compose_user(
+    brief_json: str, track_spec: dict, context_block: str, piece_end_tick: int | None = None
+) -> str:
     boundary = ""
     if piece_end_tick is not None:
         boundary = (
@@ -119,19 +122,18 @@ def review_system() -> str:
         "listing concrete violations and the current plan. Choose ONE track worth "
         "rewriting to fix the worst issues, and output its complete replacement notes.\n"
         f"GRID RULES\n{_GRID_RULES}\n\n"
-        'Respond ONLY with a single JSON object: either '
+        "Respond ONLY with a single JSON object: either "
         '{"track": "<name>", "notes": [[onset,dur,pitch,velocity], ...]} '
         'or {"track": null} when nothing is worth changing.'
     )
 
 
-def review_user(report_text: str, track_options: list[str],
-                brief_json: str) -> str:
+def review_user(report_text: str, track_options: list[str], brief_json: str) -> str:
     opts = ", ".join(track_options)
     return (
         f"EVALUATION REPORT\n{report_text}\n\n"
         f"CANDIDATE TRACKS: {opts}\n\nMUSICAL PLAN\n{brief_json}\n\n"
-        'Fix the highest-impact violations. Output ONLY the JSON decision: '
+        "Fix the highest-impact violations. Output ONLY the JSON decision: "
         '{"track": "<name>", "notes": [...]} or {"track": null}.'
     )
 
@@ -186,7 +188,9 @@ def arrange_coordinate_system(pack: StylePack) -> str:
 def arrange_coordinate_user(comp_dict: dict) -> str:
     """Build user prompt from a composition dict."""
     import json
+
     from miidi.schema.model import PPQ
+
     time_sig = comp_dict.get("meta", {}).get("time_signature", [4, 4])
     num, den = time_sig[0], time_sig[1]
     bar_ticks = int(PPQ * 4 * num / den)
@@ -199,20 +203,21 @@ def arrange_coordinate_user(comp_dict: dict) -> str:
             bar_counts[bar] = bar_counts.get(bar, 0) + 1
         pitches = [n[2] for n in notes] if notes else []
         pitch_range = f"{min(pitches)}-{max(pitches)}" if pitches else "N/A"
-        tracks_info.append({
-            "name": t.get("name", "?"),
-            "role": t.get("role", "?"),
-            "note_count": len(notes),
-            "pitch_range": pitch_range,
-            "bars_sample": {f"bar{k}": v for k, v in sorted(bar_counts.items())[:16]},
-        })
+        tracks_info.append(
+            {
+                "name": t.get("name", "?"),
+                "role": t.get("role", "?"),
+                "note_count": len(notes),
+                "pitch_range": pitch_range,
+                "bars_sample": {f"bar{k}": v for k, v in sorted(bar_counts.items())[:16]},
+            }
+        )
 
     sections = []
     cursor = 0
     for s in comp_dict.get("structure", []):
         bars = s.get("bars", 4)
-        sections.append({"name": s.get("name"), "start_bar": cursor,
-                         "end_bar": cursor + bars})
+        sections.append({"name": s.get("name"), "start_bar": cursor, "end_bar": cursor + bars})
         cursor += bars
 
     return (

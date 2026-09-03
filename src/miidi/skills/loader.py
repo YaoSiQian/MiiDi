@@ -7,8 +7,7 @@ from pathlib import Path
 
 from miidi.eval.style import StyleDefaults
 
-_REQUIRED_FILES = ("SKILL.md", "instruments.md", "harmony.md", "rhythm.md",
-                   "defaults.json")
+_REQUIRED_FILES = ("SKILL.md", "instruments.md", "harmony.md", "rhythm.md", "defaults.json")
 
 
 @dataclass(frozen=True)
@@ -35,8 +34,7 @@ def _parse_defaults(name: str, raw: dict) -> StyleDefaults:
             bpm_range=(float(raw["bpm_range"][0]), float(raw["bpm_range"][1])),
             density_ref=density,
             swing_offsets=[int(x) for x in raw.get("swing_offsets", [])],
-            drum_patterns={k: [int(x) for x in v]
-                           for k, v in raw.get("drum_patterns", {}).items()},
+            drum_patterns={k: [int(x) for x in v] for k, v in raw.get("drum_patterns", {}).items()},
         )
     except (KeyError, IndexError, TypeError, ValueError) as exc:
         raise ValueError(f"style {name!r}: malformed defaults.json ({exc})") from exc
@@ -57,17 +55,18 @@ def load_style_pack(name: str, skills_dir=None) -> StylePack:
         raw = json.loads(texts["defaults.json"])
     except json.JSONDecodeError as exc:
         raise ValueError(f"style {name!r}: defaults.json invalid JSON ({exc})") from exc
-    return StylePack(name=name,
-                     skill_md=texts["SKILL.md"],
-                     instruments_md=texts["instruments.md"],
-                     harmony_md=texts["harmony.md"],
-                     rhythm_md=texts["rhythm.md"],
-                     defaults=_parse_defaults(name, raw))
+    return StylePack(
+        name=name,
+        skill_md=texts["SKILL.md"],
+        instruments_md=texts["instruments.md"],
+        harmony_md=texts["harmony.md"],
+        rhythm_md=texts["rhythm.md"],
+        defaults=_parse_defaults(name, raw),
+    )
 
 
 def available_styles(skills_dir=None) -> list[str]:
     root = Path(skills_dir) if skills_dir else _default_dir()
     if not root.is_dir():
         return []
-    return sorted(p.name for p in root.iterdir()
-                  if p.is_dir() and (p / "defaults.json").is_file())
+    return sorted(p.name for p in root.iterdir() if p.is_dir() and (p / "defaults.json").is_file())

@@ -1,21 +1,28 @@
 from __future__ import annotations
+
 import asyncio
 import logging
 import threading
 from pathlib import Path
+
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
 
-from miidi.web.schemas import (
-    CreateSessionRequest, CreateSessionResponse,
-    GenerateStageRequest, GenerateStageResponse,
-    ReviseRequest, StatusResponse, VersionResponse, EvaluateResponse,
-)
-from miidi.pipeline.orchestrator import run_pipeline, revise, PipelineResult
-from miidi.session.store import SessionStore
-from miidi.llm.client import LLMClient
-from miidi.skills.loader import load_style_pack
 from miidi.eval.score import evaluate_rules
+from miidi.llm.client import LLMClient
+from miidi.pipeline.orchestrator import PipelineResult, revise, run_pipeline
+from miidi.session.store import SessionStore
+from miidi.skills.loader import load_style_pack
+from miidi.web.schemas import (
+    CreateSessionRequest,
+    CreateSessionResponse,
+    EvaluateResponse,
+    GenerateStageRequest,
+    GenerateStageResponse,
+    ReviseRequest,
+    StatusResponse,
+    VersionResponse,
+)
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -97,7 +104,7 @@ async def get_status(sid: str) -> StatusResponse:
     try:
         _store.session_meta(sid)
     except FileNotFoundError:
-        raise HTTPException(404, f"session {sid} not found")
+        raise HTTPException(404, f"session {sid} not found") from None
 
     # Check if a background task is still running
     with _bg_lock:
@@ -131,11 +138,11 @@ async def get_composition(sid: str) -> dict:
     try:
         _store.session_meta(sid)
     except FileNotFoundError:
-        raise HTTPException(404, f"session {sid} not found")
+        raise HTTPException(404, f"session {sid} not found") from None
     try:
         latest = _store.latest(sid)
     except ValueError:
-        raise HTTPException(404, "no versions")
+        raise HTTPException(404, "no versions") from None
     ver = _store.load_version(sid, latest)
     return ver.get("composition", {})
 
@@ -147,16 +154,17 @@ async def get_midi(sid: str) -> FileResponse:
     try:
         _store.session_meta(sid)
     except FileNotFoundError:
-        raise HTTPException(404, f"session {sid} not found")
+        raise HTTPException(404, f"session {sid} not found") from None
     midi_dir = _root / "midi" if _root else Path("midi")
     midi_path = midi_dir / f"{sid}.mid"
     if not midi_path.exists():
         try:
             latest = _store.latest(sid)
         except ValueError:
-            raise HTTPException(404, "no versions")
+            raise HTTPException(404, "no versions") from None
         comp = _store.load_composition(sid, latest)
         from miidi.render.midi import generate_midi
+
         midi_path = generate_midi(comp, midi_dir)
     return FileResponse(midi_path, media_type="audio/midi", filename=midi_path.name)
 
@@ -172,7 +180,7 @@ async def revise_session(sid: str, req: ReviseRequest) -> StatusResponse:
             lambda: revise(_store, _client, sid, req.feedback),
         )
     except Exception as e:
-        raise HTTPException(500, str(e))
+        raise HTTPException(500, str(e)) from e
     return StatusResponse(
         sid=sid,
         stage="done",
@@ -188,7 +196,7 @@ async def get_versions(sid: str) -> VersionResponse:
     try:
         versions = _store.list_versions(sid)
     except FileNotFoundError:
-        raise HTTPException(404, f"session {sid} not found")
+        raise HTTPException(404, f"session {sid} not found") from None
     return VersionResponse(versions=versions)
 
 
@@ -199,7 +207,7 @@ async def rollback(sid: str, version: int) -> StatusResponse:
     try:
         _store.load_version(sid, version)
     except FileNotFoundError:
-        raise HTTPException(404, f"version {version} not found")
+        raise HTTPException(404, f"version {version} not found") from None
     comp = _store.load_composition(sid, version)
     new_ver = _store.save_version(sid, f"rollback to v{version}", comp, None)
     return StatusResponse(
@@ -217,22 +225,24 @@ async def evaluate(sid: str) -> EvaluateResponse:
     try:
         _store.session_meta(sid)
     except FileNotFoundError:
-        raise HTTPException(404, f"session {sid} not found")
+        raise HTTPException(404, f"session {sid} not found") from None
     try:
         latest = _store.latest(sid)
     except ValueError:
-        raise HTTPException(404, "no versions")
+        raise HTTPException(404, "no versions") from None
     ver = _store.load_version(sid, latest)
     from miidi.schema.model import Composition
+
     comp = Composition(**ver.get("composition", {}))
     style = ver.get("style", "touhou")
     pack = load_style_pack(style)
     report = evaluate_rules(comp, pack.defaults)
     composite_dict = None
     if not report.invalid:
-        from miidi.eval.judge import evaluate_judge
         from miidi.eval.composite import compute_composite
-        from miidi.llm.client import load_config, LLMClient
+        from miidi.eval.judge import evaluate_judge
+        from miidi.llm.client import LLMClient, load_config
+
         client = None
         try:
             client = LLMClient(load_config())
@@ -254,14 +264,12 @@ async def generate_stage(sid: str, req: GenerateStageRequest) -> GenerateStageRe
     try:
         meta = _store.session_meta(sid)
     except FileNotFoundError:
-        raise HTTPException(404, f"session {sid} not found")
+        raise HTTPException(404, f"session {sid} not found") from None
 
     # Load existing comp if resuming from a later stage
-    existing_comp = None
     try:
         latest = _store.latest(sid)
-        ver = _store.load_version(sid, latest)
-        existing_comp = ver.get("composition")
+        _ver = _store.load_version(sid, latest)
     except (FileNotFoundError, ValueError):
         pass
 

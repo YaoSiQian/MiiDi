@@ -33,9 +33,7 @@ class EvalResult:
         return asdict(self)
 
 
-def run_single_sample(
-    sample: EvalSample, client: LLMClient, out_dir: Path
-) -> EvalResult:
+def run_single_sample(sample: EvalSample, client: LLMClient, out_dir: Path) -> EvalResult:
     result = EvalResult(sample_id=sample.id, style=sample.style)
     try:
         pack = load_style_pack(sample.style)
@@ -54,9 +52,7 @@ def run_single_sample(
         result.R_rule = rule_report.R_rule
 
         if not rule_report.invalid:
-            judge_report = evaluate_judge(
-                comp, rule_report, client, sample.style
-            )
+            judge_report = evaluate_judge(comp, rule_report, client, sample.style)
             result.J1 = judge_report.J1
             result.J2 = judge_report.J2
             result.J3 = judge_report.J3
@@ -106,12 +102,8 @@ def _write_csv(results: list[EvalResult], path: Path) -> None:
 
 def _write_markdown(results: list[EvalResult], path: Path) -> None:
     lines = ["# Evaluation Results\n"]
-    lines.append(
-        "| Sample | Style | R_rule | J1 | J2 | J3 | Composite | Error |"
-    )
-    lines.append(
-        "|--------|-------|--------|-----|-----|-----|-----------|-------|"
-    )
+    lines.append("| Sample | Style | R_rule | J1 | J2 | J3 | Composite | Error |")
+    lines.append("|--------|-------|--------|-----|-----|-----|-----------|-------|")
     for r in results:
         err = r.error[:30] if r.error else ""
         lines.append(

@@ -5,25 +5,35 @@ from miidi.schema.model import Composition
 
 
 def good_comp() -> Composition:
-    melody = [(i * 480, 480, p, 88 + (i % 4) * 6)
-              for i, p in enumerate([74, 76, 77, 79, 77, 76, 74, 72,
-                                     74, 76, 77, 74, 72, 74, 76, 72])]
+    melody = [
+        (i * 480, 480, p, 88 + (i % 4) * 6)
+        for i, p in enumerate([74, 76, 77, 79, 77, 76, 74, 72, 74, 76, 77, 74, 72, 74, 76, 72])
+    ]
     pad = []
     pcs = [(60, 64, 67), (60, 65, 69), (59, 62, 67), (60, 64, 67)]
     for b, chord in enumerate(pcs):
         pad += [(b * 1920, 1920, p, 78) for p in chord]
         pad += [(b * 1920, 1920, p - 12, 70) for p in chord]
-    bass = [(b * 960, 960, r, 92)
-            for b, r in enumerate([36, 41, 43, 36, 36, 41, 43, 36])]
-    drums = [(t, 120, p, 100) for rep in range(4)
-             for t, p in [(rep * 1920, 36), (rep * 1920 + 960, 38),
-                          (rep * 1920 + 240, 42), (rep * 1920 + 720, 42)]]
+    bass = [(b * 960, 960, r, 92) for b, r in enumerate([36, 41, 43, 36, 36, 41, 43, 36])]
+    drums = [
+        (t, 120, p, 100)
+        for rep in range(4)
+        for t, p in [
+            (rep * 1920, 36),
+            (rep * 1920 + 960, 38),
+            (rep * 1920 + 240, 42),
+            (rep * 1920 + 720, 42),
+        ]
+    ]
     return Composition(
         meta={"key": {"tonic_pc": 0, "mode": "major"}},
-        structure=[{"name": "verseA", "start_bar": 0, "bars": 2},
-                   {"name": "verseB", "start_bar": 2, "bars": 2}],
-        harmony=[{"bar": b, "dur_bars": 1.0, "symbol": s}
-                 for b, s in enumerate(["C", "F", "G", "C"])],
+        structure=[
+            {"name": "verseA", "start_bar": 0, "bars": 2},
+            {"name": "verseB", "start_bar": 2, "bars": 2},
+        ],
+        harmony=[
+            {"bar": b, "dur_bars": 1.0, "symbol": s} for b, s in enumerate(["C", "F", "G", "C"])
+        ],
         tracks=[
             {"name": "Mel", "role": "melody", "program": 73, "notes": melody},
             {"name": "Pad", "role": "harmony", "program": 0, "notes": pad},

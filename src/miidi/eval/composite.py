@@ -1,7 +1,10 @@
 from __future__ import annotations
+
 from dataclasses import dataclass
-from miidi.eval.score import RuleReport
+
 from miidi.eval.judge import JudgeReport
+from miidi.eval.score import RuleReport
+
 
 @dataclass(frozen=True)
 class CompositeReport:
@@ -22,13 +25,19 @@ class CompositeReport:
             "J3": round(self.J3, 2),
         }
 
+
 def compute_composite(rule: RuleReport, judge: JudgeReport) -> CompositeReport:
     if rule.invalid:
-        return CompositeReport(composite=0.0, R_rule=0.0,
-                               Judge_mean=0.0, J1=judge.J1,
-                               J2=judge.J2, J3=judge.J3)
+        return CompositeReport(
+            composite=0.0, R_rule=0.0, Judge_mean=0.0, J1=judge.J1, J2=judge.J2, J3=judge.J3
+        )
     judge_mean = (judge.J1 + judge.J2 + judge.J3) / 3.0
     composite = 0.6 * rule.R_rule + 0.4 * judge_mean
-    return CompositeReport(composite=composite, R_rule=rule.R_rule,
-                           Judge_mean=judge_mean, J1=judge.J1,
-                           J2=judge.J2, J3=judge.J3)
+    return CompositeReport(
+        composite=composite,
+        R_rule=rule.R_rule,
+        Judge_mean=judge_mean,
+        J1=judge.J1,
+        J2=judge.J2,
+        J3=judge.J3,
+    )

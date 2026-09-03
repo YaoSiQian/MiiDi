@@ -23,25 +23,29 @@ class SessionStore:
         sid = time.strftime("%Y%m%d-%H%M%S") + "-" + uuid.uuid4().hex[:4]
         d = self.root / sid
         d.mkdir()
-        meta = {"id": sid, "prompt": prompt, "style": style,
-                "created": time.time(), "versions": []}
-        (d / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1),
-                                     encoding="utf-8")
+        meta = {"id": sid, "prompt": prompt, "style": style, "created": time.time(), "versions": []}
+        (d / "meta.json").write_text(
+            json.dumps(meta, ensure_ascii=False, indent=1), encoding="utf-8"
+        )
         return sid
 
-    def save_version(self, sid: str, label: str, comp: Composition,
-                     extra: dict | None) -> int:
+    def save_version(self, sid: str, label: str, comp: Composition, extra: dict | None) -> int:
         d = self._dir(sid)
         meta = json.loads((d / "meta.json").read_text(encoding="utf-8"))
         version = len(meta["versions"]) + 1
-        payload = {"version": version, "label": label,
-                   "composition": comp.model_dump(),
-                   "extra": extra or {}}
+        payload = {
+            "version": version,
+            "label": label,
+            "composition": comp.model_dump(),
+            "extra": extra or {},
+        }
         (d / f"v{version}.json").write_text(
-            json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+            json.dumps(payload, ensure_ascii=False), encoding="utf-8"
+        )
         meta["versions"].append({"version": version, "label": label})
-        (d / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1),
-                                     encoding="utf-8")
+        (d / "meta.json").write_text(
+            json.dumps(meta, ensure_ascii=False, indent=1), encoding="utf-8"
+        )
         return version
 
     def list_versions(self, sid: str) -> list[dict]:

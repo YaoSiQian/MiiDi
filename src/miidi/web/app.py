@@ -1,11 +1,13 @@
 from __future__ import annotations
+
 from pathlib import Path
+
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
-from miidi.web.routes import router, init
-from miidi.session.store import SessionStore
 from miidi.llm.client import LLMClient
+from miidi.session.store import SessionStore
+from miidi.web.routes import init, router
 
 
 def create_app(store: SessionStore, client: LLMClient, root: Path) -> FastAPI:
@@ -24,12 +26,11 @@ def create_app(store: SessionStore, client: LLMClient, root: Path) -> FastAPI:
 
 def run_dev():
     """Run FastAPI + Vite dev server."""
-    import subprocess
-    import sys
     import os
+    import subprocess
 
-    from miidi.session.store import SessionStore
     from miidi.llm.client import make_client
+    from miidi.session.store import SessionStore
 
     root = Path(os.environ.get("MIIDI_ROOT", "."))
     store = SessionStore(str(root / "sessions"))

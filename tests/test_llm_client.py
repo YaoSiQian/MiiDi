@@ -4,8 +4,13 @@ import httpx
 import pytest
 
 from miidi.llm.client import (
-    LLMClient, LLMConfig, LLMConfigError, LLMError, extract_json, load_config,
     ZEN_BASE_URL,
+    LLMClient,
+    LLMConfig,
+    LLMConfigError,
+    LLMError,
+    extract_json,
+    load_config,
 )
 
 
@@ -16,12 +21,12 @@ def make_config(**kw):
 def responder(payload):
     def handler(request: httpx.Request) -> httpx.Response:
         return httpx.Response(200, json=payload)
+
     return handler
 
 
 def ok_payload(text):
-    return {"output": [{"type": "message",
-                        "content": [{"type": "output_text", "text": text}]}]}
+    return {"output": [{"type": "message", "content": [{"type": "output_text", "text": text}]}]}
 
 
 def test_load_config_from_env():
@@ -130,8 +135,9 @@ def test_malformed_json_body_raises_llm_error_not_decode_error():
 
 
 def zen_config(**kw):
-    return LLMConfig(base_url=ZEN_BASE_URL, api_key="public",
-                     model="hy3-free", provider="zen", **kw)
+    return LLMConfig(
+        base_url=ZEN_BASE_URL, api_key="public", model="hy3-free", provider="zen", **kw
+    )
 
 
 def zen_ok_payload(text):
@@ -158,7 +164,6 @@ def test_zen_respond_json_roundtrip():
 
 def test_zen_auth_header():
     def handler(request: httpx.Request) -> httpx.Response:
-        auth = request.headers.get("authorization", "")
         return httpx.Response(200, json=zen_ok_payload('{"a": 1}'))
 
     client = LLMClient(zen_config(), transport=httpx.MockTransport(handler))

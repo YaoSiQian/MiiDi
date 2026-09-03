@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from miidi.eval.context import EvaluationContext, Vertical
+from miidi.eval.context import EvaluationContext
 from miidi.musicutil.band import band
 from miidi.musicutil.scales import minor_superset_pcs
 from miidi.schema.model import Composition
@@ -37,7 +37,7 @@ def _min_adjacent_semitone(pcs: frozenset[int]) -> int:
 
 def axis_format(comp: Composition) -> tuple[float, list[Violation]]:
     viols = validate_composition(comp)
-    return ((1.0, []) if not viols else (0.0, viols))
+    return (1.0, []) if not viols else (0.0, viols)
 
 
 def axis_harmony(ctx: EvaluationContext) -> AxisResult:
@@ -69,23 +69,27 @@ def axis_harmony(ctx: EvaluationContext) -> AxisResult:
         chord = ctx.chord_at(t0)
         if chord is None:
             continue
-        sounding = [n for n in ctx.flat_notes()
-                    if n.role in ACCOMP_ROLES and n.onset < t1 and n.end > t0]
+        sounding = [
+            n for n in ctx.flat_notes() if n.role in ACCOMP_ROLES and n.onset < t1 and n.end > t0
+        ]
         if not sounding:
             continue
         mass = sum(min(n.end, t1) - max(n.onset, t0) for n in sounding)
-        in_mass = sum(min(n.end, t1) - max(n.onset, t0) for n in sounding
-                      if n.pitch % 12 in chord.pcs)
+        in_mass = sum(
+            min(n.end, t1) - max(n.onset, t0) for n in sounding if n.pitch % 12 in chord.pcs
+        )
         supports.append(in_mass / mass if mass else 0.0)
         vert = {n.pitch % 12 for n in sounding}
         matches.append(len(vert & chord.pcs) / len(chord.pcs))
-    support = band(sum(supports) / len(supports), 0.5, 0.8, 1.01, 1.01, floor=0.3) \
-        if supports else 0.5
+    support = (
+        band(sum(supports) / len(supports), 0.5, 0.8, 1.01, 1.01, floor=0.3) if supports else 0.5
+    )
     declaration = sum(matches) / len(matches) if matches else 0.7
 
     verts = list(ctx.iterate_verticals())
-    clustered = sum(1 for _t, v in verts
-                    if v.pitch_classes and _min_adjacent_semitone(v.pitch_classes) <= 1)
+    clustered = sum(
+        1 for _t, v in verts if v.pitch_classes and _min_adjacent_semitone(v.pitch_classes) <= 1
+    )
     cluster_rate = clustered / max(len(verts), 1)
 
     hits = 0
@@ -102,15 +106,23 @@ def axis_harmony(ctx: EvaluationContext) -> AxisResult:
             hits += 1
     cadence = (hits / checked) if checked else 0.7
 
-    score = (0.30 * max(adherence, 0.0) + 0.30 * support + 0.15 * declaration
-             + 0.15 * (1.0 - min(cluster_rate, 1.0)) + 0.10 * cadence)
-    return AxisResult(score=max(0.0, min(1.0, score)), details={
-        "scale_adherence": max(adherence, 0.0),
-        "chord_support": support,
-        "declaration_match": declaration,
-        "cluster_rate": cluster_rate,
-        "cadence_rate": cadence,
-    })
+    score = (
+        0.30 * max(adherence, 0.0)
+        + 0.30 * support
+        + 0.15 * declaration
+        + 0.15 * (1.0 - min(cluster_rate, 1.0))
+        + 0.10 * cadence
+    )
+    return AxisResult(
+        score=max(0.0, min(1.0, score)),
+        details={
+            "scale_adherence": max(adherence, 0.0),
+            "chord_support": support,
+            "declaration_match": declaration,
+            "cluster_rate": cluster_rate,
+            "cadence_rate": cadence,
+        },
+    )
 
 
 _GRID_KS = (1, 2, 3, 4, 6, 8, 12)
@@ -132,10 +144,12 @@ def axis_voice(ctx: EvaluationContext) -> AxisResult:
         if t.is_drum or not t.notes:
             continue
         play_rng, comf_rng = play_comf(t.program)
-        play_fracs.append(sum(1 for n in t.notes
-                              if play_rng[0] <= n[2] <= play_rng[1]) / len(t.notes))
-        comf_fracs.append(sum(1 for n in t.notes
-                              if comf_rng[0] <= n[2] <= comf_rng[1]) / len(t.notes))
+        play_fracs.append(
+            sum(1 for n in t.notes if play_rng[0] <= n[2] <= play_rng[1]) / len(t.notes)
+        )
+        comf_fracs.append(
+            sum(1 for n in t.notes if comf_rng[0] <= n[2] <= comf_rng[1]) / len(t.notes)
+        )
         seq = sorted(t.notes, key=lambda n: n[0])
         for a, b in zip(seq, seq[1:]):
             if b[0] >= a[0] + a[1]:
@@ -180,14 +194,16 @@ def axis_voice(ctx: EvaluationContext) -> AxisResult:
 
     par_component = 1.0 - min(parallels, 3) / 3
     leap_component = declining(leap_rate, 0.10, 0.40)
-    score = (0.40 * range_fit + 0.25 * par_component
-             + 0.20 * leap_component + 0.15 * gap_component)
-    return AxisResult(score=max(0.0, min(1.0, score)), details={
-        "range_fit": range_fit,
-        "parallel_count": parallels,
-        "leap_rate": leap_rate,
-        "register_gap": gap_component,
-    })
+    score = 0.40 * range_fit + 0.25 * par_component + 0.20 * leap_component + 0.15 * gap_component
+    return AxisResult(
+        score=max(0.0, min(1.0, score)),
+        details={
+            "range_fit": range_fit,
+            "parallel_count": parallels,
+            "leap_rate": leap_rate,
+            "register_gap": gap_component,
+        },
+    )
 
 
 _DRUM_PITCH_BY_NAME = {"kick": 36, "snare": 38, "hat": 42}
@@ -197,8 +213,9 @@ def axis_rhythm(ctx: EvaluationContext) -> AxisResult:
     swing = set(ctx.defaults.swing_offsets)
     onsets = [n[0] for t in ctx.comp.tracks for n in t.notes]
     if onsets:
-        legal = sum(1 for o in onsets
-                    if any((o * k) % 480 == 0 for k in _GRID_KS) or o % 480 in swing)
+        legal = sum(
+            1 for o in onsets if any((o * k) % 480 == 0 for k in _GRID_KS) or o % 480 in swing
+        )
         grid = legal / len(onsets)
     else:
         grid = 1.0
@@ -209,10 +226,11 @@ def axis_rhythm(ctx: EvaluationContext) -> AxisResult:
         ref = ctx.defaults.density_ref.get(t.role)
         if ref is None or not t.notes:
             continue
-        span_bars = max(1, round((t.end_tick / bar)))
+        span_bars = max(1, round(t.end_tick / bar))
         per_bar = len(t.notes) / span_bars
-        dens_components.append(band(per_bar, ref[0], ref[0] * 1.25,
-                                    ref[1] * 0.8, ref[1], floor=0.3))
+        dens_components.append(
+            band(per_bar, ref[0], ref[0] * 1.25, ref[1] * 0.8, ref[1], floor=0.3)
+        )
     density = sum(dens_components) / len(dens_components) if dens_components else 1.0
 
     drum_track = next((t for t in ctx.comp.tracks if t.is_drum), None)
@@ -229,22 +247,23 @@ def axis_rhythm(ctx: EvaluationContext) -> AxisResult:
     else:
         drum_fit = 1.0
 
-    offbeat = sorted(o % 480 for o in onsets
-                     if not any((o * k) % 480 == 0 for k in _GRID_KS))
+    offbeat = sorted(o % 480 for o in onsets if not any((o * k) % 480 == 0 for k in _GRID_KS))
     if len(offbeat) >= 4:
         spread = max(offbeat) - min(offbeat)
         swing_consistency = 1.0 - min(spread / 120, 1.0) * 0.8
     else:
         swing_consistency = 1.0
 
-    score = (0.30 * grid + 0.30 * density + 0.25 * drum_fit
-             + 0.15 * swing_consistency)
-    return AxisResult(score=max(0.0, min(1.0, score)), details={
-        "grid_adherence": grid,
-        "density_fit": density,
-        "drum_pattern_fit": drum_fit,
-        "swing_consistency": swing_consistency,
-    })
+    score = 0.30 * grid + 0.30 * density + 0.25 * drum_fit + 0.15 * swing_consistency
+    return AxisResult(
+        score=max(0.0, min(1.0, score)),
+        details={
+            "grid_adherence": grid,
+            "density_fit": density,
+            "drum_pattern_fit": drum_fit,
+            "swing_consistency": swing_consistency,
+        },
+    )
 
 
 import math as _math
@@ -257,7 +276,7 @@ def _family(name: str) -> str:
 
 def _section_vectors(ctx: EvaluationContext) -> list[dict]:
     vectors = []
-    for si, (name, start, end) in enumerate(ctx.sections):
+    for _si, (name, start, end) in enumerate(ctx.sections):
         notes = [n for n in ctx.flat_notes() if start <= n.onset < end]
         hist = [0.0] * 12
         for n in notes:
@@ -305,37 +324,53 @@ def axis_structure(ctx: EvaluationContext) -> AxisResult:
     contrast_vals = [v for (fa, fb), vs in sims.items() if fa != fb for v in vs]
     repeat_sim = _mean(repeat_vals) if repeat_vals else None
     contrast_sim = _mean(contrast_vals) if contrast_vals else None
-    repeat_component = band(repeat_sim, 0.55, 0.70, 1.01, 1.01, floor=0.2) \
-        if repeat_sim is not None else 0.8
-    contrast_component = (1.0 - band(contrast_sim, 0.90, 0.95, 1.01, 1.01, floor=0.0)) \
-        if contrast_sim is not None else 0.8
+    repeat_component = (
+        band(repeat_sim, 0.55, 0.70, 1.01, 1.01, floor=0.2) if repeat_sim is not None else 0.8
+    )
+    contrast_component = (
+        (1.0 - band(contrast_sim, 0.90, 0.95, 1.01, 1.01, floor=0.0))
+        if contrast_sim is not None
+        else 0.8
+    )
 
     densities = [v["density"] for v in vecs]
-    shape = band(_std(densities), 0.3, 0.8, 8.0, 12.0, floor=0.2) \
-        if len(densities) >= 2 else 0.8
+    shape = band(_std(densities), 0.3, 0.8, 8.0, 12.0, floor=0.2) if len(densities) >= 2 else 0.8
 
     melody = ctx.track_of_role("melody")
     recall = 0.8
     if melody and len(ctx.sections) >= 2 and len(melody.notes) >= 4:
-        first = [n for n in sorted(melody.notes, key=lambda n: n[0])
-                 if ctx.section_of_tick(n[0]) == 0]
-        rest = [n for n in sorted(melody.notes, key=lambda n: n[0])
-                if ctx.section_of_tick(n[0]) > 0]
+        first = [
+            n for n in sorted(melody.notes, key=lambda n: n[0]) if ctx.section_of_tick(n[0]) == 0
+        ]
+        rest = [
+            n for n in sorted(melody.notes, key=lambda n: n[0]) if ctx.section_of_tick(n[0]) > 0
+        ]
         if len(first) >= 4 and rest:
             target = _contour(first[:8])
-            found = any(_has_contour(rest[i:i + 8], target)
-                        for i in range(max(len(rest) - 7, 0))) if len(target) >= 2 else False
+            found = (
+                any(_has_contour(rest[i : i + 8], target) for i in range(max(len(rest) - 7, 0)))
+                if len(target) >= 2
+                else False
+            )
             recall = 1.0 if found else 0.3
 
-    score = (0.25 * coverage_component + 0.25 * repeat_component
-             + 0.25 * contrast_component + 0.15 * shape + 0.10 * recall)
-    return AxisResult(score=max(0.0, min(1.0, score)), details={
-        "coverage": coverage_component,
-        "repeat_family_sim": repeat_sim if repeat_sim is not None else -1.0,
-        "contrast_family_sim": contrast_sim if contrast_sim is not None else -1.0,
-        "contour_shape": shape,
-        "motif_recall": recall,
-    })
+    score = (
+        0.25 * coverage_component
+        + 0.25 * repeat_component
+        + 0.25 * contrast_component
+        + 0.15 * shape
+        + 0.10 * recall
+    )
+    return AxisResult(
+        score=max(0.0, min(1.0, score)),
+        details={
+            "coverage": coverage_component,
+            "repeat_family_sim": repeat_sim if repeat_sim is not None else -1.0,
+            "contrast_family_sim": contrast_sim if contrast_sim is not None else -1.0,
+            "contour_shape": shape,
+            "motif_recall": recall,
+        },
+    )
 
 
 def _std(xs: list[float]) -> float:
@@ -394,10 +429,8 @@ def axis_dynamics(ctx: EvaluationContext) -> AxisResult:
     else:
         directionality = band(ac, 0.15, 0.30, 1.01, 1.01, floor=0.0)
 
-    chorus_vels = [v["vel"] for v in _section_vectors(ctx)
-                   if _family(v["name"]) in _CHORUS]
-    verse_vels = [v["vel"] for v in _section_vectors(ctx)
-                  if _family(v["name"]) in _VERSE]
+    chorus_vels = [v["vel"] for v in _section_vectors(ctx) if _family(v["name"]) in _CHORUS]
+    verse_vels = [v["vel"] for v in _section_vectors(ctx) if _family(v["name"]) in _VERSE]
     if chorus_vels and verse_vels:
         diff = _mean(chorus_vels) - _mean(verse_vels)
         gradient = band(diff, -5.0, 0.0, 60.0, 61.0, floor=0.2)
@@ -405,8 +438,11 @@ def axis_dynamics(ctx: EvaluationContext) -> AxisResult:
         gradient = 0.8
 
     score = 0.5 * spread_component + 0.25 * directionality + 0.25 * gradient
-    return AxisResult(score=max(0.0, min(1.0, score)), details={
-        "velocity_spread": spread_component,
-        "directionality": directionality,
-        "gradient_ok": gradient,
-    })
+    return AxisResult(
+        score=max(0.0, min(1.0, score)),
+        details={
+            "velocity_spread": spread_component,
+            "directionality": directionality,
+            "gradient_ok": gradient,
+        },
+    )

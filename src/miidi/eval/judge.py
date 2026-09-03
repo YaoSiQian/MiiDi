@@ -20,15 +20,31 @@ _KEY_PATTERN = re.compile(
 _DURATION_BARS = re.compile(r"(\d+)\s*(?:bar|measure|小节)", re.IGNORECASE)
 _DURATION_BEATS = re.compile(r"(\d+)\s*(?:beat|拍)", re.IGNORECASE)
 _INSTRUMENT_KEYWORDS: dict[str, int] = {
-    "piano": 0, "acoustic grand": 0,
-    "guitar": 25, "electric guitar": 27, "acoustic guitar": 24,
-    "bass": 32, "electric bass": 33, "synth bass": 38,
-    "drums": 0, "drum": 0,
-    "violin": 40, "viola": 41, "cello": 42,
-    "trumpet": 56, "trombone": 57, "saxophone": 65, "sax": 65,
-    "flute": 73, "clarinet": 71, "oboe": 68,
-    "strings": 48, "string": 48, "pad": 88,
-    "organ": 19, "harpsichord": 6,
+    "piano": 0,
+    "acoustic grand": 0,
+    "guitar": 25,
+    "electric guitar": 27,
+    "acoustic guitar": 24,
+    "bass": 32,
+    "electric bass": 33,
+    "synth bass": 38,
+    "drums": 0,
+    "drum": 0,
+    "violin": 40,
+    "viola": 41,
+    "cello": 42,
+    "trumpet": 56,
+    "trombone": 57,
+    "saxophone": 65,
+    "sax": 65,
+    "flute": 73,
+    "clarinet": 71,
+    "oboe": 68,
+    "strings": 48,
+    "string": 48,
+    "pad": 88,
+    "organ": 19,
+    "harpsichord": 6,
 }
 
 
@@ -85,9 +101,9 @@ def _j1_system(pack: StylePack) -> str:
         f"{checklist}\n\n"
         "For each checklist item, respond with yes/partial/no and cite specific evidence "
         "(track name + bar number). Score 0-100 based on how many items pass.\n\n"
-        "Output JSON: {\"score\": 0-100, \"per_item\": [{\"item\": \"checklist item N\", "
-        "\"verdict\": \"yes|partial|no\", \"evidence\": \"track X bar Y: ...\"}], "
-        "\"evidence\": [{\"track\": \"...\", \"bar\": N, \"text\": \"...\"}]}"
+        'Output JSON: {"score": 0-100, "per_item": [{"item": "checklist item N", '
+        '"verdict": "yes|partial|no", "evidence": "track X bar Y: ..."}], '
+        '"evidence": [{"track": "...", "bar": N, "text": "..."}]}'
     )
 
 
@@ -97,7 +113,9 @@ def _j1_user(comp_dict: dict) -> str:
 
 def _parse_prompt_constraints(prompt: str) -> dict[str, str | None]:
     result: dict[str, str | None] = {
-        "bpm": None, "key": None, "duration_bars": None,
+        "bpm": None,
+        "key": None,
+        "duration_bars": None,
         "instruments": None,
     }
     m = _BPM_EQUALS.search(prompt) or _BPM_PATTERN.search(prompt)
@@ -110,10 +128,16 @@ def _parse_prompt_constraints(prompt: str) -> dict[str, str | None]:
             tonic = tonic[0] + "#" if tonic[1] == "#" else tonic[0] + "b"
         mode_raw = (m.group(2) or "major").lower()
         mode_map = {
-            "major": "major", "maj": "major", "m": "minor",
-            "minor": "minor", "min": "minor",
-            "dor": "dorian", "lyd": "lydian", "mix": "mixolydian",
-            "phr": "phrygian", "loc": "locrian",
+            "major": "major",
+            "maj": "major",
+            "m": "minor",
+            "minor": "minor",
+            "min": "minor",
+            "dor": "dorian",
+            "lyd": "lydian",
+            "mix": "mixolydian",
+            "phr": "phrygian",
+            "loc": "locrian",
         }
         mode = mode_map.get(mode_raw, "major")
         result["key"] = f"{tonic} {mode}"
@@ -145,61 +169,77 @@ def _extract_explicit_constraints(comp: Composition, prompt: str) -> list[dict]:
     programs_str = ", ".join(str(p) for p in programs_used) if programs_used else "none"
     constraints = []
     if parsed["bpm"]:
-        constraints.append({
-            "item": "BPM",
-            "expected": parsed["bpm"],
-            "actual": str(meta.bpm),
-            "check": f"Prompt specifies {parsed['bpm']} BPM; composition has {meta.bpm}",
-        })
+        constraints.append(
+            {
+                "item": "BPM",
+                "expected": parsed["bpm"],
+                "actual": str(meta.bpm),
+                "check": f"Prompt specifies {parsed['bpm']} BPM; composition has {meta.bpm}",
+            }
+        )
     else:
-        constraints.append({
-            "item": "BPM",
-            "expected": "not specified",
-            "actual": str(meta.bpm),
-            "check": "Prompt does not specify BPM; mark as unaddressed",
-        })
+        constraints.append(
+            {
+                "item": "BPM",
+                "expected": "not specified",
+                "actual": str(meta.bpm),
+                "check": "Prompt does not specify BPM; mark as unaddressed",
+            }
+        )
     if parsed["key"]:
-        constraints.append({
-            "item": "Key/Tonality",
-            "expected": parsed["key"],
-            "actual": key_str,
-            "check": f"Prompt specifies {parsed['key']}; composition is {key_str}",
-        })
+        constraints.append(
+            {
+                "item": "Key/Tonality",
+                "expected": parsed["key"],
+                "actual": key_str,
+                "check": f"Prompt specifies {parsed['key']}; composition is {key_str}",
+            }
+        )
     else:
-        constraints.append({
-            "item": "Key/Tonality",
-            "expected": "not specified",
-            "actual": key_str,
-            "check": "Prompt does not specify key; mark as unaddressed",
-        })
+        constraints.append(
+            {
+                "item": "Key/Tonality",
+                "expected": "not specified",
+                "actual": key_str,
+                "check": "Prompt does not specify key; mark as unaddressed",
+            }
+        )
     if parsed["duration_bars"]:
-        constraints.append({
-            "item": "Duration",
-            "expected": parsed["duration_bars"],
-            "actual": f"{duration_bars} bars",
-            "check": f"Prompt specifies {parsed['duration_bars']}; composition is {duration_bars} bars",
-        })
+        constraints.append(
+            {
+                "item": "Duration",
+                "expected": parsed["duration_bars"],
+                "actual": f"{duration_bars} bars",
+                "check": f"Prompt specifies {parsed['duration_bars']}; composition is {duration_bars} bars",
+            }
+        )
     else:
-        constraints.append({
-            "item": "Duration",
-            "expected": "not specified",
-            "actual": f"{duration_bars} bars",
-            "check": "Prompt does not specify duration; mark as unaddressed",
-        })
+        constraints.append(
+            {
+                "item": "Duration",
+                "expected": "not specified",
+                "actual": f"{duration_bars} bars",
+                "check": "Prompt does not specify duration; mark as unaddressed",
+            }
+        )
     if parsed["instruments"]:
-        constraints.append({
-            "item": "Specified instruments",
-            "expected": parsed["instruments"],
-            "actual": f"programs: {programs_str}",
-            "check": f"Prompt specifies {parsed['instruments']}; composition uses programs {programs_str}",
-        })
+        constraints.append(
+            {
+                "item": "Specified instruments",
+                "expected": parsed["instruments"],
+                "actual": f"programs: {programs_str}",
+                "check": f"Prompt specifies {parsed['instruments']}; composition uses programs {programs_str}",
+            }
+        )
     else:
-        constraints.append({
-            "item": "Specified instruments",
-            "expected": "not specified",
-            "actual": f"programs: {programs_str}",
-            "check": "Prompt does not specify instruments; mark as unaddressed",
-        })
+        constraints.append(
+            {
+                "item": "Specified instruments",
+                "expected": "not specified",
+                "actual": f"programs: {programs_str}",
+                "check": "Prompt does not specify instruments; mark as unaddressed",
+            }
+        )
     return constraints
 
 
@@ -216,9 +256,9 @@ def _j2_system(constraints_json: str) -> str:
         "For IMAGE/EMOTIONAL requirements (e.g., 'happy', 'relaxing', 'epic'):\n"
         "- Judge if the composition's characteristics match the described mood\n"
         "- Mark as satisfied/violated/unaddressed with evidence\n\n"
-        "Output JSON: {\"score\": 0-100, \"per_item\": [{\"item\": \"...\", "
-        "\"verdict\": \"satisfied|violated|unaddressed\", \"evidence\": \"...\"}], "
-        "\"evidence\": [{\"track\": \"...\", \"bar\": N, \"text\": \"...\"}]}"
+        'Output JSON: {"score": 0-100, "per_item": [{"item": "...", '
+        '"verdict": "satisfied|violated|unaddressed", "evidence": "..."}], '
+        '"evidence": [{"track": "...", "bar": N, "text": "..."}]}'
     )
 
 
@@ -246,9 +286,9 @@ def _j3_system() -> str:
         "effective use of contrast, clear sections, contains hooks or memorable phrases, "
         "demonstrates stylistic understanding.\n\n"
         "For each aspect, cite specific evidence (track name + bar number).\n\n"
-        "Output JSON: {\"score\": 0-100, \"per_item\": [{\"item\": \"rubric\", "
-        "\"verdict\": \"1-5\", \"evidence\": \"...\"}], "
-        "\"evidence\": [{\"track\": \"...\", \"bar\": N, \"text\": \"...\"}]}"
+        'Output JSON: {"score": 0-100, "per_item": [{"item": "rubric", '
+        '"verdict": "1-5", "evidence": "..."}], '
+        '"evidence": [{"track": "...", "bar": N, "text": "..."}]}'
     )
 
 
@@ -284,8 +324,13 @@ def _normalize_score(raw: dict) -> float:
     return 50.0
 
 
-def evaluate_judge(comp: Composition, rule_report: RuleReport, client: LLMClient,
-                   style: str, prompt: str | None = None) -> JudgeReport:
+def evaluate_judge(
+    comp: Composition,
+    rule_report: RuleReport,
+    client: LLMClient,
+    style: str,
+    prompt: str | None = None,
+) -> JudgeReport:
     pack = load_style_pack(style)
     comp_dict = comp.model_dump()
     rule_summary = _build_rule_summary(rule_report)
@@ -298,9 +343,7 @@ def evaluate_judge(comp: Composition, rule_report: RuleReport, client: LLMClient
     # J2: Prompt following (with extracted constraints)
     constraints = _extract_explicit_constraints(comp, j2_prompt)
     constraints_json = json.dumps(constraints, indent=2)
-    raw_j2 = client.respond_json(
-        _j2_system(constraints_json), _j2_user(comp_dict, j2_prompt)
-    )
+    raw_j2 = client.respond_json(_j2_system(constraints_json), _j2_user(comp_dict, j2_prompt))
     j2_score = _normalize_score(raw_j2)
 
     # J3: Musicality (with full rule evidence)
@@ -313,5 +356,6 @@ def evaluate_judge(comp: Composition, rule_report: RuleReport, client: LLMClient
         all_per_item[name] = raw.get("per_item", [])
         all_evidence.extend(raw.get("evidence", []))
 
-    return JudgeReport(J1=j1_score, J2=j2_score, J3=j3_score,
-                       per_item=all_per_item, evidence=all_evidence)
+    return JudgeReport(
+        J1=j1_score, J2=j2_score, J3=j3_score, per_item=all_per_item, evidence=all_evidence
+    )

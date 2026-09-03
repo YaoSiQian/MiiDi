@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from miidi.schema.model import Composition, KeySig, Meta, PPQ, Section, Track
+from miidi.schema.model import PPQ, Composition, KeySig, Meta, Section, Track
 
 
 def base_meta(**kw):
@@ -18,10 +18,8 @@ def test_valid_composition():
         structure=[Section(name="A", start_bar=0, bars=4)],
         harmony=[{"bar": 0, "dur_bars": 1.0, "symbol": "C"}],
         tracks=[
-            {"name": "Lead", "program": 73, "role": "melody",
-             "notes": [[0, 240, 69, 96]]},
-            {"name": "Drums", "role": "drums", "is_drum": True,
-             "notes": [[0, 120, 36, 100]]},
+            {"name": "Lead", "program": 73, "role": "melody", "notes": [[0, 240, 69, 96]]},
+            {"name": "Drums", "role": "drums", "is_drum": True, "notes": [[0, 120, 36, 100]]},
         ],
     )
     assert comp.tracks[0].notes == [(0, 240, 69, 96)]
@@ -64,8 +62,12 @@ def test_clamp_to_boundary_truncates_overlapping_notes():
         meta=base_meta(),
         structure=[Section(name="A", start_bar=0, bars=4)],
         tracks=[
-            {"name": "Lead", "program": 73, "role": "melody",
-             "notes": [[0, 240, 69, 96], [7600, 240, 71, 96]]},
+            {
+                "name": "Lead",
+                "program": 73,
+                "role": "melody",
+                "notes": [[0, 240, 69, 96], [7600, 240, 71, 96]],
+            },
         ],
     )
     # bar_ticks=1920, total_bars=4, limit=7680
@@ -80,8 +82,12 @@ def test_clamp_to_boundary_removes_notes_starting_beyond_limit():
         meta=base_meta(),
         structure=[Section(name="A", start_bar=0, bars=4)],
         tracks=[
-            {"name": "Lead", "program": 73, "role": "melody",
-             "notes": [[0, 240, 69, 96], [8000, 240, 71, 96]]},
+            {
+                "name": "Lead",
+                "program": 73,
+                "role": "melody",
+                "notes": [[0, 240, 69, 96], [8000, 240, 71, 96]],
+            },
         ],
     )
     # note at 8000 >= 7680 → removed
@@ -95,8 +101,12 @@ def test_clamp_to_boundary_no_change_when_within_limit():
         meta=base_meta(),
         structure=[Section(name="A", start_bar=0, bars=4)],
         tracks=[
-            {"name": "Lead", "program": 73, "role": "melody",
-             "notes": [[0, 240, 69, 96], [7200, 240, 71, 96]]},
+            {
+                "name": "Lead",
+                "program": 73,
+                "role": "melody",
+                "notes": [[0, 240, 69, 96], [7200, 240, 71, 96]],
+            },
         ],
     )
     # 7200+240=7440 < 7680 → no change
@@ -108,8 +118,7 @@ def test_clamp_to_boundary_no_op_without_structure():
     comp = Composition(
         meta=base_meta(),
         tracks=[
-            {"name": "Lead", "program": 73, "role": "melody",
-             "notes": [[0, 240, 69, 96]]},
+            {"name": "Lead", "program": 73, "role": "melody", "notes": [[0, 240, 69, 96]]},
         ],
     )
     clamped = comp.clamp_to_boundary()
@@ -121,8 +130,7 @@ def test_piece_end_tick_computed_from_structure():
         meta=base_meta(),
         structure=[Section(name="A", start_bar=0, bars=8)],
         tracks=[
-            {"name": "Lead", "program": 73, "role": "melody",
-             "notes": [[0, 240, 69, 96]]},
+            {"name": "Lead", "program": 73, "role": "melody", "notes": [[0, 240, 69, 96]]},
         ],
     )
     # 8 bars * 1920 = 15360

@@ -7,10 +7,14 @@ from miidi.eval.style import StyleDefaults
 from miidi.llm.client import LLMClient
 from miidi.pipeline.brief import MusicBrief
 from miidi.pipeline.prompts import (
-    compose_system, compose_user, plan_system, plan_user, review_system,
+    compose_system,
+    compose_user,
+    plan_system,
+    plan_user,
+    review_system,
     review_user,
 )
-from miidi.schema.model import Composition, Section, Track
+from miidi.schema.model import Composition, Track
 from miidi.schema.normalize import normalize_raw
 from miidi.schema.validate import validate_composition
 from miidi.skills.loader import StylePack
@@ -47,12 +51,15 @@ def _to_music_brief(raw: dict, pack: StylePack) -> tuple[MusicBrief, list[str]]:
 
 def make_brief(client: LLMClient, pack: StylePack, user_prompt: str) -> MusicBrief:
     last_notes: list[str] = []
-    for attempt in range(2):
+    for _attempt in range(2):
         system = plan_system(pack)
         user = plan_user(user_prompt, pack)
         if last_notes:
-            user += ("\nPREVIOUS ATTEMPT REJECTED:\n" + "\n".join(last_notes)
-                     + "\nFix these and return the full corrected JSON.")
+            user += (
+                "\nPREVIOUS ATTEMPT REJECTED:\n"
+                + "\n".join(last_notes)
+                + "\nFix these and return the full corrected JSON."
+            )
         raw = client.respond_json(system, user)
         try:
             brief, notes = _to_music_brief(raw, pack)
@@ -67,8 +74,7 @@ def make_brief(client: LLMClient, pack: StylePack, user_prompt: str) -> MusicBri
     raise StageError(f"planner failed after retry: {last_notes}")
 
 
-def build_context(kind: str, tracks: dict[str, Track],
-                   bar_ticks: int = 1920) -> str:
+def build_context(kind: str, tracks: dict[str, Track], bar_ticks: int = 1920) -> str:
     blocks = []
     for name, t in tracks.items():
         if t.is_drum:
@@ -78,28 +84,31 @@ def build_context(kind: str, tracks: dict[str, Track],
             blocks.append(f"{name} ({t.role}) notes: {rows}")
         else:
             hist: dict[int, set[int]] = {}
-            for o, d, p, _v in t.notes:
+            for o, _d, p, _v in t.notes:
                 hist.setdefault(o // bar_ticks, set()).add(p % 12)
             pretty = ", ".join(f"bar{b}:{sorted(pcs)}" for b, pcs in sorted(hist.items())[:16])
             blocks.append(f"{name} ({t.role}) per-bar pitch classes: {pretty}")
     return "\n".join(blocks)
 
 
-def compose_track(client: LLMClient, pack: StylePack, brief: MusicBrief,
-                  spec, context_block: str) -> tuple[Track, list[str]]:
+def compose_track(
+    client: LLMClient, pack: StylePack, brief: MusicBrief, spec, context_block: str
+) -> tuple[Track, list[str]]:
     spec_dict = spec.model_dump() if hasattr(spec, "model_dump") else dict(spec)
     feedback: list[str] = []
     piece_end = brief.piece_end_tick()
-    for attempt in range(3):
+    for _attempt in range(3):
         raw = client.respond_json(
             compose_system(spec_dict, pack),
-            compose_user(brief.brief_json(), spec_dict, context_block,
-                         piece_end_tick=piece_end))
+            compose_user(brief.brief_json(), spec_dict, context_block, piece_end_tick=piece_end),
+        )
         merged = {**spec_dict, "notes": raw.get("notes", [])}
-        result = normalize_raw({
-            "meta": json.loads(brief.brief_json()),
-            "tracks": [merged],
-        })
+        result = normalize_raw(
+            {
+                "meta": json.loads(brief.brief_json()),
+                "tracks": [merged],
+            }
+        )
         if result.composition is None or not result.composition.tracks:
             feedback = result.errors[:10] or ["unparseable notes"]
             continue
@@ -116,13 +125,16 @@ def _report_text(comp: Composition, defaults: StyleDefaults) -> str:
     report = evaluate_rules(comp, defaults)
     if report.invalid:
         return "INVALID COMPOSITION:\n" + "\n".join(
-            f"{v.location}: {v.message}" for v in report.violations[:12])
+            f"{v.location}: {v.message}" for v in report.violations[:12]
+        )
     axis_lines = [f"{k}={v.score:.2f}" for k, v in report.axes.items()]
     gate_lines = [f"G_{k}={v:.2f}" for k, v in report.gates.items()]
     viol_lines = [f"- {v.location}: {v.message}" for v in report.violations][:12]
-    parts = [f"R_rule={report.R_rule:.1f}",
-             "axes: " + ", ".join(axis_lines),
-             "gates: " + ", ".join(gate_lines)]
+    parts = [
+        f"R_rule={report.R_rule:.1f}",
+        "axes: " + ", ".join(axis_lines),
+        "gates: " + ", ".join(gate_lines),
+    ]
     if viol_lines:
         parts.append("violations:")
         parts.extend(viol_lines)
@@ -131,8 +143,9 @@ def _report_text(comp: Composition, defaults: StyleDefaults) -> str:
     return "\n".join(parts)
 
 
-def self_review(client: LLMClient, comp: Composition, defaults: StyleDefaults,
-                max_rounds: int = 2) -> tuple[Composition, list[dict]]:
+def self_review(
+    client: LLMClient, comp: Composition, defaults: StyleDefaults, max_rounds: int = 2
+) -> tuple[Composition, list[dict]]:
     current = comp
     trajectory: list[dict] = []
     prev_score = float("-inf")
@@ -145,13 +158,16 @@ def self_review(client: LLMClient, comp: Composition, defaults: StyleDefaults,
         if report.R_rule - prev_score < 1.0 and round_index > 0:
             break
         prev_score = report.R_rule
-        options = [t.name for t in current.tracks if not t.is_drum] or \
-                  [t.name for t in current.tracks]
+        options = [t.name for t in current.tracks if not t.is_drum] or [
+            t.name for t in current.tracks
+        ]
         try:
             reply = client.respond_json(
                 review_system(),
-                review_user(_report_text(current, defaults), options,
-                            json.dumps(current.meta.model_dump())))
+                review_user(
+                    _report_text(current, defaults), options, json.dumps(current.meta.model_dump())
+                ),
+            )
         except Exception as exc:
             trajectory[-1]["action"] = f"review aborted: {exc}"
             break
@@ -164,12 +180,18 @@ def self_review(client: LLMClient, comp: Composition, defaults: StyleDefaults,
         if target is None:
             trajectory[-1]["action"] = f"unknown track {track_name!r}; kept"
             break
-        spec = {"name": target.name, "program": target.program,
-                "role": target.role, "is_drum": target.is_drum}
-        result = normalize_raw({
-            "meta": current.meta.model_dump(),
-            "tracks": [{**spec, "notes": notes}],
-        })
+        spec = {
+            "name": target.name,
+            "program": target.program,
+            "role": target.role,
+            "is_drum": target.is_drum,
+        }
+        result = normalize_raw(
+            {
+                "meta": current.meta.model_dump(),
+                "tracks": [{**spec, "notes": notes}],
+            }
+        )
         if result.composition is None or not result.composition.tracks:
             trajectory[-1]["action"] = "patch rejected; kept"
             break
@@ -178,8 +200,7 @@ def self_review(client: LLMClient, comp: Composition, defaults: StyleDefaults,
             trajectory[-1]["action"] = "patch rejected; kept"
             break
         patched_track = patched.tracks[0]
-        new_tracks = [patched_track if t.name == track_name else t
-                      for t in current.tracks]
+        new_tracks = [patched_track if t.name == track_name else t for t in current.tracks]
         current = current.model_copy(update={"tracks": new_tracks})
         trajectory[-1]["action"] = f"patched {track_name}"
     return current, trajectory
@@ -198,8 +219,7 @@ def apply_adjustments(comp: Composition, adjustments: list[dict]) -> Composition
         if action == "section_mute":
             start_tick = adj.get("start_bar", 0) * bar
             end_tick = adj.get("end_bar", 999) * bar
-            track.notes = [n for n in track.notes
-                          if n[0] < start_tick or n[0] >= end_tick]
+            track.notes = [n for n in track.notes if n[0] < start_tick or n[0] >= end_tick]
         elif action == "octave_shift":
             direction = adj.get("direction", "up")
             shift = 12 if direction == "up" else -12
@@ -222,12 +242,13 @@ def apply_adjustments(comp: Composition, adjustments: list[dict]) -> Composition
     return comp
 
 
-def arrange_coordinate(client: LLMClient, pack: StylePack,
-                       comp: Composition) -> list[dict]:
+def arrange_coordinate(client: LLMClient, pack: StylePack, comp: Composition) -> list[dict]:
     """Ask LLM to analyze arrangement and output adjustment commands."""
     from miidi.pipeline.prompts import (
-        arrange_coordinate_system, arrange_coordinate_user,
+        arrange_coordinate_system,
+        arrange_coordinate_user,
     )
+
     system = arrange_coordinate_system(pack)
     user = arrange_coordinate_user(comp.model_dump())
     try:
@@ -238,5 +259,4 @@ def arrange_coordinate(client: LLMClient, pack: StylePack,
     if not isinstance(adjustments, list):
         return []
     valid_actions = {"section_mute", "octave_shift", "density_reduce"}
-    return [a for a in adjustments
-            if isinstance(a, dict) and a.get("action") in valid_actions]
+    return [a for a in adjustments if isinstance(a, dict) and a.get("action") in valid_actions]

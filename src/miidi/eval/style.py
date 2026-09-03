@@ -9,10 +9,12 @@ class StyleDefaults:
     density_ref: dict[str, tuple[float, float]] = field(default_factory=dict)
     swing_offsets: list[int] = field(default_factory=list)
     drum_patterns: dict[str, list[int]] = field(default_factory=dict)
-    section_vocab: dict[str, list[str]] = field(default_factory=lambda: {
-        "chorus": ["chorus", "refrain", "hook"],
-        "verse": ["verse", "couplet", "a"],
-        "bridge": ["bridge", "b"],
-        "intro": ["intro"],
-        "outro": ["outro", "coda"],
-    })
+    section_vocab: dict[str, list[str]] = field(
+        default_factory=lambda: {
+            "chorus": ["chorus", "refrain", "hook"],
+            "verse": ["verse", "couplet", "a"],
+            "bridge": ["bridge", "b"],
+            "intro": ["intro"],
+            "outro": ["outro", "coda"],
+        }
+    )

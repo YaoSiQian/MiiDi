@@ -92,9 +92,11 @@ def test_run_single_sample_invalid_composition():
 
     invalid_report = RuleReport(invalid=True, R_rule=0.0, violations=())
 
-    with patch("evals.runners.run_eval.run_pipeline", return_value=mock_pipeline_result), \
-         patch("evals.runners.run_eval.load_style_pack") as mock_load, \
-         patch("evals.runners.run_eval.evaluate_rules", return_value=invalid_report):
+    with (
+        patch("evals.runners.run_eval.run_pipeline", return_value=mock_pipeline_result),
+        patch("evals.runners.run_eval.load_style_pack") as mock_load,
+        patch("evals.runners.run_eval.evaluate_rules", return_value=invalid_report),
+    ):
         mock_pack = MagicMock()
         mock_pack.defaults = MagicMock()
         mock_load.return_value = mock_pack
@@ -105,7 +107,6 @@ def test_run_single_sample_invalid_composition():
 
 
 def test_run_eval_creates_output_files(tmp_path):
-    from evals.samples.schema import EvalSample
 
     samples_dir = tmp_path / "samples"
     samples_dir.mkdir()
@@ -138,16 +139,19 @@ def test_run_eval_creates_output_files(tmp_path):
     mock_composite = MagicMock()
     mock_composite.composite = 76.0
 
-    with patch("evals.runners.run_eval.run_pipeline", return_value=mock_pipeline_result), \
-         patch("evals.runners.run_eval.load_style_pack") as mock_load, \
-         patch("evals.runners.run_eval.evaluate_rules", return_value=mock_rule_report), \
-         patch("evals.runners.run_eval.evaluate_judge", return_value=mock_judge_report), \
-         patch("evals.runners.run_eval.compute_composite", return_value=mock_composite):
+    with (
+        patch("evals.runners.run_eval.run_pipeline", return_value=mock_pipeline_result),
+        patch("evals.runners.run_eval.load_style_pack") as mock_load,
+        patch("evals.runners.run_eval.evaluate_rules", return_value=mock_rule_report),
+        patch("evals.runners.run_eval.evaluate_judge", return_value=mock_judge_report),
+        patch("evals.runners.run_eval.compute_composite", return_value=mock_composite),
+    ):
         mock_pack = MagicMock()
         mock_pack.defaults = MagicMock()
         mock_load.return_value = mock_pack
 
         from evals.runners.run_eval import run_eval
+
         results = run_eval(samples_dir, out_dir, client=mock_client)
 
     assert len(results) == 1

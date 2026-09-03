@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 
 from pydantic import ValidationError
 
-from miidi.schema.model import Composition, PPQ
+from miidi.schema.model import PPQ, Composition
 
 
 @dataclass
@@ -17,8 +17,17 @@ class NormalizeResult:
 
 _LETTERS = {"C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11}
 _VALUE_DURATIONS = {
-    "1": 1920, "2": 960, "d2": 1440, "4": 480, "d4": 720, "8": 240,
-    "16": 120, "32": 60, "T4": 160, "T8": 80, "d8": 360,
+    "1": 1920,
+    "2": 960,
+    "d2": 1440,
+    "4": 480,
+    "d4": 720,
+    "8": 240,
+    "16": 120,
+    "32": 60,
+    "T4": 160,
+    "T8": 80,
+    "d8": 360,
 }
 DEFAULT_VELOCITY = 96
 
@@ -131,8 +140,9 @@ def normalize_raw(data: object) -> NormalizeResult:
     repairs: list[str] = []
     errors: list[str] = []
     if not isinstance(data, dict):
-        return NormalizeResult(None, repairs,
-                               [f"top level must be an object, got {type(data).__name__}"])
+        return NormalizeResult(
+            None, repairs, [f"top level must be an object, got {type(data).__name__}"]
+        )
     meta_in = data.get("meta") if isinstance(data.get("meta"), dict) else {}
     raw_tracks = data.get("tracks")
     if not isinstance(raw_tracks, list) or not raw_tracks:
@@ -167,13 +177,15 @@ def normalize_raw(data: object) -> NormalizeResult:
             notes.append(note)
             cursor = note[0] + note[1]
         if notes:
-            tracks.append({
-                "name": str(rt.get("name", f"track{i}")),
-                "program": program,
-                "role": role,
-                "is_drum": is_drum,
-                "notes": notes,
-            })
+            tracks.append(
+                {
+                    "name": str(rt.get("name", f"track{i}")),
+                    "program": program,
+                    "role": role,
+                    "is_drum": is_drum,
+                    "notes": notes,
+                }
+            )
     if not tracks:
         return NormalizeResult(None, repairs, errors + ["no usable tracks"])
     structure = []
@@ -228,5 +240,7 @@ def normalize_raw(data: object) -> NormalizeResult:
     try:
         comp = Composition.model_validate(payload)
     except ValidationError as exc:
-        return NormalizeResult(None, repairs, errors + [f"validation failed: {exc.error_count()} errors"])
+        return NormalizeResult(
+            None, repairs, errors + [f"validation failed: {exc.error_count()} errors"]
+        )
     return NormalizeResult(comp, repairs, errors)

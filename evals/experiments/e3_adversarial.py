@@ -1,15 +1,19 @@
 from __future__ import annotations
+
 from dataclasses import dataclass
+
+from evals.experiments.e1_discrimination import DegradationOp, degrade_composition
 from miidi.eval.score import evaluate_rules
 from miidi.eval.style import StyleDefaults
 from miidi.schema.model import Composition
-from evals.experiments.e1_discrimination import DegradationOp, degrade_composition
+
 
 @dataclass
 class AdversarialResult:
     original_score: float
     degraded_scores: dict[str, float]
     all_detected: bool  # All degraded <= original
+
 
 def run_adversarial(comp: Composition, defaults: StyleDefaults) -> AdversarialResult:
     original = evaluate_rules(comp, defaults)

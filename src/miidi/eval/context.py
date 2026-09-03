@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+from collections.abc import Iterator
 from dataclasses import dataclass
-from typing import Iterator
 
 from miidi.eval.style import StyleDefaults
 from miidi.musicutil.scales import scale_pcs
@@ -38,13 +38,16 @@ class EvaluationContext:
     piece_end: int
 
     @classmethod
-    def from_composition(cls, comp: Composition,
-                         defaults: StyleDefaults | None = None) -> "EvaluationContext":
+    def from_composition(
+        cls, comp: Composition, defaults: StyleDefaults | None = None
+    ) -> EvaluationContext:
         defaults = defaults or StyleDefaults()
         bar = comp.bar_ticks
         if comp.structure:
-            sections = [(s.name, s.start_bar * bar, int((s.start_bar + s.bars) * bar))
-                        for s in comp.structure]
+            sections = [
+                (s.name, s.start_bar * bar, int((s.start_bar + s.bars) * bar))
+                for s in comp.structure
+            ]
         else:
             end = max((t.end_tick for t in comp.tracks), default=bar)
             sections = [("all", 0, max(end, bar))]

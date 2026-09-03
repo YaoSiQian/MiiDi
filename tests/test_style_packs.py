@@ -1,5 +1,3 @@
-import json
-
 import pytest
 
 from miidi.schema.chords import parse_chord
@@ -29,10 +27,12 @@ def test_pack_loads_and_structure(name):
 @pytest.mark.parametrize("name", EXPECTED)
 def test_every_chord_symbol_parses(name):
     import re
+
     pack = load_style_pack(name)
     body = pack.harmony_md.replace("##", " ").replace("#", " ")
-    tokens = re.findall(r"\b([A-G][b#]?(?:maj7|m7b5|m7|min|m|dim7|dim|aug|sus4|sus2|add9|6|m6|7|5)?)\b",
-                        body)
+    tokens = re.findall(
+        r"\b([A-G][b#]?(?:maj7|m7b5|m7|min|m|dim7|dim|aug|sus4|sus2|add9|6|m6|7|5)?)\b", body
+    )
     checked = 0
     for t in tokens:
         if len(t) == 1 and t in "ABDEFG":
@@ -62,13 +62,16 @@ def test_defaults_match_contract():
     assert load_style_pack("jazz").defaults.swing_offsets == [200]
 
 
-@pytest.mark.parametrize("name,kw", [
-    ("pop", ["I-V-vi-IV"]),
-    ("classical", ["cadence"]),
-    ("jazz", ["ii-V-I"]),
-    ("lofi", ["maj7"]),
-    ("touhou", ["trumpet"]),
-])
+@pytest.mark.parametrize(
+    "name,kw",
+    [
+        ("pop", ["I-V-vi-IV"]),
+        ("classical", ["cadence"]),
+        ("jazz", ["ii-V-I"]),
+        ("lofi", ["maj7"]),
+        ("touhou", ["trumpet"]),
+    ],
+)
 def test_identity_keywords(name, kw):
     text = load_style_pack(name)
     blob = (text.skill_md + text.harmony_md + text.instruments_md).lower()

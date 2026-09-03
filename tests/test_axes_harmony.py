@@ -3,23 +3,29 @@ from miidi.eval.context import EvaluationContext, StyleDefaults
 from miidi.schema.model import Composition
 
 
-def build(harmony_symbols=("C", "F", "G", "C"), melody=(72, 74, 76, 72),
-          extra_pad_notes=(), structure=None):
+def build(
+    harmony_symbols=("C", "F", "G", "C"),
+    melody=(72, 74, 76, 72),
+    extra_pad_notes=(),
+    structure=None,
+):
     pad = []
     for bar, pcs in enumerate([(60, 64, 67), (60, 65, 69), (59, 62, 67), (60, 64, 67)]):
         onset = bar * 1920
         pad += [(onset, 1920, p, 80) for p in pcs]
     pad += tuple(extra_pad_notes)
-    bass = [(bar * 1920, 1920, root, 96)
-            for bar, root in enumerate([36, 41, 43, 36])]
+    bass = [(bar * 1920, 1920, root, 96) for bar, root in enumerate([36, 41, 43, 36])]
     return Composition(
         meta={"key": {"tonic_pc": 0, "mode": "major"}},
         structure=structure or [{"name": "A", "start_bar": 0, "bars": 4}],
-        harmony=[{"bar": b, "dur_bars": 1.0, "symbol": s}
-                 for b, s in enumerate(harmony_symbols)],
+        harmony=[{"bar": b, "dur_bars": 1.0, "symbol": s} for b, s in enumerate(harmony_symbols)],
         tracks=[
-            {"name": "Mel", "role": "melody", "program": 73,
-             "notes": [(b * 1920, 1920, p, 96) for b, p in enumerate(melody)]},
+            {
+                "name": "Mel",
+                "role": "melody",
+                "program": 73,
+                "notes": [(b * 1920, 1920, p, 96) for b, p in enumerate(melody)],
+            },
             {"name": "Pad", "role": "harmony", "program": 0, "notes": pad},
             {"name": "Bs", "role": "bass", "program": 33, "notes": bass},
         ],
@@ -54,7 +60,7 @@ def test_offkey_note_lowers_adherence_and_score():
     good = axis_harmony(ctx_of(good_comp))
     bad_comp = good_comp.model_copy(deep=True)
     mel = list(bad_comp.tracks[0].notes)
-    mel[2] = (3840, 1920, 66, 96)          # F#4 against C major
+    mel[2] = (3840, 1920, 66, 96)  # F#4 against C major
     bad_comp.tracks[0].notes = mel
     bad = axis_harmony(ctx_of(bad_comp))
     assert bad.details["scale_adherence"] < good.details["scale_adherence"]
@@ -63,7 +69,7 @@ def test_offkey_note_lowers_adherence_and_score():
 
 def test_cluster_penalizes():
     good = axis_harmony(ctx_of(build()))
-    clashing = build(extra_pad_notes=((0, 1920, 61, 80),))   # C + C#
+    clashing = build(extra_pad_notes=((0, 1920, 61, 80),))  # C + C#
     bad = axis_harmony(ctx_of(clashing))
     assert bad.details["cluster_rate"] > 0.0
     assert bad.score < good.score

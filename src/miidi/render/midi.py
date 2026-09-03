@@ -14,8 +14,7 @@ def generate_midi(comp: Composition, out_dir: Path) -> Path:
     out_dir.mkdir(parents=True, exist_ok=True)
     safe = re.sub(r"[^A-Za-z0-9_-]+", "_", comp.meta.title).strip("_") or "untitled"
     path = out_dir / f"{safe}.mid"
-    mf = MIDIFile(len(comp.tracks), deinterleave=False,
-                  ticks_per_quarternote=PPQ)
+    mf = MIDIFile(len(comp.tracks), deinterleave=False, ticks_per_quarternote=PPQ)
     channels = assign_channels([t.is_drum for t in comp.tracks])
     for ti, track in enumerate(comp.tracks):
         mf.addTrackName(ti, 0, track.name)

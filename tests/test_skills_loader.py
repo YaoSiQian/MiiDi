@@ -13,12 +13,16 @@ def pack_dir(tmp_path):
     style.mkdir(parents=True)
     for f in ("SKILL.md", "instruments.md", "harmony.md", "rhythm.md"):
         (style / f).write_text(f"# {f}\n")
-    (style / "defaults.json").write_text(json.dumps({
-        "bpm_range": [70, 140],
-        "density_ref": {"__global__": [4, 24], "melody": [2, 10]},
-        "swing_offsets": [200],
-        "drum_patterns": {"kick": [0]},
-    }))
+    (style / "defaults.json").write_text(
+        json.dumps(
+            {
+                "bpm_range": [70, 140],
+                "density_ref": {"__global__": [4, 24], "melody": [2, 10]},
+                "swing_offsets": [200],
+                "drum_patterns": {"kick": [0]},
+            }
+        )
+    )
     return root
 
 

@@ -1,5 +1,8 @@
 from miidi.musicutil.scales import (
-    HARMONIC_MINOR_PCS, MAJOR_PCS, NATURAL_MINOR_PCS, scale_pcs,
+    HARMONIC_MINOR_PCS,
+    MAJOR_PCS,
+    NATURAL_MINOR_PCS,
+    scale_pcs,
 )
 from miidi.schema.model import KeySig
 

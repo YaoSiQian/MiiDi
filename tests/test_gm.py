@@ -1,7 +1,14 @@
 import pytest
 
 from miidi.musicutil.gm import (
-    CLOSED_HAT, CRASH, KICK, OPEN_HAT, RIDE, SNARE, assign_channels, play_comf,
+    CLOSED_HAT,
+    CRASH,
+    KICK,
+    OPEN_HAT,
+    RIDE,
+    SNARE,
+    assign_channels,
+    play_comf,
 )
 
 

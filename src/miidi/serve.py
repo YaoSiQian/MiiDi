@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Start MiiDi web server with .env support."""
+
 import os
-import sys
 from pathlib import Path
 
 
@@ -15,7 +15,7 @@ def main():
                 k, v = line.split("=", 1)
                 os.environ.setdefault(k.strip(), v.strip())
 
-    from miidi.llm.client import load_config, LLMClient
+    from miidi.llm.client import LLMClient, load_config
     from miidi.session.store import SessionStore
     from miidi.web.app import create_app
 
@@ -27,6 +27,7 @@ def main():
     app = create_app(store, client, root)
 
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8000)
 
 

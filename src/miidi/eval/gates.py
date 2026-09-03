@@ -13,13 +13,12 @@ def _grams_ratio(track) -> float:
         tokens.append((a[2], a[1], gap))
     if len(tokens) < 4:
         return 0.0
-    grams = [tuple(tokens[i:i + 4]) for i in range(len(tokens) - 3)]
+    grams = [tuple(tokens[i : i + 4]) for i in range(len(tokens) - 3)]
     return (len(grams) - len(set(grams))) / len(grams)
 
 
 def gate_repetition(ctx: EvaluationContext) -> float:
-    ratios = [_grams_ratio(t) for t in ctx.comp.tracks
-              if not t.is_drum and len(t.notes) >= 8]
+    ratios = [_grams_ratio(t) for t in ctx.comp.tracks if not t.is_drum and len(t.notes) >= 8]
     if not ratios:
         return 1.0
     return declining(max(ratios), 0.30, 0.90)

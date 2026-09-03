@@ -1,17 +1,19 @@
-from pathlib import Path
-
 import pytest
 
-from miidi.eval.style import StyleDefaults
 from miidi.pipeline.prompts import (
-    compose_system, compose_user, plan_system, plan_user,
-    review_system, review_user,
+    compose_system,
+    compose_user,
+    plan_system,
+    plan_user,
+    review_system,
+    review_user,
 )
 
 
 @pytest.fixture()
 def pack():
     from miidi.skills.loader import load_style_pack
+
     return load_style_pack("pop")
 
 
@@ -30,8 +32,12 @@ def test_plan_user_embeds_range_and_vocab(pack):
 
 
 def test_compose_prompts_carry_grid_rules(pack):
-    spec = {"name": "Lead", "program": 73, "role": "melody",
-            "description": "singing quarter-note melody"}
+    spec = {
+        "name": "Lead",
+        "program": 73,
+        "role": "melody",
+        "description": "singing quarter-note melody",
+    }
     sys_text = compose_system(spec, pack)
     usr_text = compose_user('{"bpm": 100}', spec, "MELODY NOTES: [[0,480,72,96]]")
     assert "ppq=480" in sys_text or "480" in sys_text
@@ -40,16 +46,24 @@ def test_compose_prompts_carry_grid_rules(pack):
 
 
 def test_compose_user_includes_piece_end_tick(pack):
-    spec = {"name": "Lead", "program": 73, "role": "melody",
-            "description": "singing quarter-note melody"}
+    spec = {
+        "name": "Lead",
+        "program": 73,
+        "role": "melody",
+        "description": "singing quarter-note melody",
+    }
     usr_text = compose_user('{"bpm": 100}', spec, "", piece_end_tick=7680)
     assert "7680" in usr_text
     assert "PIECE BOUNDARY" in usr_text
 
 
 def test_compose_user_no_boundary_when_none(pack):
-    spec = {"name": "Lead", "program": 73, "role": "melody",
-            "description": "singing quarter-note melody"}
+    spec = {
+        "name": "Lead",
+        "program": 73,
+        "role": "melody",
+        "description": "singing quarter-note melody",
+    }
     usr_text = compose_user('{"bpm": 100}', spec, "")
     assert "PIECE BOUNDARY" not in usr_text
 

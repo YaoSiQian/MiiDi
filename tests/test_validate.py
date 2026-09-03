@@ -7,8 +7,7 @@ def comp_with(track: Track) -> Composition:
 
 
 def test_clean_passes_with_chord():
-    c = comp_with(Track(name="L", notes=[(0, 240, 60, 96), (0, 240, 64, 96),
-                                         (240, 240, 67, 96)]))
+    c = comp_with(Track(name="L", notes=[(0, 240, 60, 96), (0, 240, 64, 96), (240, 240, 67, 96)]))
     assert validate_composition(c) == []
 
 
@@ -42,8 +41,7 @@ def test_no_structure_uses_played_extent():
 
 
 def test_drum_role_consistency():
-    c = comp_with(Track(name="D", role="melody", is_drum=True,
-                        notes=[(0, 120, 38, 100)]))
+    c = comp_with(Track(name="D", role="melody", is_drum=True, notes=[(0, 120, 38, 100)]))
     assert any(v.code == "DRUM_ROLE" for v in validate_composition(c))
 
 

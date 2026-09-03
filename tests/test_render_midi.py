@@ -8,10 +8,18 @@ def sample_comp() -> Composition:
     return Composition(
         meta={"title": "Test Song", "bpm": 100},
         tracks=[
-            {"name": "Lead", "program": 73, "role": "melody",
-             "notes": [[0, 240, 69, 96], [240, 240, 71, 96]]},
-            {"name": "Drums", "role": "drums", "is_drum": True,
-             "notes": [[0, 120, 36, 100], [240, 120, 38, 100]]},
+            {
+                "name": "Lead",
+                "program": 73,
+                "role": "melody",
+                "notes": [[0, 240, 69, 96], [240, 240, 71, 96]],
+            },
+            {
+                "name": "Drums",
+                "role": "drums",
+                "is_drum": True,
+                "notes": [[0, 120, 36, 100], [240, 120, 38, 100]],
+            },
         ],
     )
 

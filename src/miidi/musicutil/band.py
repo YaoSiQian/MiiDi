@@ -3,8 +3,7 @@ from __future__ import annotations
 import math
 
 
-def band(x: float, lo0: float, lo1: float, hi1: float, hi0: float,
-         floor: float = 0.0) -> float:
+def band(x: float, lo0: float, lo1: float, hi1: float, hi0: float, floor: float = 0.0) -> float:
     if x <= lo0:
         return floor
     if x < lo1:

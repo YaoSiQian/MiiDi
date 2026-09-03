@@ -3,8 +3,13 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from miidi.eval.axes import (
-    AxisResult, axis_dynamics, axis_format, axis_harmony, axis_rhythm,
-    axis_structure, axis_voice,
+    AxisResult,
+    axis_dynamics,
+    axis_format,
+    axis_harmony,
+    axis_rhythm,
+    axis_structure,
+    axis_voice,
 )
 from miidi.eval.context import EvaluationContext, StyleDefaults
 from miidi.eval.gates import gate_balance, gate_density, gate_repetition, gate_spread
@@ -12,7 +17,10 @@ from miidi.schema.model import Composition
 from miidi.schema.validate import Violation
 
 AXIS_WEIGHTS = {
-    "harmony": 0.30, "voice": 0.20, "rhythm": 0.20, "structure": 0.20,
+    "harmony": 0.30,
+    "voice": 0.20,
+    "rhythm": 0.20,
+    "structure": 0.20,
     "dynamics": 0.10,
 }
 GATE_NAMES = ("repetition", "density", "balance", "spread")
@@ -30,15 +38,15 @@ class RuleReport:
         return {
             "invalid": self.invalid,
             "R_rule": round(self.R_rule, 6),
-            "axes": {k: {"score": round(v.score, 6), "details": v.details}
-                     for k, v in self.axes.items()},
+            "axes": {
+                k: {"score": round(v.score, 6), "details": v.details} for k, v in self.axes.items()
+            },
             "gates": {k: round(v, 6) for k, v in self.gates.items()},
             "violations": [v.__dict__ for v in self.violations],
         }
 
 
-def evaluate_rules(comp: Composition,
-                   defaults: StyleDefaults | None = None) -> RuleReport:
+def evaluate_rules(comp: Composition, defaults: StyleDefaults | None = None) -> RuleReport:
     fmt_score, viols = axis_format(comp)
     if fmt_score < 1.0:
         return RuleReport(invalid=True, R_rule=0.0, violations=tuple(viols))

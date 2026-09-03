@@ -6,7 +6,13 @@ from pydantic import BaseModel, Field
 
 from miidi.schema.chords import ChordParseError, parse_chord
 from miidi.schema.model import (
-    ChordSpan, Composition, KeySig, Meta, Section, Track, TrackRole,
+    ChordSpan,
+    Composition,
+    KeySig,
+    Meta,
+    Section,
+    Track,
+    TrackRole,
 )
 
 
@@ -28,15 +34,23 @@ class MusicBrief(BaseModel):
     instruments: list[InstrumentSpec]
 
     def to_skeleton(self) -> Composition:
-        meta = Meta(title=self.title, bpm=self.bpm,
-                    time_signature=self.time_signature,
-                    key=KeySig(tonic_pc=self.tonic_pc, mode=self.mode))
+        meta = Meta(
+            title=self.title,
+            bpm=self.bpm,
+            time_signature=self.time_signature,
+            key=KeySig(tonic_pc=self.tonic_pc, mode=self.mode),
+        )
         tracks = []
         for inst in self.instruments:
-            tracks.append(Track(name=inst.name, program=inst.program,
-                                role=inst.role, is_drum=(inst.role == "drums")))
-        return Composition(meta=meta, structure=self.structure,
-                           harmony=self.harmony, tracks=tracks)
+            tracks.append(
+                Track(
+                    name=inst.name,
+                    program=inst.program,
+                    role=inst.role,
+                    is_drum=(inst.role == "drums"),
+                )
+            )
+        return Composition(meta=meta, structure=self.structure, harmony=self.harmony, tracks=tracks)
 
     def brief_json(self) -> str:
         return self.model_dump_json()
@@ -44,6 +58,7 @@ class MusicBrief(BaseModel):
     def piece_end_tick(self) -> int:
         """Compute the piece end tick from structure and time signature."""
         from miidi.schema.model import PPQ
+
         if not self.structure:
             return 0
         num, den = self.time_signature

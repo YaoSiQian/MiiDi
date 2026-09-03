@@ -3,8 +3,8 @@ from __future__ import annotations
 import json
 import os
 import time
-from dataclasses import dataclass, field
-from typing import Mapping
+from collections.abc import Mapping
+from dataclasses import dataclass
 
 import httpx
 
@@ -77,7 +77,7 @@ def extract_json(text: str) -> dict:
         elif s[i] == "}":
             depth -= 1
             if depth == 0:
-                chunk = s[start:i + 1]
+                chunk = s[start : i + 1]
                 try:
                     return json.loads(chunk)
                 except json.JSONDecodeError as exc:
@@ -129,8 +129,9 @@ class LLMClient:
             headers["User-Agent"] = "opencode/1.18.18 ai-sdk/provider-utils/4.0.23"
         return headers
 
-    def respond_json(self, system: str, user: str, temperature: float = 0.0,
-                     name: str = "response") -> dict:
+    def respond_json(
+        self, system: str, user: str, temperature: float = 0.0, name: str = "response"
+    ) -> dict:
         if self.config.provider == "zen":
             return self._respond_chat(system, user, temperature)
         return self._respond_responses(system, user, temperature)
@@ -140,10 +141,8 @@ class LLMClient:
         payload = {
             "model": self.config.model,
             "input": [
-                {"role": "system",
-                 "content": [{"type": "input_text", "text": system}]},
-                {"role": "user",
-                 "content": [{"type": "input_text", "text": user}]},
+                {"role": "system", "content": [{"type": "input_text", "text": system}]},
+                {"role": "user", "content": [{"type": "input_text", "text": user}]},
             ],
             "temperature": temperature,
         }
@@ -152,7 +151,9 @@ class LLMClient:
             try:
                 resp = self._http.post(
                     f"{self.config.base_url.rstrip('/')}/responses",
-                    json=payload, headers=self._headers())
+                    json=payload,
+                    headers=self._headers(),
+                )
                 if resp.status_code >= 400:
                     raise LLMError(f"HTTP {resp.status_code}: {resp.text[:300]}")
                 try:
@@ -166,7 +167,7 @@ class LLMClient:
                 if isinstance(exc, LLMError) and not str(status).startswith(("HTTP 429", "HTTP 5")):
                     break
                 if attempt < self.config.max_retries:
-                    time.sleep(0.5 * (3 ** attempt))
+                    time.sleep(0.5 * (3**attempt))
         raise LLMError(f"LLM call failed after retries: {last_error}") from last_error
 
     def _respond_chat(self, system: str, user: str, temperature: float) -> dict:
@@ -186,7 +187,9 @@ class LLMClient:
             try:
                 resp = self._http.post(
                     f"{self.config.base_url.rstrip('/')}/chat/completions",
-                    json=payload, headers=self._headers())
+                    json=payload,
+                    headers=self._headers(),
+                )
                 if resp.status_code >= 400:
                     raise LLMError(f"HTTP {resp.status_code}: {resp.text[:300]}")
                 try:
@@ -200,5 +203,5 @@ class LLMClient:
                 if isinstance(exc, LLMError) and not str(status).startswith(("HTTP 429", "HTTP 5")):
                     break
                 if attempt < self.config.max_retries:
-                    time.sleep(0.5 * (3 ** attempt))
+                    time.sleep(0.5 * (3**attempt))
         raise LLMError(f"LLM call failed after retries: {last_error}") from last_error
