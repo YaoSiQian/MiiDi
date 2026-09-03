@@ -10,3 +10,9 @@ output/
 sessions/
 .pytest_cache/
 midi/
+.mypy_cache/
+.opencode/
+.superpowers/
+tools/*.json
+evals/results/*.csv
+evals/results/*.md
