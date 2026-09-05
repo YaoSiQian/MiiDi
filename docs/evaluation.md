@@ -1,42 +1,210 @@
-# MiiDi Evaluation Method
+# MiiDi 评测体系
 
-## Overview
+## 双轨架构
 
-MiiDi uses a dual-track evaluation system:
+MiiDi 的评测分两条轨道走，最后合在一起算总分。
 
-1. **Rule Track** (deterministic): 6 axes + 4 gates → R_rule ∈ [0,100]
-2. **Judge Track** (LLM-as-judge): 3 dimensions → J1, J2, J3 ∈ [0,100]
+**规则轨（Rule Track）** 靠纯代码跑，没有随机性。输入一首曲子，输出固定分数。这条轨管"及格线"——和声有没有跑偏、节奏乱不乱、结构完不完整，都靠它把关。
 
-Composite: `0.6·R_rule + 0.4·mean(J1,J2,J3)`
+**评委轨（Judge Track）** 调 LLM 当评委。三维度打分，取平均。这条轨管"好不好听"——风格对不对味、有没有按要求写、整体音乐性如何。
 
-## Rule Track Axes
+最终得分：
 
-| Axis | Weight | What it measures |
-|------|--------|-----------------|
-| A1 Format | gate | validate() pass/fail |
-| A2 Harmony | 0.30 | Scale adherence, chord support, cluster rate |
-| A3 Voice | 0.20 | Range fit, parallel motion, leap rate |
-| A4 Rhythm | 0.20 | Grid adherence, density, drum patterns |
-| A5 Structure | 0.20 | Coverage, similarity, motif recall |
-| A6 Dynamics | 0.10 | Velocity spread, directionality |
+```
+Composite = 0.6 × R_rule + 0.4 × mean(J1, J2, J3)
+```
 
-## Anti-Degeneration Gates
+规则轨占六成，评委轨占四成。规则轨打分快、可复现，所以权重高。评委轨有主观性，但能捕捉代码难以量化的音乐品质。
 
-- G_repetition: n-gram self-copy rate
-- G_density: extreme density penalty
-- G_balance: track content imbalance
-- G_spread: fake register width
+---
 
-## Judge Track Dimensions
+## 规则轨：六个轴
 
-| Dimension | What it checks | Rubric |
-|-----------|---------------|--------|
-| J1 Style | Adherence to style features | yes/partial/no per feature |
-| J2 Prompt | Following explicit requirements | satisfied/violated/unaddressed |
-| J3 Musicality | Overall musical quality | 1-5 anchor rubric |
+规则轨先跑五个轴（A2–A6），每个轴输出 0–1 之间的分数，按权重加权求和。A1 是格式校验，不参与加权，直接决定整首曲子是否有效。
 
-## Experiments
+### A1 格式校验（gate）
 
-- E1 Discrimination: good/medium/bad tiers
-- E2 Consistency: rule determinism + judge stability
-- E3 Adversarial: cheat strategy detection
+```python
+axis_format(comp) → (score, violations)
+```
+
+过不了 A1，后面全部白算。校验内容：
+
+- 音高必须在 0–127 之间
+- 力度必须在 1–127 之间
+- 音符的 onset ≥ 0，duration ≥ 1
+- 同一轨道内音符不能时间重叠
+- 鼓轨道的 `is_drum` 和 `role` 必须一致
+- 所有音符不能超出曲子总长度
+
+有违规 → score = 0，返回违规列表。整个 `R_rule` 直接归零。
+
+### A2 和声（权重 0.30）
+
+权重最大。衡量的是音符和调性、和弦之间的关系，包含五个子指标：
+
+| 子指标 | 占比 | 说明 |
+|--------|------|------|
+| scale_adherence | 0.30 | 音符落在当前音阶内的比例。弱拍上的离调音有 15% 容错，强拍上的离调直接扣分 |
+| chord_support | 0.30 | 伴奏声部（bass/harmony/color/counter）的音符时值有多少落在当前和弦内。用 `band()` 做映射，0.5–0.8 之间满分 |
+| declaration_match | 0.15 | 每小节纵向音高集合与和弦标记的匹配度。衡量的是"和弦写出来了没有" |
+| cluster_rate | 0.15 | 同时发声的音符中，相邻音程 ≤ 1 半音的比率。二度堆叠太多说明和声太挤 |
+| cadence_rate | 0.10 | 段落结尾是否落在主和弦上，且前一小节是属或下属。衡量终止式是否到位 |
+
+最终得分：加权求和，clamp 到 [0, 1]。
+
+### A3 声部（权重 0.20）
+
+检查各声部的音区、进行方式、跳进比例。
+
+| 子指标 | 占比 | 说明 |
+|--------|------|------|
+| range_fit | 0.40 | 每个轨道的音符有多少落在该乐器的可演奏音域（play range）和舒适音域（comfort range）内。取所有轨道的最小值 |
+| parallel_count | 0.25 | 两两轨道之间，连续出现纯五度/纯八度平行进行的次数。超过 3 次开始扣分 |
+| leap_rate | 0.20 | 跳进（音程 > 12 半音）占所有进行的比例。0.10 以内满分，0.40 以上归零 |
+| register_gap | 0.15 | 旋律声部和低音声部的平均音高差。差值在 8–14 半音之间最佳，太大说明声部脱节 |
+
+### A4 节奏（权重 0.20）
+
+衡量节奏的规范性和密度合理性。
+
+| 子指标 | 占比 | 说明 |
+|--------|------|------|
+| grid_adherence | 0.30 | 音符 onset 落在网格上的比例。网格支持 1/480 的细分（即 1、1/2、1/3、1/4、1/6、1/8、1/12 拍），swing 位置也算合法 |
+| density_fit | 0.30 | 每小节音符数与风格参考值的匹配度。每个 role 有自己的参考区间，偏高偏低都扣分 |
+| drum_pattern_fit | 0.25 | 鼓组音符是否落在风格定义的合法位置上。kick、snare、hat 各自有允许的 tick 残差集合 |
+| swing_consistency | 0.15 | 不在网格上的音符，其偏移量的一致性。偏移量散布太开说明 swing 感不统一 |
+
+### A5 结构（权重 0.20）
+
+检查段落覆盖、重复与对比、旋律轮廓。
+
+| 子指标 | 占比 | 说明 |
+|--------|------|------|
+| coverage | 0.25 | 段落是否覆盖了整首曲子。有大段空白说明结构不完整 |
+| repeat_family_sim | 0.25 | 同名段落（比如两个 verse）之间的余弦相似度。太低说明同一段落内部不一致，太高说明真的在复制粘贴 |
+| contrast_family_sim | 0.25 | 不同名段落之间的余弦相似度。越高说明段落之间缺乏对比 |
+| contour_shape | 0.15 | 各段落密度的标准差。太均匀说明没有起承转合 |
+| motif_recall | 0.10 | 首段旋律的轮廓（上行/下行序列）是否在后续段落中出现过 |
+
+### A6 动态（权重 0.10）
+
+权重最低，但不可或缺。
+
+| 子指标 | 占比 | 说明 |
+|--------|------|------|
+| velocity_spread | 0.50 | 力度值的标准差。4–8 之间最佳，太小说明演奏太平，太大说明力度失控 |
+| directionality | 0.25 | 逐小节平均力度的自相关系数。正值说明力度有趋势性变化（渐强/渐弱），无序波动扣分 |
+| gradient_ok | 0.25 | chorus 段落的平均力度是否高于 verse 段落。流行音乐里副歌通常更有力 |
+
+---
+
+## 反退化四道门
+
+轴得分加权求和之后，还要过四个 gate。每个 gate 输出一个乘数（0–1），连乘得到最终乘数。任何一个 gate 拖后腿，总分都会被压下去。
+
+### G_repetition：自我复制检测
+
+对每个非鼓轨道，把连续四个音符（音高、时值、间隔）组成 4-gram，统计重复率。重复率 0.30 以内满分，0.90 以上归零。
+
+这个 gate 专门抓"复制粘贴整段"的偷懒行为。
+
+### G_density：极端密度惩罚
+
+全曲非鼓音符总数除以小节数，和风格参考区间比较。太稀疏（空洞）或太密集（音墙）都扣分。下限 0.5，即使严重偏离也不会归零。
+
+### G_balance：轨道失衡惩罚
+
+计算每个非鼓轨道的时值占比，取最小值。某个轨道时值占比低于 10% 说明那个轨道基本没参与，低于 5% 扣分更重。
+
+### G_spread：虚假音域宽度
+
+取全曲非鼓音符的 P5–P95 音域宽度，再去掉头尾各 3 个音符后重新算。如果修剪后宽度不到原来的 60%，说明音域宽度是被几个极端音符撑出来的，不是真正的宽广。
+
+---
+
+## 评委轨：三个维度
+
+评委轨调 LLM，每次请求返回 JSON。三个维度分别打分，范围 0–100。
+
+### J1 风格一致性
+
+系统提示词里会注入当前风格的 SKILL.md 和 instruments.md 内容，列出 8 项检查清单：
+
+1. 配器是否符合该风格的标准编制
+2. 各乐器音区是否正确
+3. 节奏/律动是否匹配风格（swing、backbeat 等）
+4. 和声语汇是否合适（和弦类型、进行）
+5. 密度/复杂度是否符合风格预期
+6. 风格特殊禁令是否被遵守（比如古典不用鼓）
+7. 整体织体/层次是否匹配
+8. 速度是否在风格典型范围内
+
+LLM 对每项给 yes/partial/no 判定，附带证据（轨道名 + 小节数）。最终按通过比例换算成 0–100 分。
+
+### J2 提示词遵循度
+
+系统先用正则从用户 prompt 里提取显式约束（BPM、调性、时长、乐器），和实际生成的曲子元数据做对比。LLM 逐项判定：
+
+- **satisfied**：prompt 指定了，且匹配
+- **violated**：prompt 指定了，但不匹配
+- **unaddressed**：prompt 没指定
+
+对于情感类要求（"欢快""放松""史诗"），LLM 需要结合曲子特征做主观判断。
+
+### J3 音乐性
+
+基于五档锚定评分：
+
+| 档位 | 描述 |
+|------|------|
+| 1 | 不可演奏：音符随机散落，没有旋律和声可言，节奏混乱 |
+| 2 | 错误密集：有结构但频繁出错，音区违规，明显违反乐理 |
+| 3 | 合格但平淡：技术正确但缺乏表现力，像 MIDI 音序器直出 |
+| 4 | 连贯有起伏：旋律和声成形，有力度和表情变化，有发展 |
+| 5 | 结构清晰有记忆点：主题发展充分，对比有效，有 hook |
+
+LLM 评定档位后换算成 0–100 分。J3 的系统提示词里会带上规则轨的得分摘要，让评委看到客观数据再做主观判断。
+
+---
+
+## 实验设计
+
+### E1 区分度实验
+
+对同一首曲子施加四种退化操作，检查规则轨是否能区分好坏：
+
+| 退化操作 | 做法 | 预期主要影响的轴 |
+|----------|------|------------------|
+| scatter_pitch | 随机打乱所有音高 | harmony ↓, voice ↓ |
+| remove_track | 删掉最后一个轨道 | harmony ↓, voice ↓ |
+| scatter_onset | onset 随机偏移 ±60 tick | rhythm ↓ |
+| repeat_first_bar | 全曲复制第一小节 | structure ↓, rhythm ↓ |
+
+每种退化操作对目标轴的分数下降有最低阈值要求。比如 scatter_pitch 要求 harmony 轴至少下降 0.2 分。测不过说明评分系统对该类退化不敏感。
+
+### E2 一致性实验
+
+对同一首曲子跑三次规则轨打分，检查是否完全确定。规则轨是纯代码实现，理论上 `R_rule` 的 range 必须为 0。如果 range > 0，说明有浮点精度问题或缓存问题需要修。
+
+### E3 对抗实验
+
+用 E1 的四种退化操作分别处理同一首曲子，检查退化后的分数是否全部低于原始分数。如果退化后分数反而更高，说明评分系统有漏洞，存在"作弊"空间。
+
+---
+
+## 分数解读
+
+| Composite 分段 | 含义 |
+|----------------|------|
+| 80–100 | 优秀。和声、节奏、结构都站得住，风格到位，有音乐性 |
+| 60–79 | 合格。基本可听，但有明显短板——可能是声部写得不好，或段落缺乏对比 |
+| 40–59 | 勉强。有些段落能听，整体问题较多 |
+| 20–39 | 较差。大量错误，结构松散 |
+| 0–19 | 不可用 |
+
+**注意**：格式校验（A1）不过的话，Composite 直接归零，不论其他维度打多高。
+
+**各轴独立看**：R_rule 分数高不代表曲子好听。A2 和声拿了满分，A6 动态可能只有 0.3——曲子技术上没问题但像机器人弹的。需要结合 J1/J2/J3 的主观评分综合判断。
+
+**gate 的乘数效应**：G_repetition 拿到 0.5，相当于总分直接砍半。即使五个轴全满分，gate 不过也白搭。

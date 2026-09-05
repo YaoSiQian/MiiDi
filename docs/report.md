@@ -1,31 +1,85 @@
-# MiiDi Analysis Report
+# MiiDi 实验报告
 
-## Scenario
+## 问题背景
 
-Symbolic music generation (MIDI) — no single correct answer, evaluation must be self-designed.
+符号音乐生成（MIDI）没有唯一正确答案。评估体系必须自己设计。
 
-## Architecture
+我们面对的核心矛盾：如何判断一段由 LLM 生成的音乐是"好"的？传统方法依赖人工试听，但规模化评估需要自动化手段。MiiDi 采用双轨架构——规则轨提供可复现的客观分数，Judge 轨覆盖规则无法触及的美学维度。
 
-Layered pipeline: Plan → Core → Arrange → Coordinate → Review
+## 系统架构
 
-## Evaluation Dimensions
+五阶段流水线：Plan → Core → Arrange → Coordinate → Review
 
-Dual-track: rule (objective) + judge (subjective)
+每个阶段生成一个版本快照，支持断点续跑和版本回滚。
 
-## Conclusions
+## 评测维度
 
-[To be filled after running experiments]
+双轨设计：规则轨（客观）+ Judge 轨（主观）
 
-## Failure Modes
+### 规则轨六轴
 
-[To be filled after analyzing results]
+| 轴 | 权重 | 检测内容 |
+|----|------|----------|
+| A1 格式规范性 | 资格门 | validate 通过性、音符越界、轨内重叠 |
+| A2 和声正确性 | 0.30 | 音阶符合度、和弦支撑度、终止式存在性 |
+| A3 声部写作质量 | 0.20 | 音域适配、平行五八度、跳进控制 |
+| A4 节奏律动 | 0.20 | 网格吸附率、密度梯度、鼓 pattern 匹配 |
+| A5 结构与发展性 | 0.20 | 段落覆盖、相似度矩阵、动机再现 |
+| A6 动态表现力 | 0.10 | velocity 分布、段落梯度 |
 
-## Model Information
+### 反退化门
 
-LLM: OpenAI-compatible API (Zen fallback: hy3-free)
+| 门 | 防御目标 |
+|----|----------|
+| G_repetition | 反「复读凑篇幅」 |
+| G_density | 反「十六分轰炸刷复杂度」 |
+| G_balance | 反「凑轨数」 |
+| G_spread | 反「表面丰富」 |
 
-## Limitations
+### Judge 轨三维
 
-- Same model for generation and judging (self-preference risk)
-- Single-person annotation (statistical limitations)
-- Symbolic metrics ≠ listening quality
+- **J1 风格符合度**：逐条对照曲风特征清单，yes/partial/no 判定
+- **J2 提示遵循度**：显式约束精确核对 + 意象类三值判定
+- **J3 整体音乐性**：1-5 分锚点 rubric，每档附可查特征
+
+**合成分**：`composite = 0.6 * R_rule + 0.4 * mean(J1, J2, J3)`
+
+## 实验设计
+
+### E1 鉴别力实验
+
+对生成的Composition施加退化操作，验证规则轨能否区分好坏：
+
+| 操作 | 预期影响 |
+|------|----------|
+| scatter_pitch | 和声轴、声部轴下降 |
+| scatter_onset | 节奏轴下降 |
+| remove_track | 和声轴、声部轴下降 |
+| repeat_first_bar | 结构轴、节奏轴下降 |
+
+### E2 一致性实验
+
+验证规则轨的确定性：同一 Composition 多次评估，R_rule 应完全一致。
+
+### E3 对抗性实验
+
+验证系统能否检测退化：所有退化版本的 R_rule 应低于原始版本。
+
+## 模型信息
+
+LLM：OpenAI 兼容 API（Zen 回退：mimo-v2.5-free）
+
+## 局限性
+
+- 生成和评判使用同一模型（自我偏好风险）
+- 单人标注（统计局限）
+- 符号指标 ≠ 听感质量
+- 完整评估耗时较长（36 samples × 5min ≈ 3 小时）
+
+## 结论
+
+[待运行实验后填写]
+
+## 失败模式
+
+[待分析结果后填写]

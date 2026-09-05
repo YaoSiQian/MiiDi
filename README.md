@@ -93,6 +93,8 @@ python src/miidi/serve.py
 
 ## 架构概览
 
+[详细架构文档 →](docs/architecture.md)
+
 ```mermaid
 graph TD
     A[用户 Prompt + 曲风 Skill] --> B[① Plan 规划]
@@ -142,6 +144,8 @@ graph TD
 
 ## 分阶段生成
 
+[流水线详解 →](docs/pipeline.md)
+
 流水线分为五个阶段，每个阶段完成后保存一个版本快照：
 
 | 阶段 | 内容 | 耗时（参考） |
@@ -161,6 +165,8 @@ graph TD
 
 ## 技术栈
 
+[曲风系统详解 →](docs/styles.md)
+
 | 层 | 技术 |
 |---|------|
 | **后端** | Python ≥3.11、pydantic v2、FastAPI、uvicorn、httpx |
@@ -171,6 +177,8 @@ graph TD
 ---
 
 ## 评测体系
+
+[评测体系详解 →](docs/evaluation.md)
 
 ### 双轨架构
 
@@ -213,6 +221,8 @@ Composition JSON ──┬─ 规则轨：六个确定性轴 → 加权和 → �
 
 ## API 端点
 
+[API 文档 →](docs/api.md)
+
 | 方法 | 路径 | 说明 |
 |------|------|------|
 | POST | `/api/sessions` | 创建会话（仅 Plan 阶段） |
@@ -224,6 +234,12 @@ Composition JSON ──┬─ 规则轨：六个确定性轴 → 加权和 → �
 | POST | `/api/sessions/{sid}/versions/{v}/rollback` | 回滚到指定版本 |
 | POST | `/api/sessions/{sid}/evaluate` | 规则评估 |
 | GET | `/api/sessions/{sid}/midi` | 下载 MIDI 文件 |
+
+---
+
+## 实验报告
+
+[实验报告 →](docs/report.md)
 
 ---
 
