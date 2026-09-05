@@ -19,7 +19,6 @@
 - **智能自评**：内置规则评估器 + LLM Judge 双轨评分，生成后自动检测并修正问题
 - **编配协调**：独立的编配协调器分析频谱平衡、段落密度、角色清晰度，输出结构化调整命令
 - **分阶段生成**：Plan → Core → Arrange → Coordinate → Review 五阶段，支持断点续跑、单轨修改、版本回滚
-- **多 LLM 后端**：OpenCode Zen 免费模型 / 自定义 OpenAI 兼容 API
 - **可编辑 MIDI**：输出标准 MIDI 文件，可在任意 DAW 中打开、修改、再创作
 - **复古桌面 UI**：System 6 风格多窗口界面，极简而功能完整
 
@@ -35,7 +34,7 @@ pip install -e ".[dev]"
 
 ### 2. 配置 LLM
 
-**方式 A：OpenCode Zen（免费，无需 API Key）**
+**方式 A：OpenCode Zen -> hy3-free**
 
 ```bash
 # 直接使用，无需配置任何环境变量
@@ -45,14 +44,14 @@ python -m miidi generate --prompt "雨夜的咖啡馆" --style lofi
 MODEL_NAME=hy3-free python -m miidi generate --prompt "雨夜的咖啡馆" --style lofi
 ```
 
-**方式 B：自定义 OpenAI 兼容 API**
+**方式 B：OpenAI 兼容 API -> hy3**
 
 ```bash
 cp env.example .env
 # 编辑 .env：
-OPENAI_BASE_URL=https://your-api-endpoint
+OPENAI_BASE_URL=https://tokenhub.tencentmaas.com/v1
 OPENAI_API_KEY=your-key
-MODEL_NAME=your-model
+MODEL_NAME=hy3
 ```
 
 ### 3. 运行测试

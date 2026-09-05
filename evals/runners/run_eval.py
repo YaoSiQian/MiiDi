@@ -67,10 +67,12 @@ def run_single_sample(sample: EvalSample, client: LLMClient, out_dir: Path) -> E
 
 
 def run_eval(
-    samples_dir: Path, out_dir: Path, client: LLMClient | None = None, limit: int | None = None
+    samples_dir: Path,
+    out_dir: Path,
+    client: LLMClient | None = None,
+    limit: int | None = None,
+    workers: int = 1,
 ) -> list[EvalResult]:
-    if client is None:
-        client = LLMClient(load_config())
     out_dir.mkdir(parents=True, exist_ok=True)
     samples = []
     for f in sorted(samples_dir.glob("*.yaml")):
@@ -79,11 +81,34 @@ def run_eval(
         samples.append(EvalSample(**data))
     if limit is not None:
         samples = samples[:limit]
-    results = []
-    for i, sample in enumerate(samples):
-        print(f"[{i + 1}/{len(samples)}] {sample.id} ({sample.style})")
-        result = run_single_sample(sample, client, out_dir / sample.id)
-        results.append(result)
+
+    def _task(sample: EvalSample) -> EvalResult:
+        c = LLMClient(load_config()) if client is None else client
+        return run_single_sample(sample, c, out_dir / sample.id)
+
+    if workers <= 1:
+        results = []
+        for i, sample in enumerate(samples):
+            print(f"[{i + 1}/{len(samples)}] {sample.id} ({sample.style})")
+            results.append(_task(sample))
+    else:
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+
+        results = [None] * len(samples)
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            futures = {pool.submit(_task, s): i for i, s in enumerate(samples)}
+            for j, fut in enumerate(as_completed(futures), 1):
+                idx = futures[fut]
+                try:
+                    results[idx] = fut.result()
+                    print(f"[{j}/{len(samples)}] {samples[idx].id} done")
+                except Exception as exc:
+                    r = EvalResult(
+                        sample_id=samples[idx].id, style=samples[idx].style, error=str(exc)[:200]
+                    )
+                    results[idx] = r
+                    print(f"[{j}/{len(samples)}] {samples[idx].id} FAILED: {exc}")
+
     _write_csv(results, out_dir / "results.csv")
     _write_markdown(results, out_dir / "results.md")
     return results
@@ -121,5 +146,6 @@ if __name__ == "__main__":
     parser.add_argument("--samples", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--limit", type=int, default=None, help="Max number of samples to evaluate")
+    parser.add_argument("--workers", type=int, default=1, help="Number of concurrent workers")
     args = parser.parse_args()
-    run_eval(args.samples, args.out, limit=args.limit)
+    run_eval(args.samples, args.out, limit=args.limit, workers=args.workers)
