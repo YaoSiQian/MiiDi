@@ -56,7 +56,10 @@ def _run_pipeline_bg(sid: str, prompt: str, style: str, stages: list[str]) -> No
             sid=sid,
         )
         with _bg_lock:
-            _bg_tasks[sid] = {"status": "done", "log": result.stage_log}
+            _bg_tasks[sid] = {
+                "status": "done" if result.comp is not None else "error",
+                "log": result.stage_log,
+            }
     except Exception as exc:
         with _bg_lock:
             _bg_tasks[sid] = {"status": "error", "log": [str(exc)]}
@@ -116,6 +119,13 @@ async def get_status(sid: str) -> StatusResponse:
             stage="generating",
             trajectory=[],
             stage_log=["Generating..."],
+        )
+    if bg and bg["status"] == "error":
+        return StatusResponse(
+            sid=sid,
+            stage="error",
+            trajectory=[],
+            stage_log=bg["log"],
         )
 
     try:

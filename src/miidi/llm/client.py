@@ -27,6 +27,23 @@ class LLMError(RuntimeError):
     pass
 
 
+# 端点偶发返回空响应（如 reasoning 模型只回 reasoning_content）——视为瞬时故障，可重试
+_TRANSIENT_PREFIXES = (
+    "HTTP 429",
+    "HTTP 5",
+    "no content in message",
+    "no choices in response",
+    "no output text in response",
+    "malformed JSON body",
+)
+
+
+def _retryable(exc: Exception) -> bool:
+    if isinstance(exc, httpx.HTTPError):
+        return True
+    return str(exc).startswith(_TRANSIENT_PREFIXES)
+
+
 @dataclass(frozen=True)
 class LLMConfig:
     base_url: str
@@ -163,8 +180,7 @@ class LLMClient:
                 return extract_json(_reply_text(data))
             except (LLMError, httpx.HTTPError) as exc:
                 last_error = exc
-                status = getattr(exc, "args", [""])[0] if isinstance(exc, LLMError) else ""
-                if isinstance(exc, LLMError) and not str(status).startswith(("HTTP 429", "HTTP 5")):
+                if isinstance(exc, LLMError) and not _retryable(exc):
                     break
                 if attempt < self.config.max_retries:
                     time.sleep(0.5 * (3**attempt))
@@ -199,8 +215,7 @@ class LLMClient:
                 return extract_json(_chat_reply_text(data))
             except (LLMError, httpx.HTTPError) as exc:
                 last_error = exc
-                status = getattr(exc, "args", [""])[0] if isinstance(exc, LLMError) else ""
-                if isinstance(exc, LLMError) and not str(status).startswith(("HTTP 429", "HTTP 5")):
+                if isinstance(exc, LLMError) and not _retryable(exc):
                     break
                 if attempt < self.config.max_retries:
                     time.sleep(0.5 * (3**attempt))
