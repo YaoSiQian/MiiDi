@@ -50,7 +50,8 @@ class LLMConfig:
     api_key: str
     model: str
     provider: str = "openai"  # "openai" (Responses API) or "zen" (Chat Completions)
-    timeout_s: float = 300.0
+    # 900s: dense completions (~32k tokens) on slow endpoints can run 10+ minutes
+    timeout_s: float = 900.0
     max_retries: int = 2
 
 
@@ -99,7 +100,54 @@ def extract_json(text: str) -> dict:
                     return json.loads(chunk)
                 except json.JSONDecodeError as exc:
                     raise LLMError(f"invalid JSON in reply: {exc}") from exc
+    salvaged = _salvage_truncated_json(s[start:])
+    if salvaged is not None:
+        return salvaged
     raise LLMError("unbalanced JSON object in reply")
+
+
+def _salvage_truncated_json(s: str) -> dict | None:
+    """Close a JSON object truncated mid-stream (e.g. finish_reason=length).
+
+    Keeps only elements completed before the cut, then appends the missing
+    bracket closers. Note lists are collections of independent elements, so a
+    salvaged prefix is still usable output; returns None when nothing complete
+    survived.
+    """
+    stack: list[str] = []
+    in_str = False
+    esc = False
+    last_safe = -1  # index of the last comma that terminated a complete element
+    last_safe_depth = 0  # stack size at that comma — closers must match this
+    for i, ch in enumerate(s):
+        if in_str:
+            if esc:
+                esc = False
+            elif ch == "\\":
+                esc = True
+            elif ch == '"':
+                in_str = False
+            continue
+        if ch == '"':
+            in_str = True
+        elif ch in "[{":
+            stack.append(ch)
+        elif ch in "]}":
+            if stack:
+                stack.pop()
+        elif ch == "," and stack:
+            last_safe = i
+            last_safe_depth = len(stack)
+    if not stack or last_safe < 0:
+        return None
+    candidate = s[:last_safe].rstrip()
+    if candidate.endswith(","):
+        candidate = candidate[:-1]
+    candidate += "".join("}" if c == "{" else "]" for c in reversed(stack[:last_safe_depth]))
+    try:
+        return json.loads(candidate)
+    except json.JSONDecodeError:
+        return None
 
 
 def _reply_text(data: dict) -> str:
@@ -195,7 +243,9 @@ class LLMClient:
                 {"role": "user", "content": user},
             ],
             "temperature": temperature,
-            "max_tokens": 16384,
+            # 32k: dense compositions (e.g. touhou drum tracks) need ~20k+ output
+            # tokens including reasoning; 16k truncated them (finish_reason=length)
+            "max_tokens": 32768,
             "top_p": 0.95,
         }
         last_error: Exception | None = None

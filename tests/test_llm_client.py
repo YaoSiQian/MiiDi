@@ -182,3 +182,23 @@ def test_zen_retry_on_429():
     client = LLMClient(zen_config(max_retries=2), transport=httpx.MockTransport(handler))
     assert client.respond_json("s", "u") == {"ok": True}
     assert calls["n"] == 2
+
+
+def test_extract_json_salvages_truncated_note_list():
+    truncated = '{"notes": [[0, 480, 60, 80], [480, 480, 62, 80], [9'
+    assert extract_json(truncated) == {"notes": [[0, 480, 60, 80], [480, 480, 62, 80]]}
+
+
+def test_extract_json_salvage_handles_strings_and_escapes():
+    truncated = '{"label": "a \\"dense\\" part, really", "notes": [[0, 1, 2, 3], [4'
+    assert extract_json(truncated) == {
+        "label": 'a "dense" part, really',
+        "notes": [[0, 1, 2, 3]],
+    }
+
+
+def test_extract_json_salvage_nothing_complete_raises():
+    with pytest.raises(LLMError, match="unbalanced"):
+        extract_json('{"notes": [12')
+    with pytest.raises(LLMError, match="unbalanced"):
+        extract_json('{"a": tru')
