@@ -14,6 +14,7 @@
       Session
       <ul role="menu">
         <li role="menu-item"><a href="#new">New Session</a></li>
+        <li role="menu-item"><a href="#open">Open Session…</a></li>
         <li role="menu-item"><a href="#versions">Version History</a></li>
       </ul>
     </li>
@@ -94,6 +95,7 @@
       </div>
       <div class="separator"></div>
       <div class="window-pane">
+        <div id="plan-summary" style="display:none;"></div>
         <div id="pianoroll-empty" class="pianoroll-empty">
           Generate a composition to see the piano roll
           <div style="margin-top:12px;">
@@ -106,6 +108,26 @@
           <button class="btn" id="btn-play">Play</button>
           <button class="btn" id="btn-stop">Stop</button>
         </div>
+        <div class="separator"></div>
+        <div class="form-group" id="stage-gate" style="display:none;">
+          <div id="gate-hint" style="font-size:12px;margin-bottom:4px;"></div>
+          <button class="btn" id="btn-continue">Continue</button>
+          <textarea id="gate-feedback" rows="2" placeholder="Optional: what should change in this stage?" style="margin-top:6px;"></textarea>
+          <button class="btn" id="btn-gate-feedback" style="margin-top:4px;">Apply feedback</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="window" id="window-sessions" style="left:920px;top:40px;width:320px;display:none;">
+      <div class="title-bar">
+        <h1 class="title">Sessions</h1>
+      </div>
+      <div class="separator"></div>
+      <div class="window-pane">
+        <div id="sessions-list">Loading…</div>
+        <div style="margin-top:8px;">
+          <button class="btn" id="btn-sessions-close">Close</button>
+        </div>
       </div>
     </div>
 
@@ -115,6 +137,9 @@
       </div>
       <div class="separator"></div>
       <div class="window-pane">
+        <div class="form-group">
+          <button class="btn" id="btn-evaluate">Evaluate</button>
+        </div>
         <div id="eval-scores"></div>
         <div id="eval-violations"></div>
         <div id="eval-trajectory"></div>

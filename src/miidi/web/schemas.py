@@ -39,5 +39,17 @@ class GenerateStageRequest(BaseModel):
 
 class GenerateStageResponse(BaseModel):
     sid: str
-    stage_log: list[str]
-    comp: dict | None = None
+    accepted: bool = True
+    stage_log: list[str] = []
+
+
+class SessionInfo(BaseModel):
+    sid: str
+    prompt: str = ""
+    style: str = ""
+    created: str | float = ""
+    versions: list[dict] = []
+
+
+class SessionListResponse(BaseModel):
+    sessions: list[SessionInfo]

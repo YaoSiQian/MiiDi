@@ -57,46 +57,62 @@ MiiDi 的后端基于 FastAPI，所有接口统一挂在 `/api` 前缀下。
 
 ### POST /api/sessions/{sid}/generate
 
-对已存在的会话执行指定阶段。适合分步控制生成流程——比如先跑 plan，看看骨架再决定要不要继续。
+对已存在的会话执行指定阶段，适合分步控制生成流程。**后台执行**：立即返回，通过 status 接口轮询进度（`generating` → `done` / `error`）。
+
+**续跑语义**：接口会从会话最新版本继续——brief 从已存版本恢复（不重新规划），已有音符的轨道不会重写，所以每次只传一个阶段即可按 plan → core → arrange 逐步推进；重复请求已完成的阶段是空操作（不产生新版本）。
 
 **请求体**
 
 ```json
 {
-  "stages": ["core", "arrange"]
+  "stages": ["core"]
 }
 ```
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
-| stages | string[] | 是 | 要跑的阶段，可选 `plan`、`core`、`arrange` |
+| stages | string[] | 是 | 要跑的阶段段，可选 `plan`、`core`、`arrange`；通常每次只传一段 |
 
 **响应**
 
 ```json
 {
   "sid": "abc123",
-  "stage_log": ["composed melody", "composed bass", "composed drums", "core: done"],
-  "comp": {
-    "meta": { "title": "...", "bpm": 120 },
-    "structure": [],
-    "harmony": [],
-    "tracks": []
-  }
+  "accepted": true,
+  "stage_log": []
 }
 ```
-
-| 字段 | 说明 |
-|------|------|
-| stage_log | 各阶段执行日志 |
-| comp | 生成完毕的 Composition 结构，失败时可能为 null |
 
 **错误**
 
 | 状态码 | 场景 |
 |--------|------|
+| 400 | stages 含非法值 |
 | 404 | session 不存在 |
+| 409 | 该会话已有生成任务在跑 |
 | 503 | 服务器未初始化 |
+
+---
+
+### GET /api/sessions
+
+列出全部会话（按 sid 排序），供「打开历史会话」使用。
+
+**响应**
+
+```json
+{
+  "sessions": [
+    {
+      "sid": "20260906-115324-6bdd",
+      "prompt": "黄昏时分的老街咖啡馆",
+      "style": "lofi",
+      "created": 1786211604.0,
+      "versions": [{ "version": 1, "label": "planned" }]
+    }
+  ]
+}
+```
 
 ---
 

@@ -13,7 +13,7 @@ const STEPS = {
 const STEP_HINTS = {
   [STEPS.INTRO]: "Welcome to MiiDi",
   [STEPS.COMPOSE]: "Write your prompt and choose a style",
-  [STEPS.PREVIEW]: "Your composition is ready — preview it below",
+  [STEPS.PREVIEW]: "Preview the current stage — continue or give feedback",
   [STEPS.EVALUATE]: "Review evaluation scores and violations",
   [STEPS.REVISE]: "Describe what to change, then revise",
 };
@@ -30,6 +30,8 @@ let currentStep = STEPS.INTRO;
 let completedSteps = new Set();
 let currentSid = null;
 let currentTracks = [];
+let currentComp = null;
+let pipelineStage = "plan"; // plan → core → arrange (derived from the composition)
 let midiPlayer = null;
 
 // Initialize
@@ -98,10 +100,13 @@ function getSelectedStyle() {
 }
 
 // Generate
+let generating = false;
 document.getElementById("btn-generate").addEventListener("click", async () => {
+  if (generating) return; // ignore double-submit
   const prompt = document.getElementById("prompt-input").value.trim();
   if (!prompt) return;
 
+  generating = true;
   const statusEl = document.getElementById("status-text");
   const progressEl = document.getElementById("progress-bar");
   const fillEl = document.getElementById("progress-fill");
@@ -114,41 +119,53 @@ document.getElementById("btn-generate").addEventListener("click", async () => {
     const resp = await fetch("/api/sessions", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt, style: getSelectedStyle(), stages: ["plan", "core"] }),
+      body: JSON.stringify({ prompt, style: getSelectedStyle(), stages: ["plan"] }),
     });
     const data = await resp.json();
     currentSid = data.sid;
+    setSessionHash(currentSid);
     fillEl.style.width = "30%";
-    statusEl.textContent = `Session ${currentSid} — generating core tracks...`;
+    statusEl.textContent = `Session ${currentSid} — planning structure & instruments...`;
 
     // Poll until generation is done
     await pollUntilReady(currentSid, statusEl, fillEl);
 
     setStep(STEPS.PREVIEW);
     await loadComposition();
-    await loadEval();
     await loadVersions();
   } catch (e) {
     statusEl.textContent = `Error: ${e.message}`;
+  } finally {
+    generating = false;
+    updateGate();
   }
 });
 
 async function pollUntilReady(sid, statusEl, fillEl) {
   for (let i = 0; i < 300; i++) { // max ~50 min (10s interval)
     await new Promise((r) => setTimeout(r, 10000));
+    let data;
     try {
       const resp = await fetch(`/api/sessions/${sid}/status`);
-      const data = await resp.json();
-      if (data.stage === "done") {
-        fillEl.style.width = "100%";
-        statusEl.textContent = `Session ${sid} ready`;
-        return;
-      }
-      fillEl.style.width = `${30 + Math.min(i * 2, 60)}%`;
-      statusEl.textContent = `Session ${sid} — ${data.stage}...`;
+      data = await resp.json();
     } catch (_) {
-      // retry
+      continue; // transient fetch/parse failure — keep polling
     }
+    if (!data) continue;
+    if (data.stage === "done") {
+      fillEl.style.width = "100%";
+      statusEl.textContent = `Session ${sid} ready`;
+      return;
+    }
+    if (data.stage === "error") {
+      throw new Error(
+        data.stage_log && data.stage_log.length
+          ? data.stage_log.join("; ")
+          : "Generation failed"
+      );
+    }
+    fillEl.style.width = `${30 + Math.min(i * 2, 60)}%`;
+    statusEl.textContent = `Session ${sid} — ${data.stage}...`;
   }
   throw new Error("Generation timed out");
 }
@@ -158,13 +175,268 @@ async function loadComposition() {
   if (!currentSid) return;
   try {
     const resp = await fetch(`/api/sessions/${currentSid}/composition`);
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const comp = await resp.json();
+    currentComp = comp;
     currentTracks = comp.tracks || [];
     renderPianoRoll(comp);
+    renderPlan(comp);
+    updateGate();
   } catch (e) {
     console.error("Failed to load composition:", e);
   }
 }
+
+// ─── Stage gates (plan → core → arrange) ────────────────────────
+const PC_NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+const ARRANGE_ROLES = ["harmony", "counter", "color"];
+let gateNext = null; // stage segment the Continue button will run
+
+// Mirror of the backend per-track skip semantics: a segment is pending when
+// any of its tracks still lacks notes.
+function detectStage(comp) {
+  const tracks = comp.tracks || [];
+  const hasNotes = (t) => t.notes && t.notes.length > 0;
+  const coreTracks = tracks.filter((t) => !ARRANGE_ROLES.includes(t.role));
+  const arrangeTracks = tracks.filter((t) => ARRANGE_ROLES.includes(t.role));
+  const corePending = coreTracks.some((t) => !hasNotes(t));
+  const arrangePending = arrangeTracks.some((t) => !hasNotes(t));
+  if (corePending) {
+    return coreTracks.some(hasNotes)
+      ? { stage: "core", next: "core", label: "Continue: finish remaining core tracks" }
+      : { stage: "plan", next: "core", label: "Continue: compose core tracks" };
+  }
+  if (arrangePending) return { stage: "core", next: "arrange", label: "Continue: arrange" };
+  if (!arrangeTracks.length)
+    return { stage: "core", next: "arrange", label: "Continue: finalize (coordination + review)" };
+  return { stage: "arrange", next: null, label: "" };
+}
+
+function renderPlan(comp) {
+  const el = document.getElementById("plan-summary");
+  if (!el) return;
+  const meta = comp.meta || {};
+  const key = meta.key
+    ? `${PC_NAMES[meta.key.tonic_pc ?? 0]} ${meta.key.mode || ""}`.trim()
+    : "?";
+  const structure = (comp.structure || [])
+    .map((s) => `<div style="font-size:11px;">${s.name} — bar ${s.start_bar} (${s.bars} bars)</div>`)
+    .join("");
+  const instruments = (comp.tracks || [])
+    .map(
+      (t) =>
+        `<div style="font-size:11px;">${t.name} <span style="color:#666;">(${t.role}, GM ${t.program})</span></div>`
+    )
+    .join("");
+  el.innerHTML = `
+    <h3>Plan</h3>
+    <div style="font-size:11px;">${meta.title || "untitled"} — ${meta.bpm || "?"} BPM, ${key}, ${
+      meta.time_signature ? meta.time_signature.join("/") : "?"
+    }</div>
+    <h3>Structure</h3>
+    ${structure || "<div style=\"font-size:11px;color:#999;\">none</div>"}
+    <h3>Instruments</h3>
+    ${instruments || "<div style=\"font-size:11px;color:#999;\">none</div>"}
+  `;
+  const hasNotes = (comp.tracks || []).some((t) => t.notes && t.notes.length > 0);
+  el.style.display = hasNotes ? "none" : "";
+}
+
+function updateGate() {
+  const gate = document.getElementById("stage-gate");
+  if (!gate) return;
+  if (generating || revising || !currentComp) {
+    gate.style.display = "none";
+    return;
+  }
+  const info = detectStage(currentComp);
+  pipelineStage = info.stage;
+  gateNext = info.next;
+  const hint = document.getElementById("gate-hint");
+  const btnContinue = document.getElementById("btn-continue");
+  if (gateNext) {
+    gate.style.display = "";
+    hint.textContent =
+      pipelineStage === "plan"
+        ? "Stage 1/3 — the plan is ready. Continue to compose melody, bass and drums, or give feedback on the plan."
+        : pipelineStage === "core" && gateNext === "core"
+          ? "Some core tracks are still missing. Continue to compose them, or give feedback."
+          : "Core tracks are ready. Continue to full arrangement (harmony, counter, color + self-review).";
+    btnContinue.textContent = info.label;
+  } else {
+    gate.style.display = "none"; // final stage — evaluation takes over
+  }
+}
+
+async function runStage(stage) {
+  if (!currentSid || generating) return;
+  generating = true;
+  const statusEl = document.getElementById("status-text");
+  const fillEl = document.getElementById("progress-fill");
+  const progressEl = document.getElementById("progress-bar");
+  progressEl.style.display = "block";
+  fillEl.style.width = "30%";
+  updateGate();
+  const label = stage === "core" ? "composing core tracks" : "arranging harmony & color";
+  statusEl.textContent = `Session ${currentSid} — ${label}...`;
+
+  try {
+    const resp = await fetch(`/api/sessions/${currentSid}/generate`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ stages: [stage] }),
+    });
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      throw new Error(err.detail || resp.statusText);
+    }
+    await pollUntilReady(currentSid, statusEl, fillEl);
+    setStep(STEPS.PREVIEW);
+    await loadComposition();
+    await loadVersions();
+    if (stage === "arrange") await loadEval();
+  } catch (e) {
+    statusEl.textContent = `Error: ${e.message}`;
+  } finally {
+    generating = false;
+    updateGate();
+  }
+}
+
+document.getElementById("btn-continue").addEventListener("click", () => {
+  if (gateNext) runStage(gateNext);
+});
+
+document.getElementById("btn-gate-feedback").addEventListener("click", async () => {
+  if (!currentSid || revising) return;
+  const feedback = document.getElementById("gate-feedback").value.trim();
+  if (!feedback) return;
+  revising = true;
+  const btn = document.getElementById("btn-gate-feedback");
+  btn.disabled = true;
+  updateGate();
+  const statusEl = document.getElementById("status-text");
+  statusEl.textContent = "Applying feedback...";
+
+  try {
+    const resp = await fetch(`/api/sessions/${currentSid}/revise`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ feedback }),
+    });
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      throw new Error(err.detail || resp.statusText);
+    }
+    statusEl.textContent = "Revision applied";
+    await loadComposition();
+    await loadVersions();
+  } catch (e) {
+    statusEl.textContent = `Error: ${e.message}`;
+  } finally {
+    revising = false;
+    btn.disabled = false;
+  }
+});
+
+// ─── Session persistence & restore ──────────────────────────────
+function setSessionHash(sid) {
+  history.replaceState(null, "", `#session=${sid}`);
+}
+
+function clearSessionHash() {
+  history.replaceState(null, "", location.pathname + location.search);
+}
+
+async function openSession(sid) {
+  if (generating || revising) return;
+  const statusEl = document.getElementById("status-text");
+  try {
+    const resp = await fetch(`/api/sessions/${sid}/composition`);
+    if (!resp.ok) throw new Error(`session ${sid} not found`);
+    currentSid = sid;
+    setSessionHash(sid);
+    setStep(STEPS.PREVIEW);
+    await loadComposition();
+    await loadVersions();
+    loadTrajectory().catch(() => {});
+    statusEl.textContent = `Session ${sid} loaded`;
+    closeSessionsWindow();
+  } catch (e) {
+    statusEl.textContent = `Error: ${e.message}`;
+  }
+}
+
+const sessionsWindow = document.getElementById("window-sessions");
+
+function closeSessionsWindow() {
+  sessionsWindow.style.display = "none";
+}
+
+function escapeHtml(text) {
+  return text.replace(/[&<>"']/g, (c) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+  })[c]);
+}
+
+async function openSessionsWindow() {
+  sessionsWindow.style.display = "";
+  wm.focus(sessionsWindow);
+  const list = document.getElementById("sessions-list");
+  list.innerHTML = "Loading…";
+  try {
+    const resp = await fetch("/api/sessions");
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const { sessions } = await resp.json();
+    if (!sessions.length) {
+      list.innerHTML = "<div style=\"font-size:11px;color:#999;\">No sessions yet.</div>";
+      return;
+    }
+    list.innerHTML = "";
+    for (const s of [...sessions].reverse()) {
+      const row = document.createElement("div");
+      row.style.cssText =
+        "cursor:pointer;padding:4px 0;border-bottom:1px solid #ccc;font-size:11px;";
+      row.innerHTML = `<div><b>${s.sid}</b> — ${escapeHtml(s.style)}</div>
+        <div>${escapeHtml((s.prompt || "").slice(0, 44))}</div>
+        <div style="color:#666;">${s.versions.length} version(s)</div>`;
+      row.addEventListener("click", () => openSession(s.sid));
+      list.appendChild(row);
+    }
+  } catch (e) {
+    list.innerHTML = `<div style="font-size:11px;">Error: ${escapeHtml(e.message)}</div>`;
+  }
+}
+
+document.querySelector('a[href="#open"]').addEventListener("click", (e) => {
+  e.preventDefault();
+  openSessionsWindow();
+});
+
+document.getElementById("btn-sessions-close").addEventListener("click", closeSessionsWindow);
+
+// Reveal the Version History window from the Session menu
+document.querySelector('a[href="#versions"]').addEventListener("click", (e) => {
+  e.preventDefault();
+  const el = document.getElementById("version-timeline");
+  const win = el.closest(".window");
+  win.style.display = "";
+  wm.focus(win);
+});
+
+// On-demand evaluation (also covers restored sessions)
+document.getElementById("btn-evaluate").addEventListener("click", async () => {
+  if (!currentSid) return;
+  const btn = document.getElementById("btn-evaluate");
+  btn.disabled = true;
+  btn.textContent = "Evaluating…";
+  try {
+    await loadEval();
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Evaluate";
+  }
+});
 
 // Piano roll renderer
 function renderPianoRoll(comp) {
@@ -354,11 +626,16 @@ function renderTimeline(versions) {
 }
 
 // Revise
+let revising = false;
 document.getElementById("btn-revise").addEventListener("click", async () => {
+  if (revising) return; // ignore double-submit — concurrent revisions race on the session
   if (!currentSid) return;
   const feedback = document.getElementById("feedback-input").value.trim();
   if (!feedback) return;
 
+  revising = true;
+  const reviseBtn = document.getElementById("btn-revise");
+  reviseBtn.disabled = true;
   const statusEl = document.getElementById("status-text");
   statusEl.textContent = "Revising...";
 
@@ -375,6 +652,9 @@ document.getElementById("btn-revise").addEventListener("click", async () => {
     await loadVersions();
   } catch (e) {
     statusEl.textContent = `Error: ${e.message}`;
+  } finally {
+    revising = false;
+    reviseBtn.disabled = false;
   }
 });
 
@@ -384,7 +664,9 @@ document.querySelector('a[href="#new"]').addEventListener("click", (e) => {
   if (midiPlayer) { midiPlayer.stop(); midiPlayer = null; }
   currentSid = null;
   currentTracks = [];
+  currentComp = null;
   completedSteps.clear();
+  clearSessionHash();
   document.getElementById("prompt-input").value = "";
   document.getElementById("feedback-input").value = "";
   document.getElementById("status-text").textContent = "";
@@ -630,5 +912,7 @@ document.getElementById("btn-stop").addEventListener("click", () => {
   renderPianoRoll({ tracks: currentTracks });
 });
 
-// Start at Intro
+// Start at Intro, then restore a #session=<sid> deep link if present
 setStep(STEPS.INTRO);
+const initialSid = new URLSearchParams(location.hash.slice(1)).get("session");
+if (initialSid) openSession(initialSid);

@@ -20,6 +20,7 @@ from miidi.web.schemas import (
     GenerateStageRequest,
     GenerateStageResponse,
     ReviseRequest,
+    SessionListResponse,
     StatusResponse,
     VersionResponse,
 )
@@ -63,6 +64,28 @@ def _run_pipeline_bg(sid: str, prompt: str, style: str, stages: list[str]) -> No
     except Exception as exc:
         with _bg_lock:
             _bg_tasks[sid] = {"status": "error", "log": [str(exc)]}
+
+
+@router.get("/sessions", response_model=SessionListResponse)
+async def list_sessions() -> SessionListResponse:
+    if _store is None:
+        raise HTTPException(503, "server not initialized")
+    items = []
+    for sid in _store.list_sessions():
+        try:
+            meta = _store.session_meta(sid)
+        except (FileNotFoundError, KeyError):
+            continue
+        items.append(
+            {
+                "sid": sid,
+                "prompt": meta.get("prompt", ""),
+                "style": meta.get("style", ""),
+                "created": meta.get("created", ""),
+                "versions": meta.get("versions", []),
+            }
+        )
+    return SessionListResponse(sessions=items)
 
 
 @router.post("/sessions", response_model=CreateSessionResponse)
@@ -228,18 +251,8 @@ async def rollback(sid: str, version: int) -> StatusResponse:
     )
 
 
-@router.post("/sessions/{sid}/evaluate")
-async def evaluate(sid: str) -> EvaluateResponse:
-    if _store is None:
-        raise HTTPException(503, "server not initialized")
-    try:
-        _store.session_meta(sid)
-    except FileNotFoundError:
-        raise HTTPException(404, f"session {sid} not found") from None
-    try:
-        latest = _store.latest(sid)
-    except ValueError:
-        raise HTTPException(404, "no versions") from None
+def _evaluate_session_blocking(sid: str) -> EvaluateResponse:
+    latest = _store.latest(sid)
     ver = _store.load_version(sid, latest)
     from miidi.schema.model import Composition
 
@@ -267,6 +280,23 @@ async def evaluate(sid: str) -> EvaluateResponse:
     return EvaluateResponse(report=report.to_dict(), composite=composite_dict)
 
 
+@router.post("/sessions/{sid}/evaluate")
+async def evaluate(sid: str) -> EvaluateResponse:
+    if _store is None:
+        raise HTTPException(503, "server not initialized")
+    try:
+        _store.session_meta(sid)
+    except FileNotFoundError:
+        raise HTTPException(404, f"session {sid} not found") from None
+    # evaluate_judge calls the LLM (minutes) — keep it off the event loop,
+    # otherwise every other request stalls until the judge returns.
+    try:
+        loop = asyncio.get_running_loop()
+        return await loop.run_in_executor(None, _evaluate_session_blocking, sid)
+    except ValueError:
+        raise HTTPException(404, "no versions") from None
+
+
 @router.post("/sessions/{sid}/generate", response_model=GenerateStageResponse)
 async def generate_stage(sid: str, req: GenerateStageRequest) -> GenerateStageResponse:
     if _store is None or _client is None:
@@ -275,33 +305,25 @@ async def generate_stage(sid: str, req: GenerateStageRequest) -> GenerateStageRe
         meta = _store.session_meta(sid)
     except FileNotFoundError:
         raise HTTPException(404, f"session {sid} not found") from None
+    invalid = set(req.stages) - {"plan", "core", "arrange"}
+    if invalid:
+        raise HTTPException(400, f"invalid stages: {sorted(invalid)}")
 
-    # Load existing comp if resuming from a later stage
-    try:
-        latest = _store.latest(sid)
-        _ver = _store.load_version(sid, latest)
-    except (FileNotFoundError, ValueError):
-        pass
+    with _bg_lock:
+        running = _bg_tasks.get(sid, {}).get("status") == "running"
+        if not running:
+            _bg_tasks[sid] = {"status": "running", "log": []}
+    if running:
+        raise HTTPException(409, "session already generating")
 
     out_dir = (_root / "midi") if _root else None
     if out_dir:
         out_dir.mkdir(parents=True, exist_ok=True)
 
-    loop = asyncio.get_running_loop()
-    result: PipelineResult = await loop.run_in_executor(
-        None,
-        lambda: run_pipeline(
-            user_prompt=meta["prompt"],
-            style=meta["style"],
-            client=_client,
-            store=_store,
-            out_dir=out_dir,
-            stages=req.stages,
-            sid=sid,
-        ),
-    )
-    return GenerateStageResponse(
-        sid=sid,
-        stage_log=result.stage_log,
-        comp=result.comp.model_dump() if result.comp else None,
-    )
+    # Run in a background thread; the client polls GET /status (generating/done/error).
+    threading.Thread(
+        target=_run_pipeline_bg,
+        args=(sid, meta["prompt"], meta["style"], req.stages),
+        daemon=True,
+    ).start()
+    return GenerateStageResponse(sid=sid, accepted=True, stage_log=[])

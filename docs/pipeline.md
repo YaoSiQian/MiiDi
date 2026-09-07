@@ -35,7 +35,7 @@ Plan → Core → Arrange → Coordinate → Review → MIDI
 - `style`：风格包名，决定 BPM 范围、密度参考值、鼓组 pattern 等默认参数
 - `stages=["plan"]`：只跑这一步就停
 
-**输出**：`MusicBrief` 对象 + 空骨架 `Composition`（有 meta、structure、harmony，但 tracks 里只有占位）
+**输出**：`MusicBrief` 对象 + 空骨架 `Composition`（有 meta、structure、harmony，但 tracks 里只有占位）。骨架会连同 brief 一起存进会话版本（`extra.brief`），后续阶段恢复时直接复用，不会重新规划。
 
 ### Core — 骨架声部
 
@@ -49,15 +49,17 @@ Plan → Core → Arrange → Coordinate → Review → MIDI
 5. 校验不通过就带反馈重试，最多 3 次
 
 **配置参数**：
-- `stages=["plan", "core"]`：只跑 Plan + Core
+- `stages=["plan", "core"]` 或 `["core"]`：跑到 Core 停
 
-**输出**：三条有实际音符的 Track，分别替换骨架中的占位
+**输出**：三条有实际音符的 Track，分别替换骨架中的占位。已有音符的轨道会被跳过，不重写。
 
 ### Arrange — 织体填充
 
 和 Core 阶段类似的流程，生成 harmony、counter、color 三条轨道。
 
 区别在于上下文：这三条轨道在生成时能看到 Core 阶段已经写好的旋律、贝斯和鼓，所以和声声部可以围绕旋律展开，副旋律可以避开主旋律的音区。
+
+**配置参数**：`stages=["arrange"]`：从已有的 Core 版本继续，只补齐缺失的 Arrange 轨道（如果 brief 里没有 Arrange 角色，则直接进入 Coordinate + Review 收尾）。
 
 **输出**：六条轨道全部就位，`Composition` 初步成型
 
@@ -136,25 +138,29 @@ comp = store.load_composition("20260905-143022-a1b2", 4)
 
 ## 断点恢复
 
-管线支持从任意阶段的中间结果恢复，只需要传入 `sid` 参数：
+管线支持从任意阶段的中间结果恢复，只需要传入 `sid` 参数。恢复时从会话最新版本出发：brief 从已存版本还原（不重新规划），已有音符的轨道自动跳过：
 
 ```python
-# 第一次跑了 Plan + Core，中断了
-result = run_pipeline("jazz loop", "jazz", client, stages=["plan", "core"], store=store)
+# 第一段：只跑 Plan
+result = run_pipeline("jazz loop", "jazz", client, stages=["plan"], store=store)
 sid = result.sid  # 记下会话 ID
 
-# 之后从 core 版本继续跑 Arrange
-result = run_pipeline("jazz loop", "jazz", client, stages=["plan", "core", "arrange"],
-                      store=store, sid=sid)
+# 第二段：续跑 Core（brief 从 planned 版本恢复，不重规划）
+run_pipeline("jazz loop", "jazz", client, stages=["core"], store=store, sid=sid)
+
+# 第三段：续跑 Arrange + Coordinate + Review
+run_pipeline("jazz loop", "jazz", client, stages=["arrange"], store=store, sid=sid)
 ```
+
+Web 端就是这个机制：每跑完一段就停下来等用户预览、继续（`POST /api/sessions/{sid}/generate`）或提意见（`POST /api/sessions/{sid}/revise`）。
 
 会话 ID 格式是 `YYYYMMDD-HHMMSS-xxxx`，最后四位是随机 hex，确保唯一。
 
 ## 断点续跑的注意事项
 
 1. **必须传 `sid`**：不传的话会创建新会话
-2. **`stages` 可以缩减**：如果只传 `["plan"]`，就只跑 Plan；传 `["plan", "core"]` 跑到 Core 停
-3. **已生成的 Track 不会重复生成**：`stages` 参数控制的是哪些阶段执行，但每个阶段内部的 Track 生成是完整执行的
+2. **`stages` 按段语义**：列表里写哪些段就跑哪些段；全新会话没有 brief 时会隐式先跑 Plan；重复请求已完成的段是空操作，不产生新版本
+3. **已生成的 Track 不会重复生成**：按轨道粒度跳过，只补缺失的音符
 4. **版本不覆盖**：每次 `save_version` 都创建新文件，不会覆盖之前的版本
 
 ## 修订流程

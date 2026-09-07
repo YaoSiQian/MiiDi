@@ -217,18 +217,16 @@ class LifecycleFakeClient:
         self._replies = [
             # 1. create_session plan: make_brief
             BRIEF,
-            # 2. generate plan+core+arrange: make_brief (fresh pipeline)
-            BRIEF,
-            # 3. generate core: compose melody + bass
+            # 2. generate (resume from planned — no re-plan): core melody + bass
             LEAD_NOTES,
             BASS_NOTES,
-            # 4. generate arrange_coordinate (NEW)
+            # 3. generate arrange_coordinate (no arrange-role specs, still runs)
             {"analysis": {}, "adjustments": []},
-            # 5. generate self_review (after arrange)
+            # 4. generate self_review
             REVIEW_NULL,
-            # 6. revise classify → single-track
+            # 5. revise classify → single-track
             {"layer": "track", "track": "Lead"},
-            # 7. revise compose Lead
+            # 6. revise compose Lead
             {"notes": [[i * 480, 480, 64, 80] for i in range(4)]},
         ]
         self._idx = 0
@@ -271,6 +269,17 @@ def test_full_lifecycle(tmp_path):
 
     resp = c.post(f"/api/sessions/{sid}/generate", json={"stages": ["plan", "core", "arrange"]})
     assert resp.status_code == 200
+    assert resp.json()["accepted"] is True
+
+    # generate runs in a background thread — poll until it settles
+    import time
+
+    for _ in range(200):
+        resp = c.get(f"/api/sessions/{sid}/status")
+        if resp.json()["stage"] in ("done", "error"):
+            break
+        time.sleep(0.05)
+    assert resp.json()["stage"] == "done"
 
     resp = c.get(f"/api/sessions/{sid}/versions")
     assert resp.status_code == 200
@@ -286,3 +295,47 @@ def test_full_lifecycle(tmp_path):
 
     resp = c.get(f"/api/sessions/{sid}/midi")
     assert resp.status_code in (200, 404)
+
+
+class _NoLLMClient:
+    def respond_json(self, *args, **kwargs):
+        raise RuntimeError("no llm in test")
+
+
+def test_list_sessions_endpoint(tmp_path):
+    store = SessionStore(tmp_path / "sessions")
+    store.create("first prompt", "pop")
+    store.create("second prompt", "jazz")
+    app = create_app(store, _NoLLMClient(), tmp_path)
+    c = TestClient(app)
+
+    resp = c.get("/api/sessions")
+    assert resp.status_code == 200
+    sessions = resp.json()["sessions"]
+    assert len(sessions) == 2
+    assert {s["prompt"] for s in sessions} == {"first prompt", "second prompt"}
+    assert {s["style"] for s in sessions} == {"pop", "jazz"}
+    assert all(isinstance(s["versions"], list) for s in sessions)
+
+
+def test_generate_stage_rejects_invalid_stages(tmp_path):
+    store = SessionStore(tmp_path / "sessions")
+    sid = store.create("p", "pop")
+    app = create_app(store, _NoLLMClient(), tmp_path)
+    c = TestClient(app)
+
+    resp = c.post(f"/api/sessions/{sid}/generate", json={"stages": ["bogus"]})
+    assert resp.status_code == 400
+
+    resp = c.post(f"/api/sessions/{sid}/generate", json={"stages": ["core"]})
+    assert resp.status_code == 200
+    assert resp.json()["accepted"] is True
+    # background thread fails fast (no LLM) — status must settle on error
+    import time
+
+    for _ in range(200):
+        st = c.get(f"/api/sessions/{sid}/status").json()["stage"]
+        if st in ("done", "error"):
+            break
+        time.sleep(0.05)
+    assert st == "error"

@@ -59,8 +59,23 @@ def _aborted_reason(trajectory: list[dict]) -> str | None:
     return None
 
 
+def _segment_pending(comp: Composition, specs: dict, roles: set[str]) -> bool:
+    """True when any track with one of `roles` still lacks notes."""
+    for spec in specs.values():
+        if spec.role not in roles:
+            continue
+        track = next((t for t in comp.tracks if t.name == spec.name), None)
+        if track is None or not track.notes:
+            return True
+    return False
+
+
 def _compose_tracks(client, pack, brief, comp, specs, roles, log):
-    """Compose tracks whose role is in `roles`. Returns updated comp + prior dict."""
+    """Compose tracks whose role is in `roles`. Returns updated comp + prior dict.
+
+    Tracks that already carry notes are skipped, which makes re-runs on a
+    resumed session cheap no-ops for completed segments.
+    """
     ordered = sorted(
         [s for s in specs.values() if s.role in roles],
         key=lambda s: _ROLE_ORDER.index(s.role) if s.role in _ROLE_ORDER else 3,
@@ -68,6 +83,10 @@ def _compose_tracks(client, pack, brief, comp, specs, roles, log):
     prior: dict[str, object] = {}
     bar_ticks = comp.bar_ticks
     for spec in ordered:
+        existing = next((t for t in comp.tracks if t.name == spec.name), None)
+        if existing is not None and existing.notes:
+            log.append(f"skipped {spec.name}: already composed")
+            continue
         ctx = _context_for(spec.role, prior, bar_ticks)
         track, repairs = compose_track(client, pack, brief, spec, ctx)
         prior[track.name] = track
@@ -90,11 +109,16 @@ def run_pipeline(
 ) -> PipelineResult:
     """Run the generation pipeline.
 
-    stages controls which phases execute:
-      None or ["plan","core","arrange"] → full pipeline (backward-compatible)
-      ["plan"]         → brief + structure + key only
-      ["plan","core"]  → brief + melody/bass/drums
-      ["plan","core","arrange"] → full
+    stages controls which phases execute (plan always seeds a brand-new session):
+      None or containing "arrange"  → full pipeline (backward-compatible)
+      ["plan"]                      → brief + structure + key only
+      ["plan","core"] / ["core"]    → up to melody/bass/drums
+
+    Resuming: when sid + store point at a session with saved versions, the
+    latest version becomes the starting point — the brief is restored from
+    the saved extra (fallback: derived from the composition) and make_brief
+    is skipped. Tracks that already have notes are never recomposed, so
+    stages can be driven one segment at a time (plan → core → arrange).
     sid: reuse existing session instead of creating a new one.
     """
     if stages is None:
@@ -105,40 +129,65 @@ def run_pipeline(
 
     log: list[str] = []
     pack: StylePack = load_style_pack(style)
-    if sid is not None:
-        pass  # reuse existing session
-    else:
+    if sid is None:
         sid = store.create(user_prompt, style) if store is not None else None
 
-    # ── Stage: plan ──────────────────────────────────────────────
-    try:
-        brief = make_brief(client, pack, user_prompt)
-    except Exception as exc:
-        log.append(f"brief failed: {exc}")
-        return PipelineResult(comp=None, brief=None, midi_path=None, stage_log=log, sid=sid)
-    log.append("plan: brief ok")
-    comp = brief.to_skeleton()
+    # ── Resume from the latest saved version when one exists ─────
+    prior: Composition | None = None
+    brief: MusicBrief | None = None
+    resumed_label: str | None = None
+    if sid is not None and store is not None:
+        try:
+            latest = store.latest(sid)
+            ver = store.load_version(sid, latest)
+            prior = store.load_composition(sid, latest)
+            saved_brief = (ver.get("extra") or {}).get("brief")
+            brief = (
+                MusicBrief.model_validate(saved_brief)
+                if saved_brief
+                else _brief_from_comp(prior)
+            )
+            resumed_label = ver.get("label")
+            log.append(f"resumed from v{latest} ({resumed_label})")
+        except (FileNotFoundError, ValueError, KeyError):
+            prior, brief, resumed_label = None, None, None
 
-    if stages == ["plan"]:
-        if store is not None:
+    if prior is None:
+        # ── Stage: plan ──────────────────────────────────────────
+        try:
+            brief = make_brief(client, pack, user_prompt)
+        except Exception as exc:
+            log.append(f"brief failed: {exc}")
+            return PipelineResult(comp=None, brief=None, midi_path=None, stage_log=log, sid=sid)
+        log.append("plan: brief ok")
+        comp = brief.to_skeleton()
+    else:
+        comp = prior
+
+    if not ({"core", "arrange"} & set(stages)):
+        # plan-only run (a fresh session gets its brief; a resumed one is a no-op)
+        if prior is None and store is not None:
             store.save_version(sid, "planned", comp, {"brief": brief.model_dump()})
             log.append(f"session {sid}: saved planned")
         return PipelineResult(comp=comp, brief=brief, midi_path=None, stage_log=log, sid=sid)
 
     # ── Stage: core (melody + bass + drums) ──────────────────────
     specs = {s.name: s for s in brief.instruments}
-    try:
-        comp, core_prior = _compose_tracks(client, pack, brief, comp, specs, _CORE_ROLES, log)
-    except Exception as exc:
-        log.append(f"core failed: {exc}")
-        return PipelineResult(comp=None, brief=brief, midi_path=None, stage_log=log, sid=sid)
-    log.append("core: done")
+    if _segment_pending(comp, specs, _CORE_ROLES):
+        try:
+            comp, core_prior = _compose_tracks(client, pack, brief, comp, specs, _CORE_ROLES, log)
+        except Exception as exc:
+            log.append(f"core failed: {exc}")
+            return PipelineResult(comp=None, brief=brief, midi_path=None, stage_log=log, sid=sid)
+        log.append("core: done")
 
-    if store is not None:
-        store.save_version(sid, "core", comp, None)
-        log.append(f"session {sid}: saved core")
+        if store is not None:
+            store.save_version(sid, "core", comp, None)
+            log.append(f"session {sid}: saved core")
+    else:
+        log.append("core: already complete")
 
-    if stages == ["plan", "core"]:
+    if "arrange" not in stages:
         midi_path = None
         if out_dir is not None:
             midi_path = generate_midi(comp, Path(out_dir))
@@ -146,19 +195,24 @@ def run_pipeline(
         return PipelineResult(comp=comp, brief=brief, midi_path=midi_path, stage_log=log, sid=sid)
 
     # ── Stage: arrange (harmony + counter + color) ───────────────
-    try:
-        comp, _ = _compose_tracks(client, pack, brief, comp, specs, _ARRANGE_ROLES, log)
-    except Exception as exc:
-        log.append(f"arrange failed: {exc}")
-        return PipelineResult(comp=None, brief=brief, midi_path=None, stage_log=log, sid=sid)
-    log.append("arrange: done")
-    assembled = comp
+    newly_assembled = False
+    if _segment_pending(comp, specs, _ARRANGE_ROLES):
+        try:
+            comp, _ = _compose_tracks(client, pack, brief, comp, specs, _ARRANGE_ROLES, log)
+        except Exception as exc:
+            log.append(f"arrange failed: {exc}")
+            return PipelineResult(comp=None, brief=brief, midi_path=None, stage_log=log, sid=sid)
+        log.append("arrange: done")
+        newly_assembled = True
+    elif resumed_label == "reviewed":
+        log.append("pipeline already complete; nothing to do")
+        return PipelineResult(comp=comp, brief=brief, midi_path=None, stage_log=log, sid=sid)
+    else:
+        log.append("arrange: already complete")
 
-    if store is not None:
-        store.save_version(sid, "assembled", assembled, None)
+    if (newly_assembled or resumed_label is None) and store is not None:
+        store.save_version(sid, "assembled", comp, None)
         log.append(f"session {sid}: saved assembled")
-
-    comp = assembled
 
     # ── Phase 1: Arrangement coordination ──────────────────────
     try:
@@ -224,6 +278,26 @@ def revise(
     meta = store.session_meta(sid)
     latest = store.load_composition(sid, store.latest(sid))
     pack = load_style_pack(meta["style"])
+
+    if not any(t.notes for t in latest.tracks):
+        # Plan-stage gate: feedback revises the brief (re-plan only), not tracks.
+        merged_prompt = meta["prompt"] + "\nRevision request: " + feedback
+        result = run_pipeline(
+            merged_prompt, meta["style"], client, out_dir=out_dir, stages=["plan"]
+        )
+        if result.comp is None or result.brief is None:
+            result.sid = sid
+            return result
+        version = store.save_version(
+            sid,
+            "planned",
+            result.comp,
+            {"feedback": feedback, "brief": result.brief.model_dump()},
+        )
+        result.stage_log.append(f"saved re-planned v{version} under {sid}")
+        result.sid = sid
+        return result
+
     track_names = [t.name for t in latest.tracks]
     routing = client.respond_json(
         classify_revision_system(), classify_revision_user(feedback, track_names)
@@ -249,9 +323,9 @@ def revise(
         )
 
     merged_prompt = meta["prompt"] + "\nRevision request: " + feedback
-    result = run_pipeline(
-        merged_prompt, meta["style"], client, store=store, out_dir=out_dir, sid=sid
-    )
+    # Store-less run so intermediate versions (planned/core/assembled) are not
+    # appended to the session; the final result is saved below with a revision label.
+    result = run_pipeline(merged_prompt, meta["style"], client, out_dir=out_dir)
     gated = "validation failed" in result.stage_log
     if result.comp is not None and not gated:
         version = store.save_version(
