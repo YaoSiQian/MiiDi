@@ -1,0 +1,15 @@
+services:
+  miidi:
+    build: .
+    container_name: miidi
+    ports:
+      - "8000:8000"
+    # LLM 配置（可选）：取消注释并填写；不设置则默认使用 OpenCode Zen 免费模型（hy3-free）
+    # environment:
+    #   OPENAI_BASE_URL: https://api.openai.com/v1
+    #   OPENAI_API_KEY: sk-xxxx
+    #   MODEL_NAME: gpt-5
+    volumes:
+      - ./sessions:/app/sessions
+      - ./midi:/app/midi
+    restart: unless-stopped

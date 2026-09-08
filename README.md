@@ -21,6 +21,8 @@
 
 ## 快速开始
 
+[![](https://main.qcloudimg.com/raw/95b6b680ef97026ae10809dbd6516117.svg)](https://tcb.cloud.tencent.com/dev#/platform-run/service/create?type=git&repoUrl=https://github.com/YaoSiQian/MiiDi&repoBranch=main&serverName=miidi&port=8000)
+
 ### 1. 安装
 
 ```bash
@@ -75,6 +77,15 @@ python src/miidi/serve.py
 ![MiiDi Web UI — 恢复的东方 Project 演示会话](docs/img/web-ui.png)
 
 *Composer 输入 prompt 与曲风，Piano Roll 渲染六轨编曲；上图为恢复的一个已完成评测的演示会话。*
+
+### 5. Docker 部署
+
+```bash
+docker compose up -d --build   # 构建并后台启动
+docker compose down            # 停止并移除容器
+```
+
+浏览器打开 `http://localhost:8000`。LLM 配置（可选）在 `docker-compose.yml` 的 `environment` 中填写 `OPENAI_BASE_URL` / `OPENAI_API_KEY` / `MODEL_NAME`，不配置则默认使用 OpenCode Zen 免费模型；`./sessions` 与 `./midi` 已挂载为持久卷，会话快照与渲染的 MIDI 不随容器移除而丢失。
 
 ## 架构概览
 
