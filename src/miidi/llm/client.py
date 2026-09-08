@@ -3,20 +3,13 @@ from __future__ import annotations
 import json
 import os
 import time
+import uuid
 from collections.abc import Mapping
 from dataclasses import dataclass
 
 import httpx
 
 ZEN_BASE_URL = "https://opencode.ai/zen/v1"
-ZEN_MODELS = [
-    "deepseek-v4-flash-free",
-    "mimo-v2.5-free",
-    "hy3-free",
-    "nemotron-3-ultra-free",
-    "nemotron-3.5-lightning-free",
-    "laguna-s-2.1-free",
-]
 
 
 class LLMConfigError(RuntimeError):
@@ -184,6 +177,8 @@ class LLMClient:
         if transport is not None:
             kwargs["transport"] = transport
         self._http = httpx.Client(**kwargs)
+        # Zen 免费档要求请求携带会话标识（OpenCode 客户端行为），缺失时端点以 400 拒绝
+        self._session_id = str(uuid.uuid4())
 
     def close(self) -> None:
         self._http.close()
@@ -192,6 +187,7 @@ class LLMClient:
         headers = {"Authorization": f"Bearer {self.config.api_key}"}
         if self.config.provider == "zen":
             headers["User-Agent"] = "opencode/1.18.18 ai-sdk/provider-utils/4.0.23"
+            headers["x-opencode-session"] = self._session_id
         return headers
 
     def respond_json(
