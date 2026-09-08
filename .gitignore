@@ -20,4 +20,4 @@ evals/results/*
 !evals/results/summary.md
 !evals/results/experiments.md
 !evals/results/rerun_failed.md
-!evals/results/base_composition.json
+!evals/results/base_composition.json.zcode/
