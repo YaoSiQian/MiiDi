@@ -72,6 +72,10 @@ python src/miidi/serve.py
 
 浏览器打开 `http://localhost:8000`。
 
+![MiiDi Web UI — 恢复的东方 Project 演示会话](docs/img/web-ui.png)
+
+*Composer 输入 prompt 与曲风，Piano Roll 渲染六轨编曲；上图为恢复的一个已完成评测的演示会话。*
+
 ## 架构概览
 
 ```mermaid
