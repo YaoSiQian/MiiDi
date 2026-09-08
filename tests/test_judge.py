@@ -79,3 +79,22 @@ def test_evaluate_judge_returns_report():
     assert 0 <= report.J1 <= 100
     assert 0 <= report.J2 <= 100
     assert 0 <= report.J3 <= 100
+
+
+def test_evaluate_judge_passes_real_prompt_to_j2():
+    """J2 的约束抽取必须基于真实用户 prompt，而不是占位符。"""
+    client = MagicMock()
+    client.respond_json.return_value = {"score": 50.0}
+    comp = _make_comp()
+    rule_report = RuleReport(invalid=False, R_rule=65.0)
+    evaluate_judge(
+        comp,
+        rule_report,
+        client,
+        "pop",
+        prompt="A pop song at exactly 120 BPM in the key of G major.",
+    )
+    system_prompts = [c.args[0] for c in client.respond_json.call_args_list]
+    j2_system = system_prompts[1]
+    assert "120" in j2_system
+    assert "G major" in j2_system

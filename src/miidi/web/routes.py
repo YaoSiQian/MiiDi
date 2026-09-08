@@ -269,7 +269,9 @@ def _evaluate_session_blocking(sid: str) -> EvaluateResponse:
         client = None
         try:
             client = LLMClient(load_config())
-            judge = evaluate_judge(comp, report, client, style)
+            judge = evaluate_judge(
+                comp, report, client, style, prompt=_store.session_meta(sid).get("prompt", "")
+            )
             comp_report = compute_composite(report, judge)
             composite_dict = comp_report.to_dict()
         except Exception:
