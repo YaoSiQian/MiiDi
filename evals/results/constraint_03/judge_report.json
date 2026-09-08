@@ -1,0 +1,131 @@
+{
+ "J1": 44.0,
+ "J2": 60.0,
+ "J3": 32.4,
+ "per_item": {
+  "J1": [
+   {
+    "item": "checklist item 1",
+    "verdict": "no",
+    "evidence": "Composition uses string quartet (Violin 1, Violin 2, Viola, Cello) instead of standard ensemble (Violin, Piano, Cello, Flute). No piano or flute tracks present."
+   },
+   {
+    "item": "checklist item 2",
+    "verdict": "no",
+    "evidence": "Instruments present (violins, viola, cello) are in correct registers, but missing piano (C2-C6) and flute (C4-C7) from standard ensemble. E.g., Violin 1 bar 0 has notes within G3-E6, but piano and flute absent."
+   },
+   {
+    "item": "checklist item 3",
+    "verdict": "partial",
+    "evidence": "Rhythm is in 4/4 with steady notes and no drums, which fits classical, but lacks piano arpeggios for typical chamber feel. E.g., Violin 1 bar 0 has notes at regular intervals (0, 960 ticks)."
+   },
+   {
+    "item": "checklist item 4",
+    "verdict": "yes",
+    "evidence": "Harmonic vocabulary includes functional chords like Dm, Am, E7, F, C, appropriate for classical. E.g., harmony bar 0: Dm."
+   },
+   {
+    "item": "checklist item 5",
+    "verdict": "no",
+    "evidence": "Texture is purely string-based, which may be dense; standard style expects transparent layering with piano and flute. All tracks are string instruments, e.g., Violin 1 bar 0 to Cello bar 0."
+   },
+   {
+    "item": "checklist item 6",
+    "verdict": "yes",
+    "evidence": "No drum tracks used; all tracks have is_drum false, respecting style prohibitions."
+   },
+   {
+    "item": "checklist item 7",
+    "verdict": "no",
+    "evidence": "Overall texture lacks piano for harmony and flute for color, not matching chamber-orchestral layering. Only string tracks present."
+   },
+   {
+    "item": "checklist item 8",
+    "verdict": "yes",
+    "evidence": "Tempo is 132 BPM, within typical classical range. Meta.bpm confirms this."
+   }
+  ],
+  "J2": [
+   {
+    "item": "Key/Tonality",
+    "verdict": "satisfied",
+    "evidence": "The composition is in D minor (tonic_pc=2, mode=minor), matching the prompt's specification."
+   },
+   {
+    "item": "Duration",
+    "verdict": "satisfied",
+    "evidence": "The composition is 48 bars long, as indicated by the structure (outro ends at bar 48) and the final note at timestamp 90240 (48 bars * 1920 ticks/bar)."
+   },
+   {
+    "item": "Specified instruments",
+    "verdict": "violated",
+    "evidence": "The prompt specifies a single string instrument with program=48, but the composition uses four string instruments: Violin 1 (program=40), Violin 2 (program=40), Viola (program=41), and Cello (program=42)."
+   },
+   {
+    "item": "Style",
+    "verdict": "violated",
+    "evidence": "The prompt specifies 'classical string quartet', but the composition's meta style is 'pop', which is not classical."
+   },
+   {
+    "item": "Tempo",
+    "verdict": "satisfied",
+    "evidence": "The prompt specifies 'allegro tempo', and the composition has bpm=132, which falls within the typical allegro range (120–156 bpm)."
+   }
+  ],
+  "J3": [
+   {
+    "item": "rubric",
+    "verdict": 2,
+    "evidence": "The composition exhibits a clear harmonic progression and structural outline, but contains a critical error: the cello part is only present in the first two bars and remains silent for the remainder of the piece. This omission of the bass role violates basic music theory for a string quartet, resulting in an imbalanced and incomplete texture. While the other parts maintain coherence, this significant flaw places the piece in the 'errors dense' category."
+   }
+  ]
+ },
+ "evidence": [
+  {
+   "track": "Violin 1",
+   "bar": 0,
+   "text": "Melody track present, but standard ensemble requires piano and flute."
+  },
+  {
+   "track": "Cello",
+   "bar": 0,
+   "text": "Bass track present, but missing piano for harmony and flute for color."
+  },
+  {
+   "track": "Violin 1",
+   "bar": 0,
+   "text": "Rhythm is steady 4/4, no drums, but lacks piano arpeggios."
+  },
+  {
+   "track": "N/A",
+   "bar": 0,
+   "text": "Harmony symbols in composition: Dm, Am, E7, appropriate for classical."
+  },
+  {
+   "track": "All",
+   "bar": 0,
+   "text": "All tracks are strings, no piano or flute for transparent texture."
+  },
+  {
+   "track": "All",
+   "bar": 0,
+   "text": "No drum tracks, is_drum false for all."
+  },
+  {
+   "track": "N/A",
+   "bar": 0,
+   "text": "Composition meta has bpm 132, within classical range."
+  },
+  {
+   "track": "Cello",
+   "bar": 8,
+   "text": "At the start of the exposition (bar 8), the cello part is completely absent, leaving no bass support for the harmony."
+  },
+  {
+   "track": "Cello",
+   "bar": 24,
+   "text": "Throughout the development section (bar 24 onward), the cello remains silent, which is a severe instrumentation error for a string quartet."
+  }
+ ],
+ "J_mean": 45.5
+}

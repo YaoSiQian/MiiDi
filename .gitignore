@@ -3,7 +3,6 @@ __pycache__/
 .env
 .venv/
 dist/
-evals/results/
 node_modules/
 web/dist/
 output/
@@ -14,5 +13,11 @@ midi/
 .opencode/
 .superpowers/
 tools/*.json
-evals/results/*.csv
-evals/results/*.md
+evals/results/*
+!evals/results/*/
+!evals/results/results.csv
+!evals/results/results.md
+!evals/results/summary.md
+!evals/results/experiments.md
+!evals/results/rerun_failed.md
+!evals/results/base_composition.json

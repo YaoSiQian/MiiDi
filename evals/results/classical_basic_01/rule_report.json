@@ -1,0 +1,59 @@
+{
+ "invalid": false,
+ "R_rule": 77.529192,
+ "axes": {
+  "harmony": {
+   "score": 0.918229,
+   "details": {
+    "scale_adherence": 1.0,
+    "chord_support": 1.0,
+    "declaration_match": 0.8506944444444443,
+    "cluster_rate": 0.0625,
+    "cadence_rate": 0.5
+   }
+  },
+  "voice": {
+   "score": 0.73,
+   "details": {
+    "range_fit": 0.95,
+    "parallel_count": 8,
+    "leap_rate": 0.009523809523809525,
+    "register_gap": 1.0
+   }
+  },
+  "rhythm": {
+   "score": 0.895,
+   "details": {
+    "grid_adherence": 1.0,
+    "density_fit": 0.65,
+    "drum_pattern_fit": 1.0,
+    "swing_consistency": 1.0
+   }
+  },
+  "structure": {
+   "score": 0.51,
+   "details": {
+    "coverage": 1.0,
+    "repeat_family_sim": -1.0,
+    "contrast_family_sim": 0.9739429155234123,
+    "contour_shape": 0.2,
+    "motif_recall": 0.3
+   }
+  },
+  "dynamics": {
+   "score": 0.784822,
+   "details": {
+    "velocity_spread": 1.0,
+    "directionality": 0.1392892574280034,
+    "gradient_ok": 1.0
+   }
+  }
+ },
+ "gates": {
+  "repetition": 0.992754,
+  "density": 1.0,
+  "balance": 1.0,
+  "spread": 1.0
+ },
+ "violations": []
+}

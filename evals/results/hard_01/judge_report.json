@@ -1,0 +1,156 @@
+{
+ "J1": 50.0,
+ "J2": 20.0,
+ "J3": 80.0,
+ "per_item": {
+  "J1": [
+   {
+    "item": "Does the instrumentation match the style's standard ensemble?",
+    "verdict": "no",
+    "evidence": "Lead track uses program 57 (Trombone) instead of Trumpet (56); Piano track uses program 0 (Acoustic Grand) instead of Electric Piano 1 Rhodes (4); Bass track uses program 43 (Electric Bass) instead of Acoustic Bass (32); no Tenor Sax track for color role."
+   },
+   {
+    "item": "Are the instruments in their correct registers for the style?",
+    "verdict": "no",
+    "evidence": "Lead track bar 0, note at MIDI 57 (A3) is below recommended G4-G6 range for Trumpet; Piano track bar 0, note at MIDI 74 (C4) is within C3-B4, but other notes exceed B4 (e.g., MIDI 84 at bar 0)."
+   },
+   {
+    "item": "Does the rhythm/groove match the style's feel (swing, backbeat, etc.)?",
+    "verdict": "partial",
+    "evidence": "Drums track bar 0 has offsets at 440 ticks, indicating swing feel; Bass track bar 0 has quarter notes (480 ticks) for walking bass; Piano track bar 0 has single notes without chordal comping, lacking sparse shell voicings."
+   },
+   {
+    "item": "Is the harmonic vocabulary appropriate (chord types, progressions)?",
+    "verdict": "yes",
+    "evidence": "Harmony symbols include Dm7 (bar 0), G7 (bar 1), Cmaj7 (bar 2), forming standard ii-V-I progression in C major; additional Db7 (bar 13) is acceptable jazz substitution."
+   },
+   {
+    "item": "Does the density/complexity match the style's expectations?",
+    "verdict": "partial",
+    "evidence": "Lead track has dense melody with frequent notes throughout; Piano track has sparse single notes, not matching expected chordal density for harmony role."
+   },
+   {
+    "item": "Are style-specific prohibitions respected (e.g., no drums in classical)?",
+    "verdict": "yes",
+    "evidence": "No prohibited elements like guitar shredding or dense pads; drums track present with swing offsets, respecting jazz drum style."
+   },
+   {
+    "item": "Does the overall texture/layering match the style?",
+    "verdict": "no",
+    "evidence": "Missing tenor sax for color role, leaving texture with only melody, harmony, bass, and drums; no harmonized lines or soli answers typical in jazz."
+   },
+   {
+    "item": "Is the tempo within the style's typical range?",
+    "verdict": "yes",
+    "evidence": "BPM 140 is within the 110-208 BPM range specified for jazz small-combo swing."
+   }
+  ],
+  "J2": [
+   {
+    "item": "BPM",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify BPM"
+   },
+   {
+    "item": "Key/Tonality",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify key"
+   },
+   {
+    "item": "Duration",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify duration"
+   },
+   {
+    "item": "Specified instruments",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify instruments"
+   },
+   {
+    "item": "Jazz style",
+    "verdict": "violated",
+    "evidence": "Composition metadata indicates style is 'pop', not jazz as requested in the prompt"
+   },
+   {
+    "item": "ii-V-I progressions only",
+    "verdict": "violated",
+    "evidence": "Harmony throughout sections is not exclusively ii-V-I; bar 13 uses Db7, which is not part of a standard ii-V-I progression in C major"
+   }
+  ],
+  "J3": [
+   {
+    "item": "rubric",
+    "verdict": "4",
+    "evidence": "The composition demonstrates coherent melody, harmony, and rhythm with appropriate dynamics and a clear structure. It avoids major errors and is engaging, though not highly memorable. For instance, the Lead track presents melodic phrases with dynamic variation, the Piano provides consistent harmonic support, and the Drums maintain a steady rhythm, all fitting the pop style."
+   }
+  ]
+ },
+ "evidence": [
+  {
+   "track": "Lead",
+   "bar": 0,
+   "text": "Program 57 (Trombone) used instead of Trumpet; note at MIDI 57 (A3) below G4 register."
+  },
+  {
+   "track": "Piano",
+   "bar": 0,
+   "text": "Program 0 (Acoustic Grand) used instead of Rhodes; single note at MIDI 74, not chordal voicing."
+  },
+  {
+   "track": "Bass",
+   "bar": 0,
+   "text": "Program 43 (Electric Bass) used instead of Acoustic Bass; quarter note walking bass pattern."
+  },
+  {
+   "track": "Drums",
+   "bar": 0,
+   "text": "Swing offsets present, e.g., note at 440 ticks, contributing to groove."
+  },
+  {
+   "track": "Harmony",
+   "bar": 0,
+   "text": "Symbol Dm7, part of ii-V-I progression in C major."
+  },
+  {
+   "track": "Lead",
+   "bar": 1,
+   "text": "Dense melody notes, e.g., at 480 and 800 ticks, high density."
+  },
+  {
+   "track": "Lead",
+   "bar": 36,
+   "text": "Outro section continues melodic density without sax color."
+  },
+  {
+   "track": "Lead",
+   "bar": 0,
+   "text": "Melodic phrase with notes 62,65,64,60 in C major, showing key adherence and dynamic variation (velocities 75-90)."
+  },
+  {
+   "track": "Piano",
+   "bar": 0,
+   "text": "Harmonic foundation with arpeggiated patterns outlining Dm7 chord (notes 74,77,81,84)."
+  },
+  {
+   "track": "Bass",
+   "bar": 0,
+   "text": "Bass line with notes 38,41,45,44 supporting Dm7 harmony and providing rhythmic stability."
+  },
+  {
+   "track": "Drums",
+   "bar": 0,
+   "text": "Standard drum pattern with kick, snare, and hi-hat establishing 4/4 rhythm at 140 BPM."
+  },
+  {
+   "track": "Lead",
+   "bar": 4,
+   "text": "Verse melody introduces rhythmic syncopation and dynamic shifts (e.g., velocity 90 at bar 5, tick 1920)."
+  },
+  {
+   "track": "Harmony",
+   "bar": 13,
+   "text": "Use of Db7 as a tritone substitution for G7, adding harmonic interest without dissonance."
+  }
+ ],
+ "J_mean": 50.0
+}

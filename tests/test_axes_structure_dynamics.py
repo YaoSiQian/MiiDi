@@ -110,7 +110,7 @@ def test_smooth_contour_directionality_high():
 
 def three_section_comp(pitch_sets, vels):
     notes = []
-    for b, (pitches, vel) in enumerate(zip(pitch_sets, vels)):
+    for b, (pitches, vel) in enumerate(zip(pitch_sets, vels, strict=False)):
         notes += [((b * 8 + i) * 240, 240, p, vel) for i, p in enumerate(pitches)]
     return Composition(
         meta={},

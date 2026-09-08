@@ -1,0 +1,160 @@
+{
+ "J1": 44.0,
+ "J2": 75.0,
+ "J3": 77.0,
+ "per_item": {
+  "J1": [
+   {
+    "item": "checklist item 1",
+    "verdict": "no",
+    "evidence": "Tracks: Trumpet (program 56) matches melody role. Piano (program 0) does not match Electric Piano 1 (program 4) for harmony role. Tenor Sax (program 66) color role missing. Drums (is_drum:true) not in standard instrumentation."
+   },
+   {
+    "item": "checklist item 2",
+    "verdict": "partial",
+    "evidence": "Trumpet notes range G4-G6 (MIDI 67-91) correct. Piano notes mostly C3-B4 (MIDI 48-71) correct. Bass notes E1-G3 (MIDI 28-55) correct. However, piano uses wrong program (0 vs 4)."
+   },
+   {
+    "item": "checklist item 3",
+    "verdict": "no",
+    "evidence": "Drums track uses straight 8th note pattern (hi-hat on every 8th), not swung ride pattern. Piano plays quarter-note chords on every beat, not syncopated comping. Bass walks but no swing offsets. No triplets or swing feel evident in note onsets."
+   },
+   {
+    "item": "checklist item 4",
+    "verdict": "yes",
+    "evidence": "Harmony uses seventh chords (Ebmaj7, Fm7, Bb7, Cm7, Db7, Gm7, C7) throughout. Progressions like Fm7-Bb7-Ebmaj7 (ii-V-I) in bars 4-8, 12-16."
+   },
+   {
+    "item": "checklist item 5",
+    "verdict": "no",
+    "evidence": "Piano density: 4-note chords on every quarter note (e.g., bar 0), far denser than sparse two-note shells. Trumpet has continuous eighth-note lines without rests. Bass walking constant quarters. Overall too dense."
+   },
+   {
+    "item": "checklist item 6",
+    "verdict": "no",
+    "evidence": "Drums track present, but not listed in required instrumentation. Drum pattern is machine-like with identical bar repeats (e.g., bars 0-3 same as 4-7), violating 'drum-machine stiffness' prohibition."
+   },
+   {
+    "item": "checklist item 7",
+    "verdict": "partial",
+    "evidence": "Melody (Trumpet) above band, harmony (Piano) mid-register, bass low – layering present. But missing color instrument (Tenor Sax), and texture lacks call-and-response typical of small-combo swing."
+   },
+   {
+    "item": "checklist item 8",
+    "verdict": "yes",
+    "evidence": "Tempo 140 BPM within 110-208 BPM range for swing."
+   }
+  ],
+  "J2": [
+   {
+    "item": "BPM",
+    "verdict": "satisfied",
+    "evidence": [
+     {
+      "track": "meta",
+      "bar": 0,
+      "text": "bpm is 140"
+     }
+    ]
+   },
+   {
+    "item": "Key/Tonality",
+    "verdict": "satisfied",
+    "evidence": [
+     {
+      "track": "meta",
+      "bar": 0,
+      "text": "key: tonic_pc=3 (Eb), mode=major"
+     }
+    ]
+   },
+   {
+    "item": "Style (Jazz)",
+    "verdict": "violated",
+    "evidence": [
+     {
+      "track": "meta",
+      "bar": 0,
+      "text": "style is 'pop', not 'jazz'"
+     }
+    ]
+   },
+   {
+    "item": "Specified instruments",
+    "verdict": "satisfied",
+    "evidence": [
+     {
+      "track": "Trumpet",
+      "bar": 0,
+      "text": "program=56, role=melody"
+     },
+     {
+      "track": "Piano",
+      "bar": 0,
+      "text": "program=0, role=harmony"
+     }
+    ]
+   },
+   {
+    "item": "Duration",
+    "verdict": "unaddressed",
+    "evidence": []
+   }
+  ],
+  "J3": [
+   {
+    "item": "rubric",
+    "verdict": "4",
+    "evidence": "The composition is coherent with dynamics, featuring a well-formed melody and harmony appropriate to the swing style. It has clear structural sections (intro, verse, chorus, bridge, outro) with distinct harmonic progressions. Dynamics are well-implemented through velocity variations, and the rhythm is steady and engaging. However, the melody shows some repetition (G_repetition: 0.224) and the voice score (0.43) indicates room for more melodic development, preventing a higher score."
+   }
+  ]
+ },
+ "evidence": [
+  {
+   "track": "Piano",
+   "bar": 0,
+   "text": "Plays four-note chords (Eb-G-Bb-D) at 480-tick intervals, far too dense and uniform for comping."
+  },
+  {
+   "track": "Drums",
+   "bar": 0,
+   "text": "Pattern: kick 36 on 1/3, snare 38 on 2/4, hi-hat 42 on every 8th note. Identical pattern repeats every bar."
+  },
+  {
+   "track": "Trumpet",
+   "bar": 4,
+   "text": "Continuous eighth-note melody (MIDI 83,84,87...) without rests, exceeding typical phrase spacing."
+  },
+  {
+   "track": "Bass",
+   "bar": 0,
+   "text": "Walking quarter notes (MIDI 39,43,46,50) but no swing offsets; all on grid."
+  },
+  {
+   "track": "Harmony",
+   "bar": 4,
+   "text": "Fm7 (F-Ab-C-Eb) used, then Bb7 (Bb-D-F-Ab) at bar 6, ii-V motion correct."
+  },
+  {
+   "track": "Piano",
+   "bar": 12,
+   "text": "Still 4-note chords every beat, not sparse shells."
+  },
+  {
+   "track": "Drums",
+   "bar": 12,
+   "text": "Pattern unchanged from bar 0, no variation."
+  },
+  {
+   "track": "Trumpet",
+   "bar": 20,
+   "text": "Bridge melody continues dense eighth notes."
+  },
+  {
+   "track": "Trumpet",
+   "bar": 2,
+   "text": "The trumpet plays a note at bar 2 with pitch 83 and velocity 65."
+  }
+ ],
+ "J_mean": 65.3
+}

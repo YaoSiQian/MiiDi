@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import math as _math
+import re as _re
 from dataclasses import dataclass, field
 
 from miidi.eval.context import EvaluationContext
@@ -151,7 +153,7 @@ def axis_voice(ctx: EvaluationContext) -> AxisResult:
             sum(1 for n in t.notes if comf_rng[0] <= n[2] <= comf_rng[1]) / len(t.notes)
         )
         seq = sorted(t.notes, key=lambda n: n[0])
-        for a, b in zip(seq, seq[1:]):
+        for a, b in zip(seq, seq[1:], strict=False):
             if b[0] >= a[0] + a[1]:
                 steps += 1
                 if abs(b[2] - a[2]) > 12:
@@ -266,10 +268,6 @@ def axis_rhythm(ctx: EvaluationContext) -> AxisResult:
     )
 
 
-import math as _math
-import re as _re
-
-
 def _family(name: str) -> str:
     return _re.sub(r"\d+$", "", name.strip().lower()) or name.strip().lower()
 
@@ -291,7 +289,7 @@ def _section_vectors(ctx: EvaluationContext) -> list[dict]:
 
 
 def _cosine(a: list[float], b: list[float]) -> float:
-    dot = sum(x * y for x, y in zip(a, b))
+    dot = sum(x * y for x, y in zip(a, b, strict=False))
     na = _math.sqrt(sum(x * x for x in a))
     nb = _math.sqrt(sum(y * y for y in b))
     if na == 0.0 or nb == 0.0:
@@ -383,7 +381,7 @@ def _std(xs: list[float]) -> float:
 def _contour(notes) -> list[int]:
     seq = sorted(notes, key=lambda n: n[0])
     out: list[int] = []
-    for a, b in zip(seq, seq[1:]):
+    for a, b in zip(seq, seq[1:], strict=False):
         d = b[2] - a[2]
         out.append((d > 0) - (d < 0))
     while out and out[0] == 0:
@@ -424,10 +422,7 @@ def axis_dynamics(ctx: EvaluationContext) -> AxisResult:
     spread_component = band(sigma, 4, 8, 45, 60, floor=0.1)
 
     ac = _lag1_autocorr(_bar_mean_velocities(ctx))
-    if ac is None:
-        directionality = 0.8
-    else:
-        directionality = band(ac, 0.15, 0.30, 1.01, 1.01, floor=0.0)
+    directionality = 0.8 if ac is None else band(ac, 0.15, 0.30, 1.01, 1.01, floor=0.0)
 
     chorus_vels = [v["vel"] for v in _section_vectors(ctx) if _family(v["name"]) in _CHORUS]
     verse_vels = [v["vel"] for v in _section_vectors(ctx) if _family(v["name"]) in _VERSE]

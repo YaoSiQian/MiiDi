@@ -1,0 +1,13 @@
+{
+ "invalid": true,
+ "R_rule": 0.0,
+ "axes": {},
+ "gates": {},
+ "violations": [
+  {
+   "location": "Violin II/note149",
+   "code": "BOUNDS",
+   "message": "ends at 61920 beyond piece length 61440"
+  }
+ ]
+}

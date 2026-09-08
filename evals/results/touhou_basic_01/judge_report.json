@@ -1,0 +1,161 @@
+{
+ "J1": 80.0,
+ "J2": 95.0,
+ "J3": 85.0,
+ "per_item": {
+  "J1": [
+   {
+    "item": "checklist item 1",
+    "verdict": "partial",
+    "evidence": "Missing core Touhou instruments: no square/saw leads (80,81) for melody; harmonic bed lacks harpsichord (6) and only includes piano and organ for most of piece (e.g., bars 0-22). Strings (48) present but assigned to 'color' role instead of harmony."
+   },
+   {
+    "item": "checklist item 2",
+    "verdict": "partial",
+    "evidence": "Synth bass uses program 38 instead of specified 36; organ uses program 18 instead of 16. Strings (track 'Strings') notes within range but role mismatch (color vs. harmony)."
+   },
+   {
+    "item": "checklist item 3",
+    "verdict": "yes",
+    "evidence": "Straight 16th-note drive in piano (e.g., bar 0: notes every 120 ticks) and 8th-note bass (e.g., bar 0: notes every 240 ticks). Drums have straight backbeat with 16th hi-hats (bar 0: note 42 at 0,120,240...). No swing."
+   },
+   {
+    "item": "checklist item 4",
+    "verdict": "yes",
+    "evidence": "Key is A minor; chord progression uses E7-Am cadence (bars 0-1, 24-25) and diatonic chords (Am, F, G, Dm, C) appropriate for minor-key rock."
+   },
+   {
+    "item": "checklist item 5",
+    "verdict": "partial",
+    "evidence": "Harmonic bed thin: only piano and organ provide harmony for bars 0-22; strings enter late (bar 23) but in color role. Missing 3-5 instrument stack for dense wall of sound."
+   },
+   {
+    "item": "checklist item 6",
+    "verdict": "yes",
+    "evidence": "Drums present and appropriate for electronic rock style; no classical prohibitions violated."
+   },
+   {
+    "item": "checklist item 7",
+    "verdict": "partial",
+    "evidence": "Texture lacks multi-layered harmonic bed characteristic of Touhou: missing harpsichord and typical square/saw leads; strings not integrated into harmony from start (e.g., bars 0-22)."
+   },
+   {
+    "item": "checklist item 8",
+    "verdict": "yes",
+    "evidence": "BPM is 160, within the typical Touhou range of 120-170."
+   }
+  ],
+  "J2": [
+   {
+    "item": "BPM",
+    "verdict": "unaddressed",
+    "evidence": "The prompt does not specify a BPM."
+   },
+   {
+    "item": "Key/Tonality",
+    "verdict": "unaddressed",
+    "evidence": "The prompt does not specify a key."
+   },
+   {
+    "item": "Duration",
+    "verdict": "unaddressed",
+    "evidence": "The prompt does not specify a duration."
+   },
+   {
+    "item": "Specified instruments",
+    "verdict": "satisfied",
+    "evidence": "The composition includes a piano (program=1) and a trumpet (program=56) as specified. The piano plays fast arpeggios, and the trumpet carries the melody."
+   },
+   {
+    "item": "High-energy Touhou-style arrangement",
+    "verdict": "satisfied",
+    "evidence": "The composition features a fast tempo (160 BPM), rapid piano arpeggios in sixteenth notes, a prominent trumpet melody, and a driving drum beat, all characteristic of high-energy Touhou-style music."
+   }
+  ],
+  "J3": [
+   {
+    "item": "Harmony",
+    "verdict": 4,
+    "evidence": "Chord progressions are well-formed and match the harmony symbols; Piano and Organ provide consistent accompaniment without dissonance."
+   },
+   {
+    "item": "Melody",
+    "verdict": 4,
+    "evidence": "Trumpet melody is coherent with clear phrasing and contour; introduces variation between verse and chorus for development."
+   },
+   {
+    "item": "Rhythm",
+    "verdict": 4,
+    "evidence": "Rhythmic elements are steady and appropriate for pop style; drums maintain a solid beat while other instruments add syncopation."
+   },
+   {
+    "item": "Structure",
+    "verdict": 5,
+    "evidence": "Clear sections (intro, verse, chorus, bridge, outro) with distinct transitions; thematic material repeats and contrasts effectively."
+   },
+   {
+    "item": "Dynamics",
+    "verdict": 4,
+    "evidence": "Velocity variations across tracks indicate expressive dynamics; louder notes emphasize key moments in the melody."
+   }
+  ]
+ },
+ "evidence": [
+  {
+   "track": "Piano",
+   "bar": 0,
+   "text": "16th-note arpeggios (notes every 120 ticks) driving the rhythm."
+  },
+  {
+   "track": "Synth Bass",
+   "bar": 0,
+   "text": "Locked 8th-note pattern (notes every 240 ticks) providing bass drive."
+  },
+  {
+   "track": "Drums",
+   "bar": 0,
+   "text": "Straight backbeat with 16th-note hi-hats (note 42 at 0,120,240...)."
+  },
+  {
+   "track": "Trumpet",
+   "bar": 0,
+   "text": "Melody in A minor (note 69 = A4), within trumpet's register."
+  },
+  {
+   "track": "Organ",
+   "bar": 0,
+   "text": "Sustained chords (notes 80,86) providing harmonic support, but program 18 not in standard list."
+  },
+  {
+   "track": "Strings",
+   "bar": 23,
+   "text": "Enters with long chords (e.g., notes 64,69,72,76) but assigned to 'color' role, not harmony."
+  },
+  {
+   "track": "Trumpet",
+   "bar": 0,
+   "text": "Melody begins with a phrase outlining the E7 chord, using notes 69 (A4), 71 (B4), 72 (C5), and 76 (F5) with varying velocities for expression."
+  },
+  {
+   "track": "Piano",
+   "bar": 0,
+   "text": "Plays an arpeggiated E7 chord with notes 64 (E4), 68 (G#4), 71 (B4), 74 (D5), and 76 (F5), adhering to the harmony."
+  },
+  {
+   "track": "Drums",
+   "bar": 0,
+   "text": "Establishes a steady 4/4 beat with kick on beat 1, snare on beat 3, and hi-hats on 8th notes, driving the rhythm."
+  },
+  {
+   "track": "Trumpet",
+   "bar": 12,
+   "text": "Chorus melody starts with a high note 76 (F5) at velocity 95, creating a memorable hook and contrasting with the verse."
+  },
+  {
+   "track": "Strings",
+   "bar": 23,
+   "text": "Adds sustained chords in the bridge section, providing harmonic color and contrast to other tracks."
+  }
+ ],
+ "J_mean": 86.7
+}

@@ -1,0 +1,146 @@
+{
+ "J1": 88.0,
+ "J2": 100.0,
+ "J3": 60.0,
+ "per_item": {
+  "J1": [
+   {
+    "item": "Does the instrumentation match the style's standard ensemble?",
+    "verdict": "partial",
+    "evidence": "Lead track uses program 73 instead of the specified program 81 for the melody role; other instruments (bass, piano, drums) match."
+   },
+   {
+    "item": "Are the instruments in their correct registers for the style?",
+    "verdict": "partial",
+    "evidence": "Lead track bar 0, note at tick 0 with MIDI 55 (G3) is below the specified C4-C6 range for melody."
+   },
+   {
+    "item": "Is the rhythm/groove match the style's feel (swing, backbeat, etc.)?",
+    "verdict": "yes",
+    "evidence": "Drums track bar 0 shows a steady backbeat with kick on beats 1 and 3, snare on beats 2 and 4, and hi-hat on eighth notes."
+   },
+   {
+    "item": "Is the harmonic vocabulary appropriate (chord types, progressions)?",
+    "verdict": "yes",
+    "evidence": "Harmony track has I-V-vi-IV progression (C-G-Am-F) in C major, typical for pop."
+   },
+   {
+    "item": "Does the density/complexity match the style's expectations?",
+    "verdict": "yes",
+    "evidence": "Four tracks (lead, bass, piano, drums) with clear, non-cluttered roles; no excessive notes or layers."
+   },
+   {
+    "item": "Are style-specific prohibitions respected (e.g., no drums in classical)?",
+    "verdict": "yes",
+    "evidence": "No orchestral colors or distorted textures; all instruments are standard pop ensemble without prohibited elements."
+   },
+   {
+    "item": "Does the overall texture/layering match the style?",
+    "verdict": "yes",
+    "evidence": "Layering with electric bass in low register, electric piano in mid, lead melody above, and drums providing rhythmic foundation."
+   },
+   {
+    "item": "Is the tempo within the style's typical range?",
+    "verdict": "yes",
+    "evidence": "BPM is 120, which is within the typical pop tempo range of 100-140 BPM."
+   }
+  ],
+  "J2": [
+   {
+    "item": "Duration",
+    "verdict": "satisfied",
+    "evidence": "Prompt specifies 4 bars; composition structure shows verse from bar 0 to bar 4 (4 bars total)."
+   },
+   {
+    "item": "Minimal arrangement",
+    "verdict": "satisfied",
+    "evidence": "Prompt requests minimal pop piece; composition has only 4 tracks (Lead, Bass, Electric Piano, Drums) – a standard, uncluttered pop arrangement with clear roles."
+   },
+   {
+    "item": "Single melody line",
+    "verdict": "satisfied",
+    "evidence": "Prompt requests only a single melody line; composition has exactly one track with role 'melody' (Lead track with program 73)."
+   },
+   {
+    "item": "BPM",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify BPM; composition uses 120 BPM."
+   },
+   {
+    "item": "Key/Tonality",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify key; composition uses C major."
+   },
+   {
+    "item": "Specified instruments",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify instruments; composition uses programs 73, 33, 4, and 10 (drums)."
+   }
+  ],
+  "J3": [
+   {
+    "item": "rubric",
+    "verdict": "3",
+    "evidence": "The composition is technically competent with a standard pop chord progression (C-G-Am-F), clear melody, and basic rhythm section. However, it lacks expressive dynamics, shows no development beyond a single 4-bar phrase, and contains a minor dissonance in the melody. The overall result is functional but mechanical and formulaic."
+   }
+  ]
+ },
+ "evidence": [
+  {
+   "track": "Lead",
+   "bar": 0,
+   "text": "Note at tick 0 with MIDI 55 (G3) is below the recommended C4-C6 range for pop melody."
+  },
+  {
+   "track": "Lead",
+   "bar": 0,
+   "text": "Program 73 is used instead of the style-specified program 81 for Lead 2 (sawtooth)."
+  },
+  {
+   "track": "Drums",
+   "bar": 0,
+   "text": "Backbeat pattern with kick (MIDI 36) on beats 1 and 3, snare (MIDI 38) on beats 2 and 4, and hi-hat (MIDI 42) on eighth notes."
+  },
+  {
+   "track": "Electric Piano",
+   "bar": 0,
+   "text": "Harmony progression starts with C major chord, following I-V-vi-IV in C major."
+  },
+  {
+   "track": "Drums",
+   "bar": 0,
+   "text": "Drum pattern with kick (MIDI 36) and hi-hat (MIDI 42) at bar 0 indicates 120 BPM tempo in 4/4 time."
+  },
+  {
+   "track": "Electric Piano",
+   "bar": 0,
+   "text": "Harmony track starts with chord symbol 'C' at bar 0, confirming C major tonality."
+  },
+  {
+   "track": "Structure",
+   "bar": 0,
+   "text": "Verse structure spans 4 bars from bar 0 to bar 3, as per composition metadata."
+  },
+  {
+   "track": "Lead",
+   "bar": 0,
+   "text": "Melody track uses program 73, with notes starting at bar 0, contributing to the pop style."
+  },
+  {
+   "track": "Lead",
+   "bar": 2,
+   "text": "At bar 2, beat 2, the melody plays overlapping notes G4 and F4 (MIDI notes 67 and 65) that are not chord tones of Am, creating a harsh dissonance that sounds like an error."
+  },
+  {
+   "track": "Lead",
+   "bar": 0,
+   "text": "The melody in bar 0 consists of simple arpeggiated quarter notes with velocities ranging from 100 to 110, showing little dynamic variation and a mechanical feel."
+  },
+  {
+   "track": "Electric Bass",
+   "bar": 0,
+   "text": "The bass only plays root notes on beat 1 of each bar with constant velocity, contributing to a static and predictable accompaniment."
+  }
+ ],
+ "J_mean": 82.7
+}

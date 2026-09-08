@@ -1,0 +1,201 @@
+{
+ "J1": 44.0,
+ "J2": 100.0,
+ "J3": 40.0,
+ "per_item": {
+  "J1": [
+   {
+    "item": "1. Does the instrumentation match the style's standard ensemble?",
+    "verdict": "no",
+    "evidence": "Track 'Muted Guitar' uses program 26, not vibraphone (11); Track 'Reversed Pad' uses program 48, not warm pad (89); Drums track is present but not in the standard lofi ensemble."
+   },
+   {
+    "item": "2. Are the instruments in their correct registers for the style?",
+    "verdict": "partial",
+    "evidence": "Muted Guitar bar 0: pitch 115 (far above C4-A5); Rhodes bar 6: pitch 72 (above C3-B4); Bass bar 0: pitch 41 (within E1-D3); Reversed Pad bar 0: pitches 48,52,57 (within C3-C4)."
+   },
+   {
+    "item": "3. Does the rhythm/groove match the style's feel (swing, backbeat, etc.)?",
+    "verdict": "no",
+    "evidence": "Drums bar 0: hi-hats at onsets 120, 600, 1080, 1560, evenly spaced every 480 ticks, indicating a straight pattern with no swing feel."
+   },
+   {
+    "item": "4. Is the harmonic vocabulary appropriate (chord types, progressions)?",
+    "verdict": "yes",
+    "evidence": "Harmony symbols throughout: Fmaj7, Em7, Dm7, Cmaj7, Am7 are all 7th chords typical of lofi."
+   },
+   {
+    "item": "5. Does the density/complexity match the style's expectations?",
+    "verdict": "partial",
+    "evidence": "Muted Guitar has 55 notes across 24 bars (sparse melody), but Rhodes has only 5 notes total, no chord voicings, missing expected harmonic density."
+   },
+   {
+    "item": "6. Are style-specific prohibitions respected (e.g., no drums in classical)?",
+    "verdict": "no",
+    "evidence": "Track 'Muted Guitar' is not the typical vibraphone; Rhodes track plays single notes instead of chords, violating the sparse chordal texture expectation."
+   },
+   {
+    "item": "7. Does the overall texture/layering match the style?",
+    "verdict": "partial",
+    "evidence": "Bar 6 (onset 11520): all five tracks (Muted Guitar, Rhodes, Bass, Drums, Reversed Pad) are active simultaneously, exceeding the four-layer guideline."
+   },
+   {
+    "item": "8. Is the tempo within the style's typical range?",
+    "verdict": "yes",
+    "evidence": "Meta tempo: 76 BPM, within the lofi range of 66-92 BPM."
+   }
+  ],
+  "J2": [
+   {
+    "item": "Nostalgic mood",
+    "verdict": "satisfied",
+    "evidence": "The composition uses a slow tempo (76 BPM), mellow chord progression (Fmaj7, Em7, Dm7, Cmaj7), and a Rhodes piano, which together create a nostalgic and mellow atmosphere."
+   },
+   {
+    "item": "Lo-fi style",
+    "verdict": "satisfied",
+    "evidence": "The track includes a muted guitar, a reversed pad, and a relaxed beat, which are characteristic of lo-fi music. The overall structure and instrumentation align with the genre."
+   },
+   {
+    "item": "Reversed samples",
+    "verdict": "satisfied",
+    "evidence": "The composition includes a track named 'Reversed Pad' (program 48) with long sustained chords, which are likely reversed to create the typical lo-fi texture."
+   },
+   {
+    "item": "Muted guitar",
+    "verdict": "satisfied",
+    "evidence": "The composition includes a track named 'Muted Guitar' (program 26) that plays a melody throughout the piece, fulfilling the requirement for a muted guitar."
+   }
+  ],
+  "J3": [
+   {
+    "item": "rubric",
+    "verdict": 2,
+    "evidence": "The composition contains frequent wrong notes, particularly in the bass track. The bass does not follow the chord roots, causing dissonance. For example, at bar 1 (time 960), the bass plays F while the chord is Em7; at bar 2 (time 1920), the bass plays E while the chord is Dm7; at bar 3 (time 2880), the bass plays E while the chord is Cmaj7; at bar 4 (time 3840), the bass plays G while the chord is Fmaj7. These are clear violations of harmony. The rest of the composition has structure and some musical elements, but the errors are frequent and obvious."
+   }
+  ]
+ },
+ "evidence": [
+  {
+   "track": "Muted Guitar",
+   "bar": 0,
+   "text": "Pitch 115 (C8) is far above the specified register C4-A5 for melody."
+  },
+  {
+   "track": "Rhodes",
+   "bar": 6,
+   "text": "Pitch 72 (C5) is above the specified register C3-B4 for harmony."
+  },
+  {
+   "track": "Bass",
+   "bar": 0,
+   "text": "Pitch 41 (E3) is within the E1-D3 register for bass."
+  },
+  {
+   "track": "Reversed Pad",
+   "bar": 0,
+   "text": "Pitches 48 (C3), 52 (E3), 57 (A3) are within the C3-C4 register for color."
+  },
+  {
+   "track": "Drums",
+   "bar": 0,
+   "text": "Hi-hats at onsets 120, 600, 1080, 1560 indicate a straight 16th-note pattern with no swing."
+  },
+  {
+   "track": "Harmony",
+   "bar": 0,
+   "text": "Chord symbols Fmaj7, Em7, Dm7, Cmaj7, Am7 are all 7th chords appropriate for lofi."
+  },
+  {
+   "track": "Muted Guitar",
+   "bar": 0,
+   "text": "55 notes over 24 bars; while sparse, the instrument choice is non-standard."
+  },
+  {
+   "track": "Rhodes",
+   "bar": 6,
+   "text": "Only 5 notes total in the track, playing single notes instead of chords."
+  },
+  {
+   "track": "Muted Guitar",
+   "bar": 0,
+   "text": "Not a vibraphone; violates typical lofi instrumentation."
+  },
+  {
+   "track": "Rhodes",
+   "bar": 6,
+   "text": "Single notes instead of chord voicings, missing the expected harmonic texture."
+  },
+  {
+   "track": "All",
+   "bar": 6,
+   "text": "All five tracks active at onset 11520, exceeding the four-layer limit."
+  },
+  {
+   "track": "Meta",
+   "bar": 0,
+   "text": "Tempo 76 BPM is within the 66-92 BPM range for lofi."
+  },
+  {
+   "track": "meta",
+   "bar": 0,
+   "text": "BPM set to 76 in composition meta."
+  },
+  {
+   "track": "meta",
+   "bar": 0,
+   "text": "Key is C major as per meta.key."
+  },
+  {
+   "track": "structure",
+   "bar": 0,
+   "text": "Total duration defined as 24 bars (intro 4 + verse 8 + chorus 8 + outro 4)."
+  },
+  {
+   "track": "Muted Guitar",
+   "bar": 0,
+   "text": "Program 26 used for melody track."
+  },
+  {
+   "track": "Rhodes",
+   "bar": 0,
+   "text": "Program 4 used for harmony track."
+  },
+  {
+   "track": "Bass",
+   "bar": 0,
+   "text": "Program 33 used for bass track."
+  },
+  {
+   "track": "Reversed Pad",
+   "bar": 0,
+   "text": "Program 48 used for color track."
+  },
+  {
+   "track": "Drums",
+   "bar": 0,
+   "text": "Program 0 used for drum track."
+  },
+  {
+   "track": "Bass",
+   "bar": 1,
+   "text": "Note at time 960 plays MIDI 41 (F2) but chord is Em7 (should be root E)."
+  },
+  {
+   "track": "Bass",
+   "bar": 2,
+   "text": "Note at time 1920 plays MIDI 40 (E2) but chord is Dm7 (should be root D)."
+  },
+  {
+   "track": "Bass",
+   "bar": 3,
+   "text": "Note at time 2880 plays MIDI 40 (E2) but chord is Cmaj7 (should be root C)."
+  },
+  {
+   "track": "Bass",
+   "bar": 4,
+   "text": "Note at time 3840 plays MIDI 38 (G2) but chord is Fmaj7 (should be root F)."
+  }
+ ],
+ "J_mean": 61.3
+}

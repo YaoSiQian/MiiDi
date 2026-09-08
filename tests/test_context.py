@@ -57,7 +57,7 @@ def test_verticals_sampled_sorted():
     ctx = EvaluationContext.from_composition(comp(), StyleDefaults())
     pairs = list(ctx.iterate_verticals())
     ticks = [t for t, _ in pairs]
-    assert ticks[0] == 0 and all(b > a for a, b in zip(ticks, ticks[1:]))
+    assert ticks[0] == 0 and all(b > a for a, b in zip(ticks, ticks[1:], strict=False))
     v0 = pairs[0][1]
     assert set(v0.pitch_classes) == {0}  # melody C + bass C
 

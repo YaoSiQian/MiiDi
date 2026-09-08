@@ -1,0 +1,181 @@
+{
+ "J1": 55.0,
+ "J2": 90.0,
+ "J3": 80.0,
+ "per_item": {
+  "J1": [
+   {
+    "item": "checklist item 1",
+    "verdict": "no",
+    "evidence": "Bass track uses program 38 (Fretless Bass) instead of required Synth Bass (36) or Slap Bass (37); harmonic bed only has two layers (Strings program 49, Harpsichord program 7) instead of 3–5 stacked timbres (piano, organ, guitar missing; programs also mismatch: Strings should be 48, Harpsichord should be 6)."
+   },
+   {
+    "item": "checklist item 2",
+    "verdict": "yes",
+    "evidence": "Lead (Saw Lead) notes range MIDI 69–84 (A4–C6) within C4–C8; Bass notes range MIDI 40–57 (E2–F3) below C5; Strings and Harpsichord registers within typical ranges."
+   },
+   {
+    "item": "checklist item 3",
+    "verdict": "yes",
+    "evidence": "Bass plays locked 8th-note drive (240-tick intervals) throughout; drums maintain straight rock beat with backbeat on beats 2 and 4; no swing detected in any track."
+   },
+   {
+    "item": "checklist item 4",
+    "verdict": "yes",
+    "evidence": "Harmony uses diatonic minor-key progression (Am, G, F, E7) with hard authentic closes (E7–Am) at cadence points (e.g., bars 7–8, 11–12, 19–20)."
+   },
+   {
+    "item": "checklist item 5",
+    "verdict": "no",
+    "evidence": "Harmonic bed consists of only two layers (Strings long chords, Harpsichord arpeggiated single notes) instead of 3–5 simultaneous independent timbres; texture is noticeably thin compared to style expectation."
+   },
+   {
+    "item": "checklist item 6",
+    "verdict": "yes",
+    "evidence": "Drums present (electronic rock context), no classical-style prohibitions violated."
+   },
+   {
+    "item": "checklist item 7",
+    "verdict": "no",
+    "evidence": "Missing piano, organ, and guitar layers; overall texture lacks the dense wall-of-sound from stacked harmonic instruments characteristic of Touhou."
+   },
+   {
+    "item": "checklist item 8",
+    "verdict": "yes",
+    "evidence": "BPM is 140, within the style's typical 120–170 range."
+   }
+  ],
+  "J2": [
+   {
+    "item": "BPM",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify BPM; mark as unaddressed."
+   },
+   {
+    "item": "Key/Tonality",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify key; mark as unaddressed."
+   },
+   {
+    "item": "Duration",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify duration; mark as unaddressed."
+   },
+   {
+    "item": "Specified instruments",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify instruments; mark as unaddressed."
+   },
+   {
+    "item": "Playful mood",
+    "verdict": "satisfied",
+    "evidence": "Composition has a fast tempo (140 BPM), lively lead melody with varied note durations, and playful instruments like harpsichord, aligning with the playful descriptor."
+   },
+   {
+    "item": "Touhou style",
+    "verdict": "satisfied",
+    "evidence": "Use of synth lead (program 81), fast-paced structure with sections, and melodic lines are characteristic of Touhou music style."
+   },
+   {
+    "item": "Bouncy rhythm",
+    "verdict": "satisfied",
+    "evidence": "Lead melody features syncopated patterns, such as notes starting off the main beat, contributing to a bouncy rhythmic feel."
+   },
+   {
+    "item": "Bright timbres",
+    "verdict": "satisfied",
+    "evidence": "Instruments like harpsichord (program 7) with a bright, plucked sound and synth lead create bright timbres as requested."
+   }
+  ],
+  "J3": [
+   {
+    "item": "rubric",
+    "verdict": "4",
+    "evidence": "The composition demonstrates coherent melody and harmony with appropriate dynamics and clear sections. It has a playful melody in A minor that fits the pop style, with development from intro to chorus and effective use of contrast in drums and lead. However, it lacks some memorable hooks or deep thematic development that would elevate it to a score of 5."
+   }
+  ]
+ },
+ "evidence": [
+  {
+   "track": "Bass",
+   "bar": 0,
+   "text": "Program 38 (Fretless Bass) not in style-approved bass list (36, 37, 32)."
+  },
+  {
+   "track": "Strings",
+   "bar": 0,
+   "text": "Program 49 (Synth Strings 1) mismatch; style expects Strings program 48."
+  },
+  {
+   "track": "Harpsichord",
+   "bar": 0,
+   "text": "Program 7 (Harpsichord) mismatch; style expects Harpsichord program 6."
+  },
+  {
+   "track": "Lead",
+   "bar": 0,
+   "text": "Notes in range MIDI 69–84, within expected C4–C8."
+  },
+  {
+   "track": "Bass",
+   "bar": 0,
+   "text": "8th-note pattern starting at tick 0, then 240, 480, etc."
+  },
+  {
+   "track": "Drums",
+   "bar": 0,
+   "text": "Steady backbeat: kick on 1 and 3, snare on 2 and 4."
+  },
+  {
+   "track": "Harmony",
+   "bar": 7,
+   "text": "E7 chord at bar 7 resolves to Am at bar 8, authentic cadence."
+  },
+  {
+   "track": "Strings",
+   "bar": 0,
+   "text": "Only two harmonic layers present (Strings + Harpsichord)."
+  },
+  {
+   "track": "Meta",
+   "bar": 0,
+   "text": "BPM = 140, within 120–170 range."
+  },
+  {
+   "track": "Lead",
+   "bar": 0,
+   "text": "Melody begins with a playful, rhythmic pattern in A minor at 140 BPM, using program 81"
+  },
+  {
+   "track": "Drums",
+   "bar": 0,
+   "text": "Drums establish a steady 4/4 time signature, supporting the playful mood"
+  },
+  {
+   "track": "Lead",
+   "bar": 4,
+   "text": "Melody in the verse (e.g., at tick 7680, pitch 81/A5) shows varied velocities (85-95), adding expression and dynamic range."
+  },
+  {
+   "track": "Bass",
+   "bar": 0,
+   "text": "Bass line accurately outlines chord roots (e.g., at tick 0, pitch 45/A2 for Am chord), providing solid harmonic foundation."
+  },
+  {
+   "track": "Drums",
+   "bar": 12,
+   "text": "Drum fill at chorus start (tick 23040 with crash cymbal, pitch 49, velocity 127) introduces contrast and marks section change effectively."
+  },
+  {
+   "track": "Strings",
+   "bar": 0,
+   "text": "Sustained chords (e.g., notes 57,60,64,69 forming Am) throughout sections offer harmonic support with appropriate dynamics."
+  },
+  {
+   "track": "Meta",
+   "bar": 0,
+   "text": "Clear structure with distinct sections: intro (0-4), verse (4-12), chorus (12-20), and outro (20-24), demonstrating stylistic understanding of pop form."
+  }
+ ],
+ "J_mean": 75.0
+}

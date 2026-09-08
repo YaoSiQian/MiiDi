@@ -1,0 +1,191 @@
+{
+ "J1": 87.0,
+ "J2": 15.0,
+ "J3": 80.0,
+ "per_item": {
+  "J1": [
+   {
+    "item": "checklist item 1",
+    "verdict": "partial",
+    "evidence": "track Lead bar 0: Program 73 (Lead 1 square) used instead of specified program 81 (Lead 2 sawtooth); track Piano bar 0: Program 0 (Acoustic Grand Piano) used instead of specified program 4 (Electric Piano 1 Rhodes)."
+   },
+   {
+    "item": "checklist item 2",
+    "verdict": "yes",
+    "evidence": "track Lead bar 0: Notes range from 60 to 83 (C4–B5), within C4–C6; track Bass bar 0: Notes range from 29 to 50 (A1–C3), within E1–G3; track Piano bar 0: Notes range from 48 to 67 (C3–G4), within C3–C5."
+   },
+   {
+    "item": "checklist item 3",
+    "verdict": "yes",
+    "evidence": "track Drums bar 3: Snare (38) on beats 2 and 4 at ticks 4320 and 5280, establishing a steady backbeat groove typical of pop."
+   },
+   {
+    "item": "checklist item 4",
+    "verdict": "yes",
+    "evidence": "track Piano bar 0: Diatonic C‑major progression (C, G, Am, F in verse; Fmaj7, G, Am7, G7 in chorus) aligns with I‑V‑vi‑IV pop vocabulary."
+   },
+   {
+    "item": "checklist item 5",
+    "verdict": "yes",
+    "evidence": "track Lead bar 0, Piano bar 0, Bass bar 0, Drums bar 0: Simple, clear texture with melody, chordal accompaniment, and rhythm section—typical pop density."
+   },
+   {
+    "item": "checklist item 6",
+    "verdict": "yes",
+    "evidence": "track Drums bar 0, Piano bar 0, Bass bar 0, Lead bar 0: No orchestral or distorted textures; only clean pop instruments used."
+   },
+   {
+    "item": "checklist item 7",
+    "verdict": "yes",
+    "evidence": "track Drums bar 0, Bass bar 0, Piano bar 0, Lead bar 0: Clear layering—drums provide beat, bass low end, piano chords, lead melody—no clutter."
+   },
+   {
+    "item": "checklist item 8",
+    "verdict": "yes",
+    "evidence": "meta bar 0: Tempo is 120 bpm, within the typical pop range of 100–130 bpm."
+   }
+  ],
+  "J2": [
+   {
+    "item": "BPM",
+    "verdict": "violated",
+    "evidence": "Composition BPM is 120, but prompt specifies 300 BPM."
+   },
+   {
+    "item": "Key/Tonality",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify key; composition is in C major."
+   },
+   {
+    "item": "Duration",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify duration; composition has 28 bars."
+   },
+   {
+    "item": "Specified instruments",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify instruments; composition uses programs 73 (flute), 33 (bass), and 0 (piano)."
+   },
+   {
+    "item": "Extremely fast",
+    "verdict": "violated",
+    "evidence": "BPM is 120, which is not extremely fast; for comparison, 300 BPM would be required for extremely fast tempo."
+   },
+   {
+    "item": "Very soothing",
+    "verdict": "violated",
+    "evidence": "As a lullaby, it should be calming; however, the moderate tempo (120 BPM) and presence of drums throughout the track reduce the soothing quality."
+   }
+  ],
+  "J3": [
+   {
+    "item": "rubric",
+    "verdict": "4",
+    "evidence": "The composition is coherent with clear structure, dynamics, and some memorable moments. It avoids chaotic note placement or frequent errors, and is technically correct with expressive dynamic shaping. However, it is somewhat formulaic and lacks deep innovation."
+   }
+  ]
+ },
+ "evidence": [
+  {
+   "track": "Lead",
+   "bar": 0,
+   "text": "Program 73 (Lead 1 square) used instead of specified program 81 (Lead 2 sawtooth)."
+  },
+  {
+   "track": "Piano",
+   "bar": 0,
+   "text": "Program 0 (Acoustic Grand Piano) used instead of specified program 4 (Electric Piano 1 Rhodes)."
+  },
+  {
+   "track": "Lead",
+   "bar": 0,
+   "text": "Notes range from 60 (C4) to 83 (B5), within C4–C6."
+  },
+  {
+   "track": "Bass",
+   "bar": 0,
+   "text": "Notes range from 29 (A1) to 50 (C3), within E1–G3."
+  },
+  {
+   "track": "Piano",
+   "bar": 0,
+   "text": "Notes range from 48 (C3) to 67 (G4), within C3–C5."
+  },
+  {
+   "track": "Drums",
+   "bar": 3,
+   "text": "Snare (38) hits at ticks 4320 and 5280 (beats 2 and 4) establish a backbeat."
+  },
+  {
+   "track": "Piano",
+   "bar": 0,
+   "text": "Diatonic C‑major progression (C, G, Am, F in intro/verse) fits I‑V‑vi‑IV pop style."
+  },
+  {
+   "track": "Drums",
+   "bar": 0,
+   "text": "Simple backbeat pattern without excessive fills."
+  },
+  {
+   "track": "Lead",
+   "bar": 0,
+   "text": "Single voice melody, no competing leads."
+  },
+  {
+   "track": "meta",
+   "bar": 0,
+   "text": "Tempo 120 bpm is within typical pop range."
+  },
+  {
+   "track": "meta",
+   "bar": 0,
+   "text": "bpm: 120"
+  },
+  {
+   "track": "meta",
+   "bar": 0,
+   "text": "key: C major (tonic_pc: 0, mode: major)"
+  },
+  {
+   "track": "structure",
+   "bar": 0,
+   "text": "total duration: 28 bars (intro: 4 bars, verse: 8 bars, chorus: 8 bars, bridge: 4 bars, outro: 4 bars)"
+  },
+  {
+   "track": "tracks",
+   "bar": 0,
+   "text": "instruments: Lead (program: 73), Bass (program: 33), Piano (program: 0), Drums (program: 0, is_drum: true)"
+  },
+  {
+   "track": "Lead",
+   "bar": 16,
+   "text": "Melody reaches higher note (E5) with velocity 80, creating a peak in the chorus that adds interest and memorability."
+  },
+  {
+   "track": "Lead",
+   "bar": 18,
+   "text": "Continues the chorus motif with high note (E5) and increased velocity (85), reinforcing the hook."
+  },
+  {
+   "track": "Piano",
+   "bar": 16,
+   "text": "Chords played with increased velocity (92) in the chorus, adding dynamic emphasis and energy."
+  },
+  {
+   "track": "Piano",
+   "bar": 25,
+   "text": "Dynamics decrease (velocity 68) in the outro, providing a gentle wind-down and contrast."
+  },
+  {
+   "track": "Bass",
+   "bar": 21,
+   "text": "Plays C2 (fifth of F) instead of root F, adding subtle variation to the bass line without disrupting harmony."
+  },
+  {
+   "track": "Drums",
+   "bar": 24,
+   "text": "Drum velocities are reduced (e.g., kick velocity 56) in the outro, supporting the dynamic arc of the piece."
+  }
+ ],
+ "J_mean": 60.7
+}

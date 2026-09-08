@@ -1,0 +1,136 @@
+{
+ "J1": 40.0,
+ "J2": 67.0,
+ "J3": 80.0,
+ "per_item": {
+  "J1": [
+   {
+    "item": "checklist item 1",
+    "verdict": "no",
+    "evidence": "Composition uses only Piano (0) for harmony, missing standard stacked harmonic bed (strings, harpsichord, organ, guitar). Bass uses program 38 (not standard synth bass 36/37/32). No color instrument (celesta)."
+   },
+   {
+    "item": "checklist item 2",
+    "verdict": "partial",
+    "evidence": "Lead (Square 80) in C4-C8 register is correct. Piano (0) in C2-B7 is correct. Bass (38) in low register B0-G5 is acceptable but uses wrong program. Missing harmonic layers prevent full assessment."
+   },
+   {
+    "item": "checklist item 3",
+    "verdict": "partial",
+    "evidence": "Straight 16th-note drive present in bass (8th notes, program 38) and drums. No swing. However, drums are not part of the standard Touhou ensemble (no drum track specified in instrumentation). Rhythmic feel is pop/rock, not the relentless electronic drive expected."
+   },
+   {
+    "item": "checklist item 4",
+    "verdict": "yes",
+    "evidence": "Chords: Bm (i), G (VI), A (VII), F#7 (V7), Em (iv) in B minor. Uses standard minor key harmony with authentic cadences (F#7→Bm). Matches style's minor-key vocabulary."
+   },
+   {
+    "item": "checklist item 5",
+    "verdict": "no",
+    "evidence": "Composition has only 3 melodic/harmonic tracks (Lead, Piano, Bass) + drums. Missing dense multi-layered harmonic bed (stack of 3+ timbres). Texture is thin compared to style's dense wall of sound."
+   },
+   {
+    "item": "checklist item 6",
+    "verdict": "partial",
+    "evidence": "Style prohibits drums in classical, but this is electronic rock—drums are acceptable. However, drums are not listed in the standard instrumentation. No other prohibitions violated."
+   },
+   {
+    "item": "checklist item 7",
+    "verdict": "no",
+    "evidence": "Missing harmonic bed stack (strings, harpsichord, organ, guitar). Lead carries melody alone; only piano provides harmony. Bass uses program 38. Texture lacks the characteristic layered density of Touhou."
+   },
+   {
+    "item": "checklist item 8",
+    "verdict": "yes",
+    "evidence": "BPM=170 is within the 120-170 range specified for the style."
+   }
+  ],
+  "J2": [
+   {
+    "item": "BPM",
+    "verdict": "satisfied",
+    "evidence": "Composition meta specifies bpm: 170, which matches the prompt requirement of 170 BPM."
+   },
+   {
+    "item": "Key/Tonality",
+    "verdict": "satisfied",
+    "evidence": "Composition key is B minor (tonic_pc 11, mode minor), matching the prompt's B minor specification."
+   },
+   {
+    "item": "Duration",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify duration; composition has 28 bars, but this is not evaluated as it was not requested."
+   },
+   {
+    "item": "Specified instruments",
+    "verdict": "violated",
+    "evidence": "Prompt specifies piano(program=0), drums(program=0), drum(program=0), but composition includes tracks with programs: Lead (80), Piano (0), Bass (38), and Drums (0). This introduces extra instruments (Lead, Bass) and only one drum track instead of two as implied."
+   }
+  ],
+  "J3": [
+   {
+    "item": "rubric",
+    "verdict": "4",
+    "evidence": "The composition exhibits coherent structure with effective dynamics. The melody is well-formed, featuring expressive variations and climactic moments. The harmony supports the melody appropriately without obvious errors, the rhythm is driving and consistent with the pop style, and sections are clearly delineated through changes in instrumentation and patterns."
+   }
+  ]
+ },
+ "evidence": [
+  {
+   "track": "Lead",
+   "bar": 0,
+   "text": "Square Lead (80) melody starts at C5, within correct register."
+  },
+  {
+   "track": "Piano",
+   "bar": 0,
+   "text": "Acoustic Grand Piano (0) plays arpeggiated chords in C3-C5, but is the only harmonic instrument—missing strings, harpsichord, organ, guitar layers."
+  },
+  {
+   "track": "Bass",
+   "bar": 0,
+   "text": "Bass uses program 38 (Electric Bass finger), not standard synth bass (36), slap (37), or upright (32)."
+  },
+  {
+   "track": "Drums",
+   "bar": 0,
+   "text": "Drum track present with kick, snare, hi-hat pattern. Drums are not part of the standard Touhou ensemble per the instrumentation list."
+  },
+  {
+   "track": "Piano",
+   "bar": 12,
+   "text": "Chorus section: Piano alone plays chords, no harmonic bed stacking. Violates the 'dense chord pads' requirement."
+  },
+  {
+   "track": "Bass",
+   "bar": 12,
+   "text": "Bass plays 8th-note pattern, but with wrong program (38)."
+  },
+  {
+   "track": "Lead",
+   "bar": 16,
+   "text": "A climactic high note (MIDI 83, B5) with a strong velocity (125) creates a memorable peak in the chorus."
+  },
+  {
+   "track": "Piano",
+   "bar": 4,
+   "text": "Arpeggiated pattern (notes 50, 54, 57) outlines the Bm chord, providing clear harmonic foundation for the verse."
+  },
+  {
+   "track": "Drums",
+   "bar": 0,
+   "text": "Crash cymbal (note 49) and steady rock beat with kick, snare, and hi-hats establish the tempo and style immediately."
+  },
+  {
+   "track": "Bass",
+   "bar": 0,
+   "text": "Driving eighth-note pattern on the root note (B1, MIDI 35) anchors the harmony and rhythm throughout the intro."
+  },
+  {
+   "track": "Lead",
+   "bar": 20,
+   "text": "Melodic variation in the bridge (notes 64, 67, 71, 76) provides contrast and development, breaking from the verse/chorus pattern."
+  }
+ ],
+ "J_mean": 62.3
+}

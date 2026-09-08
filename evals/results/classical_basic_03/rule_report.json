@@ -1,0 +1,59 @@
+{
+ "invalid": false,
+ "R_rule": 34.275243,
+ "axes": {
+  "harmony": {
+   "score": 0.948608,
+   "details": {
+    "scale_adherence": 0.9953596287703016,
+    "chord_support": 1.0,
+    "declaration_match": 0.9409722222222222,
+    "cluster_rate": 0.052083333333333336,
+    "cadence_rate": 0.6666666666666666
+   }
+  },
+  "voice": {
+   "score": 0.748025,
+   "details": {
+    "range_fit": 0.9950617283950617,
+    "parallel_count": 17,
+    "leap_rate": 0.01643192488262911,
+    "register_gap": 1.0
+   }
+  },
+  "rhythm": {
+   "score": 0.971702,
+   "details": {
+    "grid_adherence": 1.0,
+    "density_fit": 0.9056737588652483,
+    "drum_pattern_fit": 1.0,
+    "swing_consistency": 1.0
+   }
+  },
+  "structure": {
+   "score": 0.68,
+   "details": {
+    "coverage": 1.0,
+    "repeat_family_sim": -1.0,
+    "contrast_family_sim": 0.9869991283280967,
+    "contour_shape": 1.0,
+    "motif_recall": 0.8
+   }
+  },
+  "dynamics": {
+   "score": 0.854939,
+   "details": {
+    "velocity_spread": 0.8098782775203948,
+    "directionality": 1.0,
+    "gradient_ok": 0.8
+   }
+  }
+ },
+ "gates": {
+  "repetition": 0.771709,
+  "density": 1.0,
+  "balance": 0.522513,
+  "spread": 1.0
+ },
+ "violations": []
+}

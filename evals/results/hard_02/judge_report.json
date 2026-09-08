@@ -1,0 +1,171 @@
+{
+ "J1": 82.0,
+ "J2": 30.0,
+ "J3": 85.0,
+ "per_item": {
+  "J1": [
+   {
+    "item": "checklist item 1",
+    "verdict": "partial",
+    "evidence": "Lead (program 81) and Bass (program 38) fit, but missing required harmonic bed layers: no harpsichord (6), organ (16), or guitar (24) tracks present. Only Piano (0) and Strings (49) provide harmony."
+   },
+   {
+    "item": "checklist item 2",
+    "verdict": "yes",
+    "evidence": "Lead notes span C5-A6 (bars 0-3), Bass stays below C3 (bar 0), Strings and Piano operate in mid-register (C3-C6). All within style registers."
+   },
+   {
+    "item": "checklist item 3",
+    "verdict": "yes",
+    "evidence": "Bass maintains straight 8th-note drive throughout (bars 0-3, 4-7). Drums play driving rock beat with straight 16ths (bar 0 onwards). No swing detected."
+   },
+   {
+    "item": "checklist item 4",
+    "verdict": "partial",
+    "evidence": "Uses minor-key chords (Am, Dm, F, G) and authentic cadences (E7-Am at bars 19, 24-25). However, lacks typical Touhou chord extensions or complex progressions beyond basic triads."
+   },
+   {
+    "item": "checklist item 5",
+    "verdict": "partial",
+    "evidence": "Lead melody is active (bars 12-15), but harmonic texture only has 2 layers (Piano + Strings) instead of 3-5. Missing density from absent harpsichord/organ/guitar."
+   },
+   {
+    "item": "checklist item 6",
+    "verdict": "yes",
+    "evidence": "Electronic rock style permits drums (track present). No classical or acoustic prohibitions violated."
+   },
+   {
+    "item": "checklist item 7",
+    "verdict": "partial",
+    "evidence": "Has melody + bass + drums + 2 harmony layers. Missing the characteristic 'wall of sound' from stacked harmonic beds (only 2 instead of 3-5 simultaneous timbres)."
+   },
+   {
+    "item": "checklist item 8",
+    "verdict": "yes",
+    "evidence": "Tempo is 170 BPM, within the 120-170 BPM range specified for Touhou style."
+   }
+  ],
+  "J2": [
+   {
+    "item": "BPM",
+    "verdict": "violated",
+    "evidence": "Prompt specifies 190 BPM, but composition has 170 BPM."
+   },
+   {
+    "item": "Touhou piece",
+    "verdict": "violated",
+    "evidence": "Composition style is listed as 'pop' in metadata, which does not match the characteristic Touhou style known for high-energy, fast-paced electronic and orchestral music. The BPM is also lower than typical Touhou pieces."
+   },
+   {
+    "item": "Maximum note density in chorus",
+    "verdict": "satisfied",
+    "evidence": "Lead track has the highest note density in the chorus section (bars 12-19) with 90 notes over 8 bars, averaging 11.25 notes per bar, which is higher than in other sections (e.g., intro: 10.5, verse: 10.25, bridge: 11.0, outro: 9.5 notes per bar)."
+   }
+  ],
+  "J3": [
+   {
+    "item": "rubric",
+    "verdict": "4",
+    "evidence": "The composition is coherent with well-formed melody and harmony, appropriate dynamics, and clear structure. It engages with variations and contrasts, such as the chorus intensity and bridge tension, but could have stronger memorable moments."
+   }
+  ]
+ },
+ "evidence": [
+  {
+   "track": "Bass",
+   "bar": 0,
+   "text": "Bass plays consistent 8th-note pattern (240-tick notes) starting at beat 1, locked to grid."
+  },
+  {
+   "track": "Drums",
+   "bar": 0,
+   "text": "Drums establish driving rock beat with straight 16th-note hi-hat pattern (60-tick notes)."
+  },
+  {
+   "track": "Harmony",
+   "bar": 19,
+   "text": "E7 chord appears (bar 19) leading to Am (bar 20), showing authentic cadence."
+  },
+  {
+   "track": "Lead",
+   "bar": 12,
+   "text": "Saw lead melody active in C5-A6 range with bright minor-key lines."
+  },
+  {
+   "track": "Piano",
+   "bar": 0,
+   "text": "Piano plays triad chords (A-C-E) as part of harmonic bed, but only alongside Strings."
+  },
+  {
+   "track": "Strings",
+   "bar": 0,
+   "text": "Strings play sustained chords, providing harmonic foundation but alone with piano."
+  },
+  {
+   "track": "meta",
+   "bar": 0,
+   "text": "BPM is 170"
+  },
+  {
+   "track": "meta",
+   "bar": 0,
+   "text": "Key is A minor with tonic_pc 9 and mode minor"
+  },
+  {
+   "track": "structure",
+   "bar": 0,
+   "text": "Total duration is 28 bars, comprising intro (4 bars), verse (8 bars), chorus (8 bars), bridge (4 bars), outro (4 bars)"
+  },
+  {
+   "track": "Lead",
+   "bar": 0,
+   "text": "Track uses program 81 (Lead instrument)"
+  },
+  {
+   "track": "Bass",
+   "bar": 0,
+   "text": "Track uses program 38 (Bass instrument)"
+  },
+  {
+   "track": "Strings",
+   "bar": 0,
+   "text": "Track uses program 49 (Strings instrument)"
+  },
+  {
+   "track": "Piano",
+   "bar": 0,
+   "text": "Track uses program 0 (Piano instrument)"
+  },
+  {
+   "track": "Drums",
+   "bar": 0,
+   "text": "Track uses program 118 (Drums instrument)"
+  },
+  {
+   "track": "Lead",
+   "bar": 12,
+   "text": "Melody rises to high notes (e.g., MIDI note 81 at bar 12) with increased dynamics (velocity 115), creating a memorable hook in the chorus section."
+  },
+  {
+   "track": "Drums",
+   "bar": 12,
+   "text": "Drums increase velocity to 120 at the chorus start, enhancing energy and drive."
+  },
+  {
+   "track": "Strings",
+   "bar": 0,
+   "text": "Strings provide sustained chordal support (e.g., notes 57, 60, 64, 69 at bar 0), aligning with the Am chord progression and adding harmonic depth."
+  },
+  {
+   "track": "Bass",
+   "bar": 4,
+   "text": "Bass notes outline root notes with dynamic variation (e.g., velocity 95 to 100 at bar 4), supporting the groove and harmony."
+  },
+  {
+   "track": "Piano",
+   "bar": 0,
+   "text": "Piano plays rhythmic chords (e.g., notes 69, 72, 76 at bar 0) that reinforce the harmony and add texture."
+  }
+ ],
+ "J_mean": 65.7
+}

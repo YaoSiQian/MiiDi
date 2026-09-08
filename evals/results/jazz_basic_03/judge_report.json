@@ -1,0 +1,181 @@
+{
+ "J1": 75.0,
+ "J2": 67.0,
+ "J3": 19.4,
+ "per_item": {
+  "J1": [
+   {
+    "item": "checklist item 1",
+    "verdict": "yes",
+    "evidence": "Muted Trumpet, Piano, Bass, Drums tracks present as standard jazz ensemble."
+   },
+   {
+    "item": "checklist item 2",
+    "verdict": "partial",
+    "evidence": "Piano track uses program 0 (Acoustic Grand Piano) instead of specified Electric Piano 1 (program 4) for Rhodes sound."
+   },
+   {
+    "item": "checklist item 3",
+    "verdict": "yes",
+    "evidence": "Bass track has walking bass line on beat in bar 0 (onsets 0,480,960,1440 ticks)."
+   },
+   {
+    "item": "checklist item 4",
+    "verdict": "yes",
+    "evidence": "Chord progression includes ii-V-I like Dm7-G7-Cmaj7 in bars 4-7, typical jazz harmony."
+   },
+   {
+    "item": "checklist item 5",
+    "verdict": "partial",
+    "evidence": "Piano comping has four-note voicings (e.g., bar 0 notes 45,55,60,64), not sparse two-note shells as per style."
+   },
+   {
+    "item": "checklist item 6",
+    "verdict": "yes",
+    "evidence": "No guitar, dense pads, or drum-machine stiffness; offsets imply swing feel."
+   },
+   {
+    "item": "checklist item 7",
+    "verdict": "yes",
+    "evidence": "Texture with melody trumpet, piano chords, walking bass, and drums is standard jazz combo layering."
+   },
+   {
+    "item": "checklist item 8",
+    "verdict": "yes",
+    "evidence": "Tempo 112 BPM within the style's 110-208 BPM range."
+   }
+  ],
+  "J2": [
+   {
+    "item": "BPM",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify BPM; no constraint to check."
+   },
+   {
+    "item": "Key/Tonality",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify key; no constraint to check."
+   },
+   {
+    "item": "Duration",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify duration; no constraint to check."
+   },
+   {
+    "item": "Specified instruments",
+    "verdict": "satisfied",
+    "evidence": "Prompt specifies 'muted trumpet', and composition uses track 'Muted Trumpet' with program 59 (Muted Trumpet in General MIDI), matching the request."
+   },
+   {
+    "item": "Style",
+    "verdict": "violated",
+    "evidence": "Prompt specifies 'cool jazz ballad', but composition metadata has style 'pop', indicating a mismatch with the requested jazz style."
+   },
+   {
+    "item": "Mood (thoughtful and understated)",
+    "verdict": "satisfied",
+    "evidence": "Composition uses A minor key, jazz chords (e.g., Am7, E7, Dm7), moderate tempo (112 BPM), and moderate note velocities (e.g., trumpet 80-92, piano 56-67), creating a thoughtful and understated atmosphere consistent with the prompt."
+   }
+  ],
+  "J3": [
+   {
+    "item": "rubric",
+    "verdict": "3",
+    "evidence": "The composition is technically competent with clear structure (intro, verse, bridge, outro) and appropriate jazz harmony (Am7, Dm7, G7, etc.), but it lacks expressive dynamics and memorable moments. The muted trumpet melody is coherent but formulaic, and poor instrument balance (indicated by G_balance = 0.400) makes it sound flat and mechanical."
+   }
+  ]
+ },
+ "evidence": [
+  {
+   "track": "Piano",
+   "bar": 0,
+   "text": "Uses program 0 instead of specified Electric Piano 1 (program 4) for Rhodes sound."
+  },
+  {
+   "track": "Bass",
+   "bar": 0,
+   "text": "Walking bass pattern with onsets on beats 0,480,960,1440 ticks, indicating quarter-note pulse."
+  },
+  {
+   "track": "Piano",
+   "bar": 0,
+   "text": "Four-note voicing at onset 0 (notes 45,55,60,64), not sparse two-note shells as per style guideline."
+  },
+  {
+   "track": "Drums",
+   "bar": 0,
+   "text": "Drum hits with varied onsets (e.g., 440,920 ticks) suggest swing feel rather than rigid quantization."
+  },
+  {
+   "track": "Muted Trumpet",
+   "bar": 4,
+   "text": "Melody notes start at onset 3840 ticks (bar 4), fitting over Am7 chord, with appropriate jazz phrasing."
+  },
+  {
+   "track": "Muted Trumpet",
+   "bar": 0,
+   "text": "Muted trumpet melody with notes like [0, 480, 70, 85] (A4) starts the piece, setting a mellow jazz tone."
+  },
+  {
+   "track": "Piano",
+   "bar": 0,
+   "text": "Piano chords like [0, 1440, 45, 62] (A2-E3-A3-C#4) establish Am7 harmony, supporting the jazz ballad feel."
+  },
+  {
+   "track": "Bass",
+   "bar": 0,
+   "text": "Bass plays root notes and walking lines like [0, 465, 45, 64] (A2) with consistent eighth-note rhythm, typical of jazz."
+  },
+  {
+   "track": "Drums",
+   "bar": 0,
+   "text": "Drums play a swing pattern with hi-hat on beats 2 and 4 (e.g., [1920, 120, 36, 30] at bar 4) and brushes on snare."
+  },
+  {
+   "track": "Muted Trumpet",
+   "bar": 11,
+   "text": "Muted trumpet plays descending lines like [5760, 480, 73, 87] (G4) over E7, creating tension before resolution."
+  },
+  {
+   "track": "Piano",
+   "bar": 24,
+   "text": "Piano voicings shift to Fmaj7 ([6480, 1200, 40, 58] F2-C3-F3-A3) during the bridge, adding harmonic variety."
+  },
+  {
+   "track": "Bass",
+   "bar": 30,
+   "text": "Bass plays a chromatic approach [59520, 465, 45, 64] (A2) leading into the final Am6 chord at bar 31."
+  },
+  {
+   "track": "Drums",
+   "bar": 31,
+   "text": "Drums conclude with a cymbal swell and soft snare hit, supporting the muted trumpet's final note."
+  },
+  {
+   "track": "Muted Trumpet",
+   "bar": 0,
+   "text": "Melody begins with notes [70, 72, 73] (G4, A4, A#4), showing chromatic movement but within a jazz context; however, it does not develop into a memorable hook."
+  },
+  {
+   "track": "Piano",
+   "bar": 0,
+   "text": "Plays Am7 chord (pitches 45, 55, 60, 64) correctly, providing harmonic support but with static voicings throughout the section."
+  },
+  {
+   "track": "Bass",
+   "bar": 0,
+   "text": "Bass line uses notes [45, 38, 45, 33] (A2, E2, A2, C2) establishing root movement, but rhythmic pattern is repetitive."
+  },
+  {
+   "track": "Drums",
+   "bar": 0,
+   "text": "Basic beat with low velocities (e.g., 34, 36), contributing to poor balance; dynamics are not varied expressively across sections."
+  },
+  {
+   "track": "Structure",
+   "bar": 4,
+   "text": "Verse section starts at bar 4 with a change to Dm7 chord, but thematic development is minimal, adhering to a predictable pattern."
+  }
+ ],
+ "J_mean": 53.8
+}

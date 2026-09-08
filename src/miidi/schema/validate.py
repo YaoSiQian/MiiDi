@@ -14,10 +14,7 @@ class Violation:
 
 def validate_composition(comp: Composition) -> list[Violation]:
     out: list[Violation] = []
-    if comp.structure:
-        limit = int(comp.total_bars() * comp.bar_ticks)
-    else:
-        limit = comp.piece_end_tick()
+    limit = int(comp.total_bars() * comp.bar_ticks) if comp.structure else comp.piece_end_tick()
     for track in comp.tracks:
         prefix = track.name
         if track.is_drum != (track.role == "drums"):
@@ -50,7 +47,7 @@ def validate_composition(comp: Composition) -> list[Violation]:
         if track.is_drum:
             continue
         spans = sorted(ordered)
-        for (a0, a1), (b0, b1) in zip(spans, spans[1:]):
+        for (a0, a1), (b0, b1) in zip(spans, spans[1:], strict=False):
             if b0 < a1:
                 out.append(
                     Violation(prefix, "OVERLAP", f"spans [{a0},{a1}) and [{b0},{b1}) overlap")

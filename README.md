@@ -171,7 +171,7 @@ graph TD
 | **后端** | Python ≥3.11、pydantic v2、FastAPI、uvicorn、httpx |
 | **前端** | Vite、JavaScript、@sakun/system.css（System 6 风格） |
 | **音频** | midiutil |
-| **评测** | numpy、scipy、pandas、pytest |
+| **评测** | pytest、pyyaml（样本集）、mido（MIDI 断言） |
 
 ---
 
@@ -215,6 +215,22 @@ Composition JSON ──┬─ 规则轨：六个确定性轴 → 加权和 → �
 - **J3 整体音乐性**：1-5 分锚点 rubric，每档附可查特征
 
 **合成分**：`composite = 0.6 * R_rule + 0.4 * mean(J1, J2, J3)`
+
+### 运行评测
+
+```bash
+# 全量评测（38 样本：5 风格基础 ×20 + 约束 ×8 + 高难 ×6 + 对抗 ×4，走真实 LLM）
+python -m evals.runners.run_eval --samples evals/samples --out evals/results --workers 4
+
+# 汇总统计（按风格 / 类别 / 分数段 / 规则轴）
+python -m evals.runners.summarize --results evals/results
+
+# 有效性验证实验（E1 区分度 / E2 确定性 / E3 对抗性）
+python -m evals.experiments.run_experiments \
+    --composition evals/results/base_composition.json --style pop --out evals/results
+```
+
+完整结果表格见 [evals/results/results.md](evals/results/results.md)，实验数据与分析见[实验报告](docs/report.md)。
 
 ---
 

@@ -8,7 +8,7 @@ from miidi.musicutil.band import band
 def _grams_ratio(track) -> float:
     seq = sorted(track.notes, key=lambda n: n[0])
     tokens = []
-    for a, b in zip(seq, seq[1:]):
+    for a, b in zip(seq, seq[1:], strict=False):
         gap = b[0] - (a[0] + a[1])
         tokens.append((a[2], a[1], gap))
     if len(tokens) < 4:

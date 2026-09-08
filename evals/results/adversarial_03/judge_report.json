@@ -1,0 +1,161 @@
+{
+ "J1": 50.0,
+ "J2": 66.0,
+ "J3": 90.0,
+ "per_item": {
+  "J1": [
+   {
+    "item": "checklist item 1",
+    "verdict": "partial",
+    "evidence": "Trumpet, Double Bass, Piano, Drum Kit are present, matching a jazz combo. However, the composition lacks the Tenor Sax 'color' instrument specified in the instrumentation table for full style adherence."
+   },
+   {
+    "item": "checklist item 2",
+    "verdict": "partial",
+    "evidence": "Trumpet notes are in G4-A5 (e.g., bar 4, 7680 ms: G4=67), within correct register. Bass notes are in C2-G3 (e.g., bar 0, 0 ms: C2=36), within E1-G3. Piano notes go up to C5 (e.g., bar 4, 15360 ms: C5=72) above recommended B4, and voicings are 3-4 notes (e.g., bar 0, 0 ms: C3+E4+G4+C5), not sparse two-note shells."
+   },
+   {
+    "item": "checklist item 3",
+    "verdict": "partial",
+    "evidence": "Drums play a swing pattern with ride on every eighth (e.g., bar 0: 240 ms, 720 ms), snare on 2/4 (e.g., bar 0: 480 ms, 1440 ms), and bass on 1/3 (e.g., bar 0: 0 ms, 960 ms). However, the pattern is mechanically identical in every bar (e.g., bars 0-1, 4-5, 8-9) with no variations, creating drum-machine stiffness."
+   },
+   {
+    "item": "checklist item 4",
+    "verdict": "no",
+    "evidence": "Harmony uses triads only (C, Dm, G, Am, F) throughout (e.g., bar 4: Dm triad, bar 6: G triad). No seventh chords (e.g., Dm7, G7) are present, violating the style's default seventh-chord vocabulary and ii-V-I motion."
+   },
+   {
+    "item": "checklist item 5",
+    "verdict": "no",
+    "evidence": "Piano comping is dense: 3-4 note chords every beat (e.g., bar 0: 4 chords at 0, 480, 960, 1440 ms). Drum ride pattern is relentless eighth notes (e.g., bar 0-40: every 240 ms). This exceeds typical jazz density and lacks rhythmic variety."
+   },
+   {
+    "item": "checklist item 6",
+    "verdict": "no",
+    "evidence": "Drum pattern is stiff and repetitive (e.g., bars 0-8: identical ride/snare/bass pattern every measure), violating the prohibition against drum-machine stiffness. Swing feel should come from written offsets, not from this rigid quantization."
+   },
+   {
+    "item": "checklist item 7",
+    "verdict": "partial",
+    "evidence": "Melody (Trumpet) sits above rhythm section (Piano, Bass, Drums), creating a lead-and-accompany texture. However, Piano's dense chords and Drums' stiff pattern disrupt the relaxed swing layering; Bass walking is appropriate (e.g., bar 0: quarter notes at 0, 480, 960, 1440 ms)."
+   },
+   {
+    "item": "checklist item 8",
+    "verdict": "yes",
+    "evidence": "Tempo is 140 BPM, within the style's 110-208 BPM range."
+   }
+  ],
+  "J2": [
+   {
+    "item": "Jazz genre",
+    "verdict": "violated",
+    "evidence": "The composition metadata explicitly lists the style as 'pop', not jazz. While jazz elements exist (double bass, trumpet), the overall style classification contradicts the prompt's requirement."
+   },
+   {
+    "item": "No seventh chords",
+    "verdict": "satisfied",
+    "evidence": "All chord symbols in the harmony are triads: C, Dm, G, Am, F. No seventh chords (maj7, min7, dom7, etc.) are present in the composition."
+   },
+   {
+    "item": "No swing feel",
+    "verdict": "satisfied",
+    "evidence": "The rhythm is straight with no swing indication. The drum pattern shows even eighth notes on the hi-hat (program 118, track 'Drum Kit'), and the bass line consists of even quarter notes throughout, creating a straight 4/4 feel typical of pop rather than jazz swing."
+   }
+  ],
+  "J3": [
+   {
+    "item": "rubric",
+    "verdict": "5",
+    "evidence": "The composition demonstrates clear structure with defined sections (intro, head, solo, outro), strong thematic development in the melody (head presents a theme, solo varies it), effective use of dynamics and articulation, and stylistic adherence to pop music with memorable phrases."
+   }
+  ]
+ },
+ "evidence": [
+  {
+   "track": "Trumpet",
+   "bar": 4,
+   "text": "Melody note G4 (MIDI 67) at 7680 ms, within correct trumpet register."
+  },
+  {
+   "track": "Piano",
+   "bar": 0,
+   "text": "Chord at 0 ms contains C3, E4, G4, C5 (MIDI 48, 64, 67, 72) – 4-note voicing above B4 and not sparse."
+  },
+  {
+   "track": "Double Bass",
+   "bar": 0,
+   "text": "Walking quarter notes: C2 (36), G2 (43), C2 (36), G2 (43) at 0, 480, 960, 1440 ms – within register."
+  },
+  {
+   "track": "Drum Kit",
+   "bar": 0,
+   "text": "Swing pattern: ride cymbal (42) at 240, 720 ms; snare (38) at 480, 1440 ms; bass drum (36) at 0, 960 ms."
+  },
+  {
+   "track": "Piano",
+   "bar": 4,
+   "text": "Piano note C5 (72) at 15360 ms exceeds recommended B4 upper limit."
+  },
+  {
+   "track": "Drum Kit",
+   "bar": 4,
+   "text": "Identical pattern to bar 0: ride at 8160, 8640 ms; snare at 8400, 9360 ms; bass at 7680, 8640 ms – mechanical repetition."
+  },
+  {
+   "track": "Harmony",
+   "bar": 4,
+   "text": "Symbol 'Dm' indicates a D minor triad, not a Dm7 seventh chord."
+  },
+  {
+   "track": "Piano",
+   "bar": 8,
+   "text": "Chord at 19200 ms: C3, E4, G4 (MIDI 48, 64, 67) – still 3-note voicing, comping dense."
+  },
+  {
+   "track": "Double Bass",
+   "bar": 0,
+   "text": "First note at bar 0 is MIDI 36 (C2), establishing C as tonic."
+  },
+  {
+   "track": "Piano",
+   "bar": 0,
+   "text": "Chord at bar 0 includes MIDI 60 (C4), 64 (E4), 67 (G4) - a C major triad."
+  },
+  {
+   "track": "Trumpet",
+   "bar": 4,
+   "text": "Trumpet melody begins at bar 4 (start of head) with notes in C major scale."
+  },
+  {
+   "track": "Drum Kit",
+   "bar": 0,
+   "text": "Steady drum pattern from bar 0 with consistent 140 BPM pulse."
+  },
+  {
+   "track": "Structure",
+   "bar": 0,
+   "text": "Composition spans 40 bars total: intro (bars 0-3), head (bars 4-19), solo (bars 20-35), outro (bars 36-39)."
+  },
+  {
+   "track": "Trumpet",
+   "bar": 4,
+   "text": "Main melody introduces a catchy phrase in C major with varying velocities (e.g., 85 and 78), indicating dynamic expression."
+  },
+  {
+   "track": "Piano",
+   "bar": 0,
+   "text": "Harmony chords (C major) are played accurately and support the tonal foundation, with sustained notes for clarity."
+  },
+  {
+   "track": "Drum Kit",
+   "bar": 0,
+   "text": "Steady pop rhythm is established with kick, snare, and hi-hat, featuring dynamic accents (e.g., velocities 60-75) to enhance groove."
+  },
+  {
+   "track": "Double Bass",
+   "bar": 4,
+   "text": "Bass line follows the chord progression with root notes and fifths, providing a solid harmonic anchor and rhythmic consistency."
+  }
+ ],
+ "J_mean": 68.7
+}

@@ -1,0 +1,151 @@
+{
+ "J1": 30.0,
+ "J2": 85.0,
+ "J3": 60.0,
+ "per_item": {
+  "J1": [
+   {
+    "item": "checklist item 1",
+    "verdict": "no",
+    "evidence": "Track 'Bass' uses program 38 (not in style's allowed bass list of 36/37/32); Pad uses only program 48 (strings) — missing harpsichord(6), piano(0/1), organ(16), guitar(24) required for dense harmonic bed; no saw lead(81), no trumpet(56), no celesta(8)"
+   },
+   {
+    "item": "checklist item 2",
+    "verdict": "yes",
+    "evidence": "Lead (program 80) plays MIDI 69-77 (A4-F5), within F2-A8; Pad (program 48) chords span MIDI 48-76, within C2-A7; Bass notes MIDI 36-57, all below C5"
+   },
+   {
+    "item": "checklist item 3",
+    "verdict": "partial",
+    "evidence": "Drums provide 8th-note hi-hat drive and snare backbeat on 2/4, partially matching style's straight feel; however, Bass alternates octaves (e.g., bar 0: MIDI 45 then 45 at octave) rather than locked 8th-note root drive; Lead sustains long notes (e.g., bar 1 onset 480 dur 480 = dotted half) lacking relentless motion"
+   },
+   {
+    "item": "checklist item 4",
+    "verdict": "yes",
+    "evidence": "Chord progression uses minor-key vocabulary (Am, F, G, Dm, C) throughout; E7 appears at cadential points (bars 7,11,24,25) resolving to Am; bridge modulates through Dm-G-C-circle pattern returning to Am"
+   },
+   {
+    "item": "checklist item 5",
+    "verdict": "no",
+    "evidence": "Only 4 tracks (Lead, Pad, Bass, Drums); Pad is single-instrument voice; no counter-melodies, no arpeggiated inner voices, no decorative figurations — texture is extremely thin vs. style's multi-layered density"
+   },
+   {
+    "item": "checklist item 6",
+    "verdict": "partial",
+    "evidence": "Drums present (not prohibited for pop-rock Touhou style as written); no explicit violations of other prohibitions"
+   },
+   {
+    "item": "checklist item 7",
+    "verdict": "no",
+    "evidence": "Missing harmonic bed stack (only strings, no harpsichord+piano+organ+guitar stacking); no second lead voice; no celesta color; total layer count is 3-4 vs. style requirement of 5+ simultaneous layers"
+   },
+   {
+    "item": "checklist item 8",
+    "verdict": "yes",
+    "evidence": "BPM is 160, within the style's 120-170 BPM range"
+   }
+  ],
+  "J2": [
+   {
+    "item": "BPM",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify BPM; composition has BPM 160."
+   },
+   {
+    "item": "Key/Tonality",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify key; composition is in A minor."
+   },
+   {
+    "item": "Duration",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify duration; composition is 28 bars long."
+   },
+   {
+    "item": "Specified instruments",
+    "verdict": "violated",
+    "evidence": "Prompt specifies bass(program=32), but composition uses bass with program 38, lead with program 80, and pad with program 48."
+   },
+   {
+    "item": "Intense battle theme",
+    "verdict": "satisfied",
+    "evidence": "Composition features fast tempo (160 BPM), minor key (A minor), energetic drum patterns, and driving rhythms typical of Touhou battle themes."
+   },
+   {
+    "item": "Rapid-fire notes",
+    "verdict": "satisfied",
+    "evidence": "Lead track contains sequences of short-duration notes (e.g., eighth notes with duration 240 ticks), such as in bar 0: notes [0,240,69,100] and [240,240,72,110]."
+   },
+   {
+    "item": "Driving bass",
+    "verdict": "satisfied",
+    "evidence": "Bass track plays continuous eighth notes (duration 240 ticks) throughout, providing a driving rhythm, e.g., in bar 0: notes [0,240,45,88] and [240,240,45,78]."
+   }
+  ],
+  "J3": [
+   {
+    "item": "rubric",
+    "verdict": 3,
+    "evidence": "The composition demonstrates technical competence with coherent harmony, steady rhythm, and clear sectional structure. However, it lacks a consistent melody and memorable moments, resulting in a flat, formulaic listening experience that feels like a backing track rather than a complete piece."
+   }
+  ]
+ },
+ "evidence": [
+  {
+   "track": "Bass",
+   "bar": 0,
+   "text": "Program 38 is not in allowed bass roster (36 Synth Bass, 37 Slap Bass, 32 Upright Bass); plays octave pattern MIDI 45↔45 rather than locked 8th-note root drive"
+  },
+  {
+   "track": "Pad",
+   "bar": 0,
+   "text": "Single strings track (program 48) plays Am chord (57,60,64,69,72,76); missing harpsichord, piano, organ, guitar stacking that creates the characteristic dense Touhou wall of sound"
+  },
+  {
+   "track": "Lead",
+   "bar": 1,
+   "text": "Melody sustains dotted-half note (onset 480, dur 480, MIDI 76) — style demands relentless 16th-note drive and continuous motion"
+  },
+  {
+   "track": "Drums",
+   "bar": 4,
+   "text": "Drums enter with 8th-note hi-hat pattern and snare on 2/4; appropriate for rock style but cannot compensate for missing harmonic layers"
+  },
+  {
+   "track": "harmony",
+   "bar": 7,
+   "text": "E7→Am cadence present (bars 7→8, 11→12, 24→26) — correct hard authentic close, strongest harmonic element"
+  },
+  {
+   "track": "Lead",
+   "bar": 1,
+   "text": "Lead melody contains only 12 notes and ceases after bar 1 (last note ends at tick 3840), leaving no melodic content for the remainder of the piece."
+  },
+  {
+   "track": "Bass",
+   "bar": 5,
+   "text": "Bass maintains a repetitive eighth-note pattern on root notes throughout, providing driving rhythm but minimal variation or development."
+  },
+  {
+   "track": "Pad",
+   "bar": 0,
+   "text": "Pad plays full, correctly voiced chords (e.g., Am chord at bar 0) that align with the stated harmonic progression, ensuring harmonic coherence."
+  },
+  {
+   "track": "Drums",
+   "bar": 12,
+   "text": "Drums introduce a crash cymbal at the start of the chorus (bar 12), marking a clear structural boundary and demonstrating sectional contrast."
+  },
+  {
+   "track": "Bass",
+   "bar": 20,
+   "text": "Bass pattern continues unchanged in the bridge, maintaining consistency but contributing to overall monotony."
+  },
+  {
+   "track": "Pad",
+   "bar": 12,
+   "text": "Pad voicings in the chorus are dynamically varied (velocities 72-85), showing some expressive intent."
+  }
+ ],
+ "J_mean": 58.3
+}

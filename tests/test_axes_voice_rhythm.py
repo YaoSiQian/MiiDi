@@ -157,7 +157,7 @@ def _offbeat_track(onsets):
             "name": "Mel",
             "role": "melody",
             "program": 73,
-            "notes": [(o, 220, p, 96) for o, p in zip(onsets, [72, 74, 76, 77])],
+            "notes": [(o, 220, p, 96) for o, p in zip(onsets, [72, 74, 76, 77], strict=False)],
         }
     ]
 

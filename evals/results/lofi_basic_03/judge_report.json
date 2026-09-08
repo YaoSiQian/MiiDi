@@ -1,0 +1,156 @@
+{
+ "J1": 44.0,
+ "J2": 67.0,
+ "J3": 50.0,
+ "per_item": {
+  "J1": [
+   {
+    "item": "Instrumentation match",
+    "verdict": "no",
+    "evidence": "Track 'Lead Rhodes' used for melody instead of Vibraphone (GM 11); Track 'Rain Sounds' used for color instead of Pad 2 (GM 89)."
+   },
+   {
+    "item": "Registers",
+    "verdict": "no",
+    "evidence": "Track 'Harmony Rhodes' bar 20 (tick 30720) has note MIDI 84 (C6), exceeding the specified Rhodes register C3-B4; Lead Rhodes melody notes are within C4-A5 but misassigned to harmony role."
+   },
+   {
+    "item": "Rhythm/groove",
+    "verdict": "no",
+    "evidence": "Track 'Drums' bar 0: notes at exact ticks (e.g., kick at 0, snare at 480) with no swing indication, lacking the lazy swung groove typical of lofi."
+   },
+   {
+    "item": "Harmonic vocabulary",
+    "verdict": "yes",
+    "evidence": "Track 'Harmony Rhodes' uses Am7, Dm7, Em7, Cmaj7 chords throughout (e.g., bar 0 Am7, bar 1 Dm7), appropriate seventh chords for lofi."
+   },
+   {
+    "item": "Density/complexity",
+    "verdict": "partial",
+    "evidence": "Individual tracks are sparse (e.g., Lead Rhodes has only 10 notes over 24 bars), but five tracks active simultaneously (all tracks) may exceed sparse texture expectations."
+   },
+   {
+    "item": "Prohibitions",
+    "verdict": "yes",
+    "evidence": "All instruments are soft: Rhodes, bass, drums, rain sounds; no distorted guitars, staccato synths, or hard-edged sounds."
+   },
+   {
+    "item": "Texture/layering",
+    "verdict": "no",
+    "evidence": "Five layers present (Lead Rhodes, Harmony Rhodes, Bass, Drums, Rain Sounds) throughout the composition, exceeding the guideline of no more than four layers for lofi's sparse texture."
+   },
+   {
+    "item": "Tempo",
+    "verdict": "yes",
+    "evidence": "BPM is 72, within the typical lofi range of 66-92 BPM."
+   }
+  ],
+  "J2": [
+   {
+    "item": "Style: lo-fi",
+    "verdict": "violated",
+    "evidence": "Composition meta style is 'pop', not 'lo-fi'."
+   },
+   {
+    "item": "Rain sounds",
+    "verdict": "satisfied",
+    "evidence": "Track named 'Rain Sounds' with program 97 present throughout the piece."
+   },
+   {
+    "item": "Melancholic Rhodes",
+    "verdict": "satisfied",
+    "evidence": "Two Rhodes tracks (Lead Rhodes and Harmony Rhodes) present. Key is A minor, chords are Am7, Dm7, Em7, Cmaj7 (minor and major seventh chords in a minor key), which can create a melancholic mood."
+   }
+  ],
+  "J3": [
+   {
+    "item": "rubric",
+    "verdict": "3",
+    "evidence": "The composition has a coherent harmonic progression and steady rhythm, but the melody (Lead Rhodes) is only present in the first two bars (bars 0-1), leaving the majority of the piece without a melodic focus. The harmony (Harmony Rhodes) repeats the same chord progression throughout without variation, and the drums and bass maintain a static pattern, resulting in a mechanical and formulaic feel with little development or memorable moments."
+   }
+  ]
+ },
+ "evidence": [
+  {
+   "track": "Lead Rhodes",
+   "bar": 0,
+   "text": "Melody role assigned to Rhodes instead of vibraphone, deviating from standard lofi ensemble."
+  },
+  {
+   "track": "Harmony Rhodes",
+   "bar": 20,
+   "text": "Note MIDI 84 (C6) is above the specified Rhodes register C3-B4."
+  },
+  {
+   "track": "Drums",
+   "bar": 0,
+   "text": "Rhythmic pattern with precise on-tick hits suggests straight rhythm, not the swung, laid-back feel of lofi."
+  },
+  {
+   "track": "Harmony Rhodes",
+   "bar": 0,
+   "text": "Chord Am7 (notes 69,72,76,79) played, appropriate seventh chord for lofi harmony."
+  },
+  {
+   "track": "Bass",
+   "bar": 0,
+   "text": "Note at MIDI 33 (A2) is within E1-D3 register, but overall texture has five simultaneous layers."
+  },
+  {
+   "track": "Drums",
+   "bar": 0,
+   "text": "Soft percussion sounds used, respecting lofi prohibitions against hard-edged sounds."
+  },
+  {
+   "track": "Rain Sounds",
+   "bar": 0,
+   "text": "Added as color layer, contributing to five layers total when combined with other tracks."
+  },
+  {
+   "track": "Meta",
+   "bar": 0,
+   "text": "Tempo set to 72 BPM, within lofi's typical 66-92 BPM range."
+  },
+  {
+   "track": "meta",
+   "bar": 0,
+   "text": "BPM is 72 in composition metadata."
+  },
+  {
+   "track": "meta",
+   "bar": 0,
+   "text": "Key is A minor (tonic_pc 9, mode minor) in composition metadata."
+  },
+  {
+   "track": "structure",
+   "bar": 0,
+   "text": "Composition structure spans from bar 0 (intro) to bar 20 (outro start), with bars up to 23, totaling 24 bars."
+  },
+  {
+   "track": "tracks",
+   "bar": 0,
+   "text": "Tracks include Lead Rhodes (program 4), Harmony Rhodes (program 4), Bass (program 33), and Rain Sounds (program 97)."
+  },
+  {
+   "track": "Lead Rhodes",
+   "bar": 0,
+   "text": "Melody notes appear only in bars 0 and 1, then cease for the remainder of the 24-bar composition."
+  },
+  {
+   "track": "Harmony Rhodes",
+   "bar": 0,
+   "text": "Chord voicings change every bar but follow the same Am7-Dm7-Em7-Cmaj7 progression continuously with no sectional contrast."
+  },
+  {
+   "track": "Drums",
+   "bar": 0,
+   "text": "The drum pattern remains consistent throughout all sections without variation or fills."
+  },
+  {
+   "track": "Bass",
+   "bar": 0,
+   "text": "The bass plays root notes in a whole-note pattern that does not deviate, only varying dynamics slightly."
+  }
+ ],
+ "J_mean": 53.7
+}

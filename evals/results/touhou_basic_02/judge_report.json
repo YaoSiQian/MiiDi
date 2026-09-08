@@ -1,0 +1,191 @@
+{
+ "J1": 42.0,
+ "J2": 95.0,
+ "J3": 80.0,
+ "per_item": {
+  "J1": [
+   {
+    "item": "checklist item 1",
+    "verdict": "no",
+    "evidence": "Brass Section (prog 61/Trombone) is not in the standard ensemble; should be Square Lead (80), Saw Lead (81), or Trumpet (56). Choir (52) is not a standard Touhou layer. Harpsichord track uses program 7 (Clavinet), not 6 (Harpsichord). Synth Bass uses 38 (Synth Bass 2) not 36. Missing Piano, Organ, Guitar, Celesta entirely."
+   },
+   {
+    "item": "checklist item 2",
+    "verdict": "partial",
+    "evidence": "Melody notes C4-C8 range is plausible (Brass Section bars 12-19: MIDI 69-88). Bass register B0-C5 is respected (Synth Bass bars 0-3: MIDI 29-33). However the instruments occupying these registers are wrong programs."
+   },
+   {
+    "item": "checklist item 3",
+    "verdict": "partial",
+    "evidence": "Straight feel with no swing is correct throughout. Synth Bass plays locked 8th-note drive (240-tick notes, e.g. bars 0-3). However the style calls for 'straight 16th drive' overall — only the Harpsichord (120-tick arpeggios) provides this; strings and bass are 8th-note only."
+   },
+   {
+    "item": "checklist item 4",
+    "verdict": "yes",
+    "evidence": "Minor key (A minor) with appropriate progressions. E7-Am authentic cadence lands at bar 3→4, bar 18→19, and bar 30→31 matching the style's 'hard authentic closes (E7-Am)'. Bridge uses Am-Dm-G-C (bar 20-23), standard functional harmony."
+   },
+   {
+    "item": "checklist item 5",
+    "verdict": "no",
+    "evidence": "Style requires 3-5 simultaneous harmonic layers for dense chord pads. Only Strings + Choir + Harpsichord-clavinet are present (3 layers max), missing Piano, Organ, Guitar. The texture is noticeably thin compared to the 'dense, bright wall of sound' standard."
+   },
+   {
+    "item": "checklist item 6",
+    "verdict": "yes",
+    "evidence": "No prohibited instrument combinations. Drums are appropriate for electronic rock style. No classical-only violations."
+   },
+   {
+    "item": "checklist item 7",
+    "verdict": "no",
+    "evidence": "The defining ZUN trait — 'removal of any one layer thins the texture noticeably' — implies a dense stack. Here, 3+ standard layers are already absent (Piano, Organ, Guitar). Strings (bar 0) and Harpsichord (bar 0) are the only harmonic bed, with Choir as non-standard addition."
+   },
+   {
+    "item": "checklist item 8",
+    "verdict": "yes",
+    "evidence": "144 BPM falls within the 120-170 BPM range specified for the style."
+   }
+  ],
+  "J2": [
+   {
+    "item": "BPM",
+    "verdict": "unaddressed",
+    "evidence": "BPM is specified as 144 in composition metadata, but prompt did not mention BPM."
+   },
+   {
+    "item": "Key/Tonality",
+    "verdict": "unaddressed",
+    "evidence": "Key is A minor in composition metadata, but prompt did not specify key."
+   },
+   {
+    "item": "Duration",
+    "verdict": "unaddressed",
+    "evidence": "Duration is 32 bars in composition structure, but prompt did not mention duration."
+   },
+   {
+    "item": "Specified instruments",
+    "verdict": "unaddressed",
+    "evidence": "Composition includes programs 61, 52, 48, 7, 38 (brass, choir, strings, harpsichord, synth bass), but prompt did not explicitly list instruments beyond 'choir and brass' in the description."
+   },
+   {
+    "item": "Dramatic mood",
+    "verdict": "satisfied",
+    "evidence": "Title 'Dramatic Overture in A Minor', minor key with tense harmonies (e.g., E7 at bar 3), high-velocity brass notes (e.g., Brass track at bar 0 with velocity 100), and active drums (e.g., snare hits at bar 0)."
+   },
+   {
+    "item": "Orchestral style",
+    "verdict": "satisfied",
+    "evidence": "Tracks include orchestral instruments: Brass Section (program 61), Choir (program 52), String Ensemble (program 48), and Harpsichord (program 7), creating a full orchestral sound."
+   },
+   {
+    "item": "Touhou style",
+    "verdict": "satisfied",
+    "evidence": "Fast tempo (144 BPM), melodic lead in brass (e.g., Brass track at bar 0-3), blend of orchestral elements with electronic synth bass (program 38), and structure with verses/choruses typical of Touhou music."
+   },
+   {
+    "item": "Choir presence",
+    "verdict": "satisfied",
+    "evidence": "Choir track with program 52 plays harmony notes throughout, e.g., sustained chords from bar 0 (notes: 60, 64 at velocity 48, 45)."
+   },
+   {
+    "item": "Brass presence",
+    "verdict": "satisfied",
+    "evidence": "Brass Section track with program 61 plays melody lines, e.g., prominent notes at bar 0 (note 69, velocity 100) and across sections."
+   }
+  ],
+  "J3": [
+   {
+    "item": "rubric",
+    "verdict": "4",
+    "evidence": "The composition demonstrates coherent structure with dynamics: clear sections (intro, verse, chorus, bridge), functional harmony, appropriate use of dynamics (e.g., velocity increase in chorus), and some thematic development. However, it lacks strong memorable hooks and could have smoother voice leading."
+   }
+  ]
+ },
+ "evidence": [
+  {
+   "track": "Brass Section",
+   "bar": 0,
+   "text": "Program 61 (Trombone) is not in the Touhou standard ensemble; melody should use Square Lead 80, Saw Lead 81, or Trumpet 56."
+  },
+  {
+   "track": "Harpsichord",
+   "bar": 0,
+   "text": "Program 7 is Clavinet in GM, not Harpsichord (program 6). Wrong timbre for the harmonic bed layer."
+  },
+  {
+   "track": "Synth Bass",
+   "bar": 0,
+   "text": "Program 38 (Synth Bass 2) instead of 36 (Synth Bass 1). Close but not matching the specified instrument."
+  },
+  {
+   "track": "Choir",
+   "bar": 0,
+   "text": "Program 52 (Choir Aahs) is not part of the standard Touhou harmonic bed ensemble (Strings+Harpsichord+Piano+Organ+Guitar)."
+  },
+  {
+   "track": "String Ensemble",
+   "bar": 0,
+   "text": "Program 48 is correct per the style guide, but alone with only Harpsichord-clavinet it cannot produce the required dense harmonic wall."
+  },
+  {
+   "track": "Synth Bass",
+   "bar": 0,
+   "text": "Locked 8th-note drive (240-tick notes throughout bars 0-61) matches the style's bass pattern requirement."
+  },
+  {
+   "track": "Brass Section",
+   "bar": 12,
+   "text": "E7 chord at bar 18 resolves to Am at bar 19-20, matching the required hard authentic close cadence pattern."
+  },
+  {
+   "track": "Drums",
+   "bar": 0,
+   "text": "Straight rock beat with no swing, consistent throughout — appropriate for the style."
+  },
+  {
+   "track": "Brass Section",
+   "bar": 0,
+   "text": "Melody begins with note A (MIDI 69) at bar 0, confirming the A minor tonality."
+  },
+  {
+   "track": "Drums",
+   "bar": 0,
+   "text": "Drum pattern starts with a kick and hi-hat, establishing a rhythmic foundation consistent with a 144 BPM tempo."
+  },
+  {
+   "track": "String Ensemble",
+   "bar": 0,
+   "text": "String harmony outlines an A minor chord (A, C, E) at bar 0."
+  },
+  {
+   "track": "Synth Bass",
+   "bar": 0,
+   "text": "Bass line begins on A (MIDI 33), supporting the A minor key."
+  },
+  {
+   "track": "Choir",
+   "bar": 0,
+   "text": "Harmony is correctly voiced as A minor (A3, C4) in the intro, matching the chord symbol Am."
+  },
+  {
+   "track": "Brass Section",
+   "bar": 28,
+   "text": "Melody velocity increases to 110 in the second chorus, demonstrating dynamic contrast."
+  },
+  {
+   "track": "Drums",
+   "bar": 4,
+   "text": "Drum pattern enters with a steady rock beat (kick on beat 1, snare on beat 2), providing rhythmic foundation."
+  },
+  {
+   "track": "Brass Section",
+   "bar": 8,
+   "text": "Large interval jump from D5 (bar 7) to F4 (bar 8) in the melody indicates a somewhat abrupt voice leading."
+  },
+  {
+   "track": "String Ensemble",
+   "bar": 0,
+   "text": "Harmony block chords follow the progression Am (A4, C5, E5) with acceptable voice leading."
+  }
+ ],
+ "J_mean": 72.3
+}
