@@ -8,7 +8,7 @@ from miidi.skills.loader import available_styles, load_style_pack
 
 @pytest.fixture()
 def pack_dir(tmp_path):
-    root = tmp_path / "skills"
+    root = tmp_path / "styles"
     style = root / "teststyle"
     style.mkdir(parents=True)
     for f in ("SKILL.md", "instruments.md", "harmony.md", "rhythm.md"):
@@ -27,7 +27,7 @@ def pack_dir(tmp_path):
 
 
 def test_load_pack_maps_defaults(pack_dir):
-    pack = load_style_pack("teststyle", skills_dir=pack_dir)
+    pack = load_style_pack("teststyle", styles_dir=pack_dir)
     assert pack.name == "teststyle"
     assert isinstance(pack.defaults, StyleDefaults)
     assert pack.defaults.bpm_range == (70.0, 140.0)
@@ -39,24 +39,24 @@ def test_load_pack_maps_defaults(pack_dir):
 def test_missing_file_raises(pack_dir):
     (pack_dir / "teststyle" / "rhythm.md").unlink()
     with pytest.raises(FileNotFoundError):
-        load_style_pack("teststyle", skills_dir=pack_dir)
+        load_style_pack("teststyle", styles_dir=pack_dir)
 
 
 def test_unknown_style_raises(pack_dir):
     with pytest.raises(FileNotFoundError):
-        load_style_pack("nope", skills_dir=pack_dir)
+        load_style_pack("nope", styles_dir=pack_dir)
 
 
 def test_available_styles_sorted(pack_dir):
-    assert available_styles(skills_dir=pack_dir) == ["teststyle"]
+    assert available_styles(styles_dir=pack_dir) == ["teststyle"]
 
 
 def test_malformed_defaults_raise(pack_dir):
     (pack_dir / "teststyle" / "defaults.json").write_text('{"bpm_range": [1]}')
     with pytest.raises(ValueError):
-        load_style_pack("teststyle", skills_dir=pack_dir)
+        load_style_pack("teststyle", styles_dir=pack_dir)
 
 
 def test_env_var_resolution(pack_dir, monkeypatch):
-    monkeypatch.setenv("MIIDI_SKILLS_DIR", str(pack_dir))
+    monkeypatch.setenv("MIIDI_STYLES_DIR", str(pack_dir))
     assert load_style_pack("teststyle").name == "teststyle"

@@ -1,6 +1,6 @@
 # 曲风知识包
 
-MiiDi 内置五种曲风，每种风格配备独立的知识包（knowledge pack），存放在 `skills/` 目录下。知识包为 LLM 生成流水线提供风格专属的音乐语言约束，确保输出符合特定曲风的审美标准。
+MiiDi 内置五种曲风，每种风格配备独立的知识包（knowledge pack），存放在 `styles/` 目录下。知识包为生成流水线提供风格专属的音乐语言约束。
 
 ## 曲风一览
 
@@ -75,7 +75,7 @@ MiiDi 内置五种曲风，每种风格配备独立的知识包（knowledge pack
 每个风格的目录包含 5 个必需文件：
 
 ```
-skills/{style}/
+styles/{style}/
 ├── SKILL.md         # 风格概览：身份定位、工作流、输出规则
 ├── instruments.md   # 配器表：角色、GM 音色、音域、注意事项
 ├── harmony.md       # 和声语汇：和弦符号表、特征进行、调性中心
@@ -114,11 +114,11 @@ skills/{style}/
 `src/miidi/skills/loader.py` 负责加载知识包：
 
 - `load_style_pack(name)` 读取指定风格目录，解析所有文件，返回 `StylePack` 数据类
-- `available_styles()` 扫描 `skills/` 目录，返回所有包含 `defaults.json` 的子目录名
+- `available_styles()` 扫描 `styles/` 目录，返回所有包含 `defaults.json` 的子目录名
 - 缺少任何必需文件会抛出 `FileNotFoundError`
 - `defaults.json` 格式错误会抛出 `ValueError`
 
-环境变量 `MIIDI_SKILLS_DIR` 可覆盖默认的 `skills/` 目录位置。
+环境变量 `MIIDI_STYLES_DIR` 可覆盖默认的 `styles/` 目录位置。
 
 ## 扩展新风格
 
@@ -126,11 +126,11 @@ skills/{style}/
 
 ### 1. 创建目录和文件
 
-在 `skills/` 下新建目录，放入 5 个必需文件：
+在 `styles/` 下新建目录，放入 5 个必需文件：
 
 ```bash
-mkdir skills/mygenre
-touch skills/mygenre/{SKILL.md,instruments.md,harmony.md,rhythm.md,defaults.json}
+mkdir styles/mygenre
+touch styles/mygenre/{SKILL.md,instruments.md,harmony.md,rhythm.md,defaults.json}
 ```
 
 ### 2. 填写内容

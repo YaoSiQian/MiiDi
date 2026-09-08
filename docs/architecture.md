@@ -123,9 +123,9 @@ composite = 0.6 × R_rule + 0.4 × mean(J1, J2, J3)
 
 ---
 
-## skills：曲风知识包
+## styles：曲风知识包
 
-`skills/` 目录下每个子目录是一个曲风包（目前有 pop、classical、jazz、lofi、touhou）。
+`styles/` 目录下每个子目录是一个曲风包（目前有 pop、classical、jazz、lofi、touhou）。
 
 每个包包含五个文件：
 
@@ -137,7 +137,7 @@ composite = 0.6 × R_rule + 0.4 × mean(J1, J2, J3)
 | `rhythm.md` | 节奏特征：鼓 pattern、swing 感觉 |
 | `defaults.json` | 评估参数：BPM 范围、密度参考值、swing 偏移、鼓 pattern 残差 |
 
-`skills/loader.py` 的 `load_style_pack` 加载并解析这五个文件，返回 `StylePack` 数据类。pipeline 用它构造 prompt，eval 用它的 `defaults` 做评估参数校准。
+`src/miidi/skills/loader.py` 的 `load_style_pack` 加载并解析这五个文件，返回 `StylePack` 数据类。pipeline 用它构造 prompt，eval 用它的 `defaults` 做评估参数校准。
 
 这个设计把曲风知识从代码中剥离出来。添加新曲风只需新建目录和文件，不改任何 Python 代码。
 

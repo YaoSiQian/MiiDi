@@ -21,10 +21,10 @@ class StylePack:
 
 
 def _default_dir() -> Path:
-    env = os.environ.get("MIIDI_SKILLS_DIR")
+    env = os.environ.get("MIIDI_STYLES_DIR")
     if env:
         return Path(env)
-    return Path(__file__).resolve().parents[3] / "skills"
+    return Path(__file__).resolve().parents[3] / "styles"
 
 
 def _parse_defaults(name: str, raw: dict) -> StyleDefaults:
@@ -40,8 +40,8 @@ def _parse_defaults(name: str, raw: dict) -> StyleDefaults:
         raise ValueError(f"style {name!r}: malformed defaults.json ({exc})") from exc
 
 
-def load_style_pack(name: str, skills_dir=None) -> StylePack:
-    root = Path(skills_dir) if skills_dir else _default_dir()
+def load_style_pack(name: str, styles_dir=None) -> StylePack:
+    root = Path(styles_dir) if styles_dir else _default_dir()
     style_dir = root / name
     if not style_dir.is_dir():
         raise FileNotFoundError(f"unknown style {name!r} under {root}")
@@ -65,8 +65,8 @@ def load_style_pack(name: str, skills_dir=None) -> StylePack:
     )
 
 
-def available_styles(skills_dir=None) -> list[str]:
-    root = Path(skills_dir) if skills_dir else _default_dir()
+def available_styles(styles_dir=None) -> list[str]:
+    root = Path(styles_dir) if styles_dir else _default_dir()
     if not root.is_dir():
         return []
     return sorted(p.name for p in root.iterdir() if p.is_dir() and (p / "defaults.json").is_file())
