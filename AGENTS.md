@@ -4,7 +4,7 @@
 
 MiiDi — AI-native MIDI music generation and evaluation platform. A natural-language prompt + style pack goes through a 5-stage LLM pipeline (Plan → Core → Arrange → Coordinate → Review) to produce a `Composition` JSON, rendered to MIDI via midiutil. Quality is scored by a dual-track evaluator: deterministic rule axes (R_rule) + LLM judge (J1–J3), combined as `composite = 0.6*R_rule + 0.4*mean(J1..J3)`.
 
-Docs are Chinese and worth reading before deep changes: `docs/architecture.md` (module map + design rationale), `docs/pipeline.md`, `docs/evaluation.md`, `docs/styles.md`, `docs/api.md`.
+Docs are Chinese and worth reading before deep changes: `docs/architecture.md` (module map + design rationale), `docs/pipeline.md`, `docs/evaluation.md`, `docs/styles.md`, `docs/api.md`, `docs/report.md` (experiment results + failure-mode analysis).
 
 ## Layout
 
@@ -13,14 +13,16 @@ Docs are Chinese and worth reading before deep changes: `docs/architecture.md` (
   - `musicutil/` — scales, `band()` score-mapping helper, GM instrument ranges/channel allocation
   - `eval/` — rule axes (`axes.py`), multiplicative anti-degeneration gates (`gates.py`), LLM judge (`judge.py`), aggregation (`score.py`/`composite.py`), shared precomputation (`context.py`)
   - `llm/` — `client.py`: dual protocol — OpenAI Responses API when `OPENAI_BASE_URL` is set, otherwise auto-fallback to OpenCode Zen (free). Retries 429/5xx with backoff; `extract_json` pulls JSON out of LLM prose
-  - `skills/` — style-pack loader; packs live in repo-root `skills/<style>/` (pop, classical, jazz, lofi, touhou): `SKILL.md`, `harmony.md`, `instruments.md`, `rhythm.md`, `defaults.json`
+  - `skills/` — style-pack loader (`load_style_pack`); packs live in repo-root `styles/<style>/` (pop, classical, jazz, lofi, touhou): `SKILL.md`, `harmony.md`, `instruments.md`, `rhythm.md`, `defaults.json`. Data dir is `styles/`, overridable via `MIIDI_STYLES_DIR`
   - `pipeline/` — stages (`stages.py`), arrangement coordinator (`orchestrator.py`), all LLM prompts (`prompts.py`), brief builder (`brief.py`)
   - `session/` — version store; snapshots written to `sessions/` (gitignored)
   - `render/` — Composition → MIDI
   - `web/` — FastAPI app (`app.py`), API routes (`routes.py`), request schemas
   - `serve.py` — web entry: `python src/miidi/serve.py` → uvicorn on :8000, loads `.env` from repo root
 - `web/` — Vite + vanilla JS frontend (System 6 retro multi-window UI via `@sakun/system.css`); `js/app.js`, `js/window-manager.js`. It is `web/`, not `webapp/` — older paths were renamed, watch for stale references
-- `evals/` — eval samples (`samples/*.yaml`), experiment scripts, `runners/run_eval.py`; imported as top-level `evals` module (works because `tests/conftest.py` puts repo root on sys.path)
+- `evals/` — eval samples (`samples/*.yaml`, 38 samples), experiment scripts (`experiments/`), runner + analysis entry points (`runners/run_eval.py`, `summarize.py`, `rejudge_j2.py`, `rerun_failed.py`); imported as top-level `evals` module (works because `tests/conftest.py` puts repo root on sys.path)
+- `styles/` — style-pack data directory (one subdirectory per style); renamed from `skills/`, watch for stale references
+- `evals/results/` — committed evaluation data: result tables (`results.csv`/`results.md`/`summary.md`), validity experiments (`experiments.md`), failure rerun (`rerun_failed.md`), base composition, and per-sample artifacts (`<sid>/composition.json`, `rule_report.json`, `judge_report.json`, rendered MIDI)
 - `tools/` — standalone MIDI analysis scripts
 - `tests/` — pytest suite; LLM calls are mocked, no network or API key needed
 
@@ -47,7 +49,7 @@ Docs are Chinese and worth reading before deep changes: `docs/architecture.md` (
 ## Config / env
 
 - LLM config via env: `OPENAI_BASE_URL`, `OPENAI_API_KEY`, `MODEL_NAME` (see `env.example`; `.env` is loaded manually by `serve.py`). Unset = OpenCode Zen free default (model `hy3-free`)
-- Generated artifacts land in `output/`, `sessions/`, `evals/results/` — all gitignored
+- Generated artifacts land in `output/`, `sessions/`, `midi/` — all gitignored. `evals/results/` is committed (tables + per-sample raw artifacts)
 
 ## Conventions
 

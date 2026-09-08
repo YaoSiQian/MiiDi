@@ -10,23 +10,18 @@
   </tr>
 </table>
 
----
+一句自然语言描述，加一个风格包，产出可以直接在 DAW 里编辑的多轨 MIDI。五阶段流水线负责生成，双轨评估器负责质检——规则违规会回流到生成端做定点修补，评过的分数决定下一轮怎么改。
 
-## 功能亮点
+## 功能
 
-- **自然语言创作**：用文字描述音乐意图，LLM 自动完成从简报到音符的全流程生成
-- **五种曲风**：流行、古典、爵士、Lo-Fi、东方 Project，每种风格配备独立知识包
-- **智能自评**：内置规则评估器 + LLM Judge 双轨评分，生成后自动检测并修正问题
-- **编配协调**：独立的编配协调器分析频谱平衡、段落密度、角色清晰度，输出结构化调整命令
-- **分阶段生成**：Plan → Core → Arrange → Coordinate → Review 五阶段，支持断点续跑、单轨修改、版本回滚
-- **可编辑 MIDI**：输出标准 MIDI 文件，可在任意 DAW 中打开、修改、再创作
-- **复古桌面 UI**：System 6 风格多窗口界面，极简而功能完整
-
----
+- **自然语言作曲**：五种风格（流行、古典、爵士、Lo-Fi、东方 Project），每种风格有独立知识包约束 LLM 的音乐语言
+- **双轨评估**：确定性规则轴 + LLM Judge 三维打分，合成一个 composite 分数，附反退化门防作弊
+- **分阶段生成**：每个阶段落盘一个版本快照，支持断点续跑、单轨修改、版本回滚
+- **复古桌面 UI**：System 6 风格多窗口界面，钢琴卷帘预览、会话恢复、版本历史
 
 ## 快速开始
 
-### 1. 安装依赖
+### 1. 安装
 
 ```bash
 pip install -e ".[dev]"
@@ -34,33 +29,24 @@ pip install -e ".[dev]"
 
 ### 2. 配置 LLM
 
-**方式 A：OpenCode Zen -> hy3-free**
+**方式 A：OpenCode Zen（免费）**
 
 ```bash
-# 直接使用，无需配置任何环境变量
+# 零配置直接跑，默认模型 hy3-free
 python -m miidi generate --prompt "雨夜的咖啡馆" --style lofi
 
-# 指定模型
-MODEL_NAME=hy3-free python -m miidi generate --prompt "雨夜的咖啡馆" --style lofi
+# 换 Zen 目录下的其他模型
+MODEL_NAME=deepseek-v4-flash-free python -m miidi generate --prompt "雨夜的咖啡馆" --style lofi
 ```
 
-**方式 B：OpenAI 兼容 API -> hy3**
+**方式 B：OpenAI 兼容 API**
 
 ```bash
 cp env.example .env
-# 编辑 .env：
-OPENAI_BASE_URL=https://tokenhub.tencentmaas.com/v1
-OPENAI_API_KEY=your-key
-MODEL_NAME=hy3
+# 编辑 .env：OPENAI_BASE_URL / OPENAI_API_KEY / MODEL_NAME
 ```
 
-### 3. 运行测试
-
-```bash
-python -m pytest tests/ -v
-```
-
-### 4. 生成音乐
+### 3. 生成音乐
 
 ```bash
 # 查看可用曲风
@@ -69,30 +55,24 @@ python -m miidi styles
 # 全流程生成
 python -m miidi generate --style lofi --prompt "雨夜的咖啡馆" --out output/
 
-# 分阶段生成（可中断续跑）
-python -m miidi generate --style jazz --prompt "深夜即兴" --stages plan       # 仅生成简报
-python -m miidi generate --style jazz --prompt "深夜即兴" --stages plan,core   # 生成旋律/贝斯/鼓
-python -m miidi generate --style jazz --prompt "深夜即兴" --stages plan,core,arrange  # 含编配
-python -m miidi generate --style jazz --prompt "深夜即兴"                       # 全流程（含协调+自评）
+# 分阶段生成，可中断续跑
+python -m miidi generate --style jazz --prompt "深夜即兴" --stages plan
+python -m miidi generate --style jazz --prompt "深夜即兴" --stages plan,core
+python -m miidi generate --style jazz --prompt "深夜即兴" --stages plan,core,arrange
 
 # 评估生成结果
 python -m miidi evaluate --json output/path/to/composition.json
 ```
 
-### 5. 启动 Web 应用
+### 4. 启动 Web 应用
 
 ```bash
-# 一键启动
 python src/miidi/serve.py
 ```
 
-浏览器访问 `http://localhost:8000`，通过复古桌面界面进行可视化创作。
-
----
+浏览器打开 `http://localhost:8000`。
 
 ## 架构概览
-
-[详细架构文档 →](docs/architecture.md)
 
 ```mermaid
 graph TD
@@ -100,7 +80,7 @@ graph TD
     B --> C[② Core 核心轨创作]
     C --> D[③ Arrange 编配]
     D --> E[④ Coordinate 编配协调]
-    E --> F[⑤ Self-review 自评修正]
+    E --> F[⑤ Review 自评修正]
     F --> G[⑥ Render 渲染]
 
     B -->|音乐简报| H[meta + structure + harmony + 配器表]
@@ -114,112 +94,25 @@ graph TD
     style M fill:#c8e6c9
 ```
 
-### 核心模块
-
 | 模块 | 职责 | 关键文件 |
 |------|------|----------|
-| **schema** | 数据模型定义、格式修复、硬约束校验 | `model.py` / `normalize.py` |
-| **eval** | 规则评估轴实现、聚合评分、反退化门 | `axes/` / `gates.py` / `score.py` |
-| **render** | MIDI 渲染 | `midi.py` |
-| **llm** | LLM 客户端（Responses API + Chat Completions + Zen 自动降级） | `client.py` |
+| **schema** | 数据模型、格式修复、硬约束校验 | `model.py` / `normalize.py` |
+| **eval** | 规则评估轴、反退化门、LLM Judge、合成评分 | `axes/` / `gates.py` / `score.py` |
+| **llm** | LLM 客户端，双协议自动降级 | `client.py` |
 | **skills** | 曲风知识包加载器 | `loader.py` |
-| **pipeline** | 五阶段流水线、编配协调、会话式修改 | `stages.py` / `orchestrator.py` / `prompts.py` |
+| **pipeline** | 五阶段流水线、编配协调、会话式修改 | `stages.py` / `orchestrator.py` |
 | **session** | 版本管理、快照持久化 | `store.py` |
-| **web** | FastAPI 应用、RESTful API | `web/` |
+| **render** | MIDI 渲染 | `midi.py` |
+| **web** | FastAPI 应用、RESTful API | `app.py` / `routes.py` |
 
-### 前端架构
+技术栈：Python ≥3.11、pydantic v2、FastAPI、uvicorn、httpx；前端 Vite + vanilla JS + @sakun/system.css；MIDI 渲染用 midiutil。
 
-| 窗口 | 功能 |
-|------|------|
-| **Intro** | 欢迎页面，点击 "Get Started" 进入创作 |
-| **Composer** | Prompt 输入、曲风选择、生成进度 |
-| **Piano Roll** | 多轨音符网格渲染、播放控制 |
-| **Evaluator** | 各轴分数条形图、违规明细、编配调整、自评轨迹 |
-| **Feedback** | 自然语言反馈、版本历史、回滚 |
+## 运行评测
 
-顶部流程指示条显示当前阶段（Intro → Compose → Preview → Evaluate → Revise），支持向后导航。
-
----
-
-## 分阶段生成
-
-[流水线详解 →](docs/pipeline.md)
-
-流水线分为五个阶段，每个阶段完成后保存一个版本快照：
-
-| 阶段 | 内容 | 耗时（参考） |
-|------|------|-------------|
-| **Plan** | 音乐简报：调性、节奏、和声、结构、配器 | ~10s |
-| **Core** | 核心轨：旋律、贝斯、鼓 | ~6min |
-| **Arrange** | 编配轨：和声、对位、色彩 | ~8min |
-| **Coordinate** | 编配协调：LLM 分析整体平衡，输出 section_mute / octave_shift / density_reduce 调整命令 | ~1min |
-| **Review** | 自评修正：规则评估 → LLM 定点 patch | ~1min |
-
-支持：
-- 断点续跑：指定 `--stages` 从指定阶段开始
-- 单轨修改：`POST /sessions/{sid}/revise` 针对单个轨道修改
-- 版本回滚：`POST /sessions/{sid}/versions/{v}/rollback`
-
----
-
-## 技术栈
-
-[曲风系统详解 →](docs/styles.md)
-
-| 层 | 技术 |
-|---|------|
-| **后端** | Python ≥3.11、pydantic v2、FastAPI、uvicorn、httpx |
-| **前端** | Vite、JavaScript、@sakun/system.css（System 6 风格） |
-| **音频** | midiutil |
-| **评测** | pytest、pyyaml（样本集）、mido（MIDI 断言） |
-
----
-
-## 评测体系
-
-[评测体系详解 →](docs/evaluation.md)
-
-### 双轨架构
-
-```
-Composition JSON ──┬─ 规则轨：六个确定性轴 → 加权和 → 反退化门 → R_rule ∈ [0,100]
-                   │    （可复现、零 API 成本、无法靠话术骗分）
-                   └─ Judge 轨：LLM-as-judge ×3 维
-                        （覆盖规则无法触及的风格与美学维度）
-```
-
-### 规则轨六轴
-
-| 轴 | 权重 | 检测内容 |
-|----|------|----------|
-| **A1 格式规范性** | 资格门 | validate 通过性、音符越界、轨内重叠 |
-| **A2 和声正确性** | 0.30 | 音阶符合度、和弦支撑度、终止式存在性 |
-| **A3 声部写作质量** | 0.20 | 音域适配、平行五八度、跳进控制 |
-| **A4 节奏律动** | 0.20 | 网格吸附率、密度梯度、鼓 pattern 匹配 |
-| **A5 结构与发展性** | 0.20 | 段落覆盖、相似度矩阵、动机再现 |
-| **A6 动态表现力** | 0.10 | velocity 分布、段落梯度 |
-
-### 反退化门（乘法）
-
-| 门 | 防御目标 |
-|----|----------|
-| G_repetition | 反「复读凑篇幅」 |
-| G_density | 反「十六分轰炸刷复杂度」 |
-| G_balance | 反「凑轨数」 |
-| G_spread | 反「表面丰富」 |
-
-### Judge 轨三维
-
-- **J1 风格符合度**：逐条对照曲风特征清单，yes/partial/no 判定
-- **J2 提示遵循度**：显式约束精确核对 + 意象类三值判定
-- **J3 整体音乐性**：1-5 分锚点 rubric，每档附可查特征
-
-**合成分**：`composite = 0.6 * R_rule + 0.4 * mean(J1, J2, J3)`
-
-### 运行评测
+评测脚本走真实 LLM，不属于测试套件：
 
 ```bash
-# 全量评测（38 样本：5 风格基础 ×20 + 约束 ×8 + 高难 ×6 + 对抗 ×4，走真实 LLM）
+# 全量评测（38 样本：5 风格基础 ×20 + 约束 ×8 + 高难 ×6 + 对抗 ×4）
 python -m evals.runners.run_eval --samples evals/samples --out evals/results --workers 4
 
 # 汇总统计（按风格 / 类别 / 分数段 / 规则轴）
@@ -227,36 +120,21 @@ python -m evals.runners.summarize --results evals/results
 
 # 有效性验证实验（E1 区分度 / E2 确定性 / E3 对抗性）
 python -m evals.experiments.run_experiments \
-    --composition evals/results/base_composition.json --style pop --out evals/results
+    --composition evals/results/base_composition.json --style classical --out evals/results
 ```
 
-完整结果表格见 [evals/results/results.md](evals/results/results.md)，实验数据与分析见[实验报告](docs/report.md)。
+结果表与逐样本原始产物在 [evals/results/](evals/results/results.md)，一轮完整评测的实测耗时见[实验报告](docs/report.md#4-评测实施)。
 
----
+## 文档
 
-## API 端点
-
-[API 文档 →](docs/api.md)
-
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| POST | `/api/sessions` | 创建会话（仅 Plan 阶段） |
-| POST | `/api/sessions/{sid}/generate` | 执行指定阶段 |
-| GET | `/api/sessions/{sid}/status` | 查看会话状态 |
-| GET | `/api/sessions/{sid}/composition` | 获取当前版本曲谱 |
-| GET | `/api/sessions/{sid}/versions` | 版本历史 |
-| POST | `/api/sessions/{sid}/revise` | 单轨/全曲修改 |
-| POST | `/api/sessions/{sid}/versions/{v}/rollback` | 回滚到指定版本 |
-| POST | `/api/sessions/{sid}/evaluate` | 规则评估 |
-| GET | `/api/sessions/{sid}/midi` | 下载 MIDI 文件 |
-
----
-
-## 实验报告
-
-[实验报告 →](docs/report.md)
-
----
+| 文档 | 内容 |
+|------|------|
+| [architecture.md](docs/architecture.md) | 模块依赖、数据契约、设计取舍 |
+| [pipeline.md](docs/pipeline.md) | 五阶段流水线详解、分阶段与续跑语义 |
+| [evaluation.md](docs/evaluation.md) | 双轨评测方法：六轴、四道门、三维 Judge |
+| [styles.md](docs/styles.md) | 曲风知识包结构、与评估的关系、扩展方法 |
+| [api.md](docs/api.md) | HTTP 接口、续跑语义、错误码 |
+| [report.md](docs/report.md) | 实验报告：场景选择、评测数据、失败模式分析 |
 
 ## 许可证
 
