@@ -105,13 +105,7 @@ docker compose down            # 停止并移除容器
 <div align="center">
   <img src="docs/img/web-demo.avif" alt="MiiDi Web Demo">
   <br/>
-  <sub>一次真实生成的完整会话录屏，从雨夜的 prompt 到打烊前的最后一版</sub>
-</div>
-<br/>
-<div align="center">
-  <audio controls src="docs/img/web-demo.mp3"></audio>
-  <br/>
-  <sub>Lo-Fi 作品《雨夜的咖啡馆》（约 94 秒）</sub>
+  <sub>一次真实生成的完整会话录屏，从<a href="#3-生成音乐">雨夜的 prompt</a>到<a href="docs/img/web-demo.mp3">【▶️打烊前的最后一版】</a></sub>
 </div>
 
 ## 架构概览
