@@ -12,6 +12,9 @@
 
 一句自然语言描述，加一个风格包，产出可以直接在 DAW 里编辑的多轨 MIDI。五阶段流水线负责生成，双轨评估器负责质检——规则违规会回流到生成端做定点修补，评过的分数决定下一轮怎么改。
 
+<img src="https://img.shields.io/badge/LLM-Tencent_Hy3-00a4ef" alt="Tencent Hy3" />
+<img src="https://img.shields.io/badge/腾讯犀牛鸟开源人才培养计划-Shape_with_AI「开源课题实战」-0078d4" alt="Windows 11" />
+
 ## 功能
 
 - **自然语言作曲**：五种风格（流行、古典、爵士、Lo-Fi、东方 Project），每种风格有独立知识包约束 LLM 的音乐语言
@@ -150,6 +153,12 @@ python -m evals.experiments.run_experiments \
 | [styles.md](docs/styles.md) | 曲风知识包结构、与评估的关系、扩展方法 |
 | [api.md](docs/api.md) | HTTP 接口、续跑语义、错误码 |
 | [report.md](docs/report.md) | 实验报告：场景选择、评测数据、失败模式分析 |
+
+# 致谢
+<div align="center">
+  <img src="https://i0.hdslb.com/bfs/new_dyn/2006228e1c475336a03096c87285bbba4168597.png" width="49%" alt="Hy3 娘" />
+  <br /><sub><a href="https://github.com/Tencent-Hunyuan/Hy3">Tencent-Hunyuan/Hy3</a></sub>
+</div>
 
 ## 许可证
 
