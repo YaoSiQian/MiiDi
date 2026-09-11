@@ -44,6 +44,11 @@ python -m miidi generate --prompt "雨夜的咖啡馆" --style lofi
 MODEL_NAME=deepseek-v4-flash-free python -m miidi generate --prompt "雨夜的咖啡馆" --style lofi
 ```
 
+> [!CAUTION]
+> 悲报：人生自古谁无死，Tencent/Hy3:free 已从 OpenRouter / OpenCode Zen 下架 (´Д` )
+>
+> 本仓库默认模型名仍是它———调用即 401，且白且珍惜。
+
 **方式 B：OpenAI 兼容 API**
 
 ```bash
