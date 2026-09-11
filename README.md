@@ -82,10 +82,6 @@ python src/miidi/serve.py
 
 浏览器打开 `http://localhost:8000`。
 
-![MiiDi Web UI — 恢复的东方 Project 演示会话](docs/img/web-ui.png)
-
-*Composer 输入 prompt 与曲风，Piano Roll 渲染六轨编曲；上图为恢复的一个已完成评测的演示会话。*
-
 ### 5. Docker 部署
 
 ```bash
@@ -94,6 +90,29 @@ docker compose down            # 停止并移除容器
 ```
 
 浏览器打开 `http://localhost:8000`。LLM 配置（可选）在 `docker-compose.yml` 的 `environment` 中填写 `OPENAI_BASE_URL` / `OPENAI_API_KEY` / `MODEL_NAME`，不配置则默认使用 OpenCode Zen 免费模型；`./sessions` 与 `./midi` 已挂载为持久卷，会话快照与渲染的 MIDI 不随容器移除而丢失。
+
+## Demo
+
+<div align="center">
+
+<i>雨夜，咖啡馆打烊前</i><br>
+<i>钢琴在唱片纹路里打滑</i><br>
+<i>鼓点踩着雨滴，一步慢半拍</i><br>
+<i>连时间都懒得走了</i>
+
+</div>
+
+<div align="center">
+  <img src="docs/img/web-demo.avif" alt="MiiDi Web Demo">
+  <br/>
+  <sub>一次真实生成的完整会话录屏，从雨夜的 prompt 到打烊前的最后一版</sub>
+</div>
+<br/>
+<div align="center">
+  <audio controls src="docs/img/web-demo.mp3"></audio>
+  <br/>
+  <sub>Lo-Fi 作品《雨夜的咖啡馆》（约 94 秒）</sub>
+</div>
 
 ## 架构概览
 
