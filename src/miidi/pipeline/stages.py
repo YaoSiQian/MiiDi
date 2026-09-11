@@ -38,6 +38,7 @@ def _to_music_brief(raw: dict, pack: StylePack) -> tuple[MusicBrief, list[str]]:
         fixed_sections.append(fixed)
         cursor = start + int(s.get("bars", 0))
     raw["structure"] = fixed_sections
+    raw["style"] = pack.name
     lo, hi = pack.defaults.bpm_range
     bpm = raw.get("bpm")
     if isinstance(bpm, int) and not lo <= bpm <= hi:

@@ -360,6 +360,7 @@ def _brief_from_comp(comp: Composition) -> MusicBrief:
         time_signature=comp.meta.time_signature,
         tonic_pc=comp.meta.key.tonic_pc,
         mode=comp.meta.key.mode,
+        style=comp.meta.style,
         structure=comp.structure,
         harmony=comp.harmony,
         instruments=[

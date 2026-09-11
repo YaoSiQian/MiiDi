@@ -29,6 +29,7 @@ class MusicBrief(BaseModel):
     time_signature: tuple[int, int] = (4, 4)
     tonic_pc: int = Field(default=0, ge=0, le=11)
     mode: Literal["major", "minor"] = "major"
+    style: str = "pop"
     structure: list[Section]
     harmony: list[ChordSpan]
     instruments: list[InstrumentSpec]
@@ -39,6 +40,7 @@ class MusicBrief(BaseModel):
             bpm=self.bpm,
             time_signature=self.time_signature,
             key=KeySig(tonic_pc=self.tonic_pc, mode=self.mode),
+            style=self.style,
         )
         tracks = []
         for inst in self.instruments:
