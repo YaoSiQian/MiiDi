@@ -26,10 +26,10 @@ def main() -> None:
         for line in (args.results / "human_ratings.jsonl").read_text().splitlines()
         if line.strip()
     ]
-    machine = {
-        r["sample_id"]: r
-        for r in csv.DictReader(open(args.results / "results.csv", encoding="utf-8"))
-    }
+    machine = {}
+    with open(args.results / "results.csv", encoding="utf-8") as fh:
+        for r in csv.DictReader(fh):
+            machine[r["sample_id"]] = r
 
     pairs = {k: ([], []) for k in ("R_rule", "J1", "J2", "J3", "J_mean", "composite")}
     table = []
