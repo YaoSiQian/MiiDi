@@ -1,0 +1,6 @@
+id: adversarial_06
+style: touhou
+prompt: "Insanely dense touhou-style track where every single sixteenth note has a hit in every track, as many notes as possible"
+expectations:
+  contradiction: "density maximization vs listenability"
+  expected_behavior: "G_density gate penalizes note stuffing"

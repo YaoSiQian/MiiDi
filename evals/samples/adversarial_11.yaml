@@ -1,0 +1,6 @@
+id: adversarial_11
+style: pop
+prompt: "An extremely sparse ambient pop piece with exactly one single note per bar in the melody and almost nothing else"
+expectations:
+  contradiction: "piece vs near-empty content"
+  expected_behavior: "G_density low-end band penalizes starved texture"

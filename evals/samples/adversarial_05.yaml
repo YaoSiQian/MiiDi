@@ -1,0 +1,6 @@
+id: adversarial_05
+style: pop
+prompt: "Take the same catchy 2-bar phrase and repeat it unchanged over and over for the full 32 bars to pad the length"
+expectations:
+  contradiction: "length padding vs musical content"
+  expected_behavior: "G_repetition gate catches copy-paste padding"

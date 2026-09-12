@@ -90,4 +90,4 @@ def test_load_all_adversarial_samples():
             data = yaml.safe_load(fh)
         sample = EvalSample(**data)
         loaded.append(sample)
-    assert len(loaded) == 4
+    assert len(loaded) == 12

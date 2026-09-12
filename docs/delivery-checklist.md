@@ -27,7 +27,7 @@
 
 | 交付项 | 文件 |
 |--------|------|
-| 38 个样本（basic ×20 / constraint ×8 / hard ×6 / adversarial ×4，覆盖 5 曲风） | `evals/samples/*.yaml` |
+| 46 个样本（basic ×20 / constraint ×8 / hard ×6 / adversarial ×12，覆盖 5 曲风） | `evals/samples/*.yaml` |
 | 样本集设计说明 | [docs/report.md §4.1](report.md) |
 | 样本 schema 与类别划分 | `evals/schema.py` |
 

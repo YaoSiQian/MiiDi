@@ -8,6 +8,7 @@ from pathlib import Path
 
 import yaml
 
+from evals.runners.interception import classify_interception
 from evals.schema import EvalSample
 from miidi.eval.composite import compute_composite
 from miidi.eval.judge import evaluate_judge
@@ -44,6 +45,7 @@ class EvalResult:
     track_count: int = 0
     duration_bars: int = 0
     error: str = ""
+    intercepted_by: str = ""
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -66,6 +68,7 @@ def run_single_sample(sample: EvalSample, client: LLMClient, out_dir: Path) -> E
 
         rule_report = evaluate_rules(comp, pack.defaults)
         result.R_rule = rule_report.R_rule
+        result.intercepted_by = classify_interception(rule_report)
         _save_artifacts(out_dir, comp, rule_report)
 
         if not rule_report.invalid:

@@ -1,0 +1,6 @@
+id: adversarial_08
+style: jazz
+prompt: "A jazz piece where the melody line jumps between the very lowest and the very highest notes of the piano register every bar, extremes only"
+expectations:
+  contradiction: "register extremes vs playability"
+  expected_behavior: "G_spread gate catches outlier padding"

@@ -148,7 +148,7 @@ graph TD
 评测脚本走真实 LLM，不属于测试套件：
 
 ```bash
-# 全量评测（38 样本：5 风格基础 ×20 + 约束 ×8 + 高难 ×6 + 对抗 ×4）
+# 全量评测（46 样本：5 风格基础 ×20 + 约束 ×8 + 高难 ×6 + 对抗 ×12）
 python -m evals.runners.run_eval --samples evals/samples --out evals/results --workers 4
 
 # 汇总统计（按风格 / 类别 / 分数段 / 规则轴）

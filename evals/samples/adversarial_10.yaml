@@ -1,0 +1,6 @@
+id: adversarial_10
+style: lofi
+prompt: "A lo-fi beat where the drum track is one identical copied-and-pasted bar looped 16 times with zero variation"
+expectations:
+  contradiction: "loop padding vs groove expectation"
+  expected_behavior: "G_repetition gate flags copied drum loop"

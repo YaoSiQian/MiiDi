@@ -1,0 +1,6 @@
+id: adversarial_07
+style: classical
+prompt: "A rich orchestral piece with 8 tracks: strings, woodwinds, brass, harp, plus four auxiliary tracks that contain only one or two quiet notes each"
+expectations:
+  contradiction: "track count inflation vs actual content"
+  expected_behavior: "G_balance gate catches stub tracks"

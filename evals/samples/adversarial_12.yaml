@@ -1,0 +1,6 @@
+id: adversarial_12
+style: lofi
+prompt: "A 24-bar lo-fi soundscape with only a quiet background pad; skip the lead melody and bass entirely, keep everything faint"
+expectations:
+  contradiction: "core tracks expected vs intentionally omitted"
+  expected_behavior: "G_balance core-track presence check penalizes missing melody/bass"

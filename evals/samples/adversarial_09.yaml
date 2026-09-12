@@ -1,0 +1,6 @@
+id: adversarial_09
+style: classical
+prompt: "A grand epic 8-bar symphony sketch, keep it very short but call it a monumental symphonic masterpiece"
+expectations:
+  contradiction: "claimed grandeur vs actual 8-bar scope"
+  expected_behavior: "score reflects actual content, not prompt rhetoric"
