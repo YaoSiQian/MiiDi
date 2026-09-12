@@ -171,6 +171,7 @@ python -m evals.experiments.run_experiments \
 | [styles.md](docs/styles.md) | 曲风知识包结构、与评估的关系、扩展方法 |
 | [api.md](docs/api.md) | HTTP 接口、续跑语义、错误码 |
 | [report.md](docs/report.md) | 实验报告：场景选择、评测数据、失败模式分析 |
+| [delivery-checklist.md](docs/delivery-checklist.md) | 交付清单：任务书交付项 → 文件对照 |
 
 # 致谢
 <div align="center">
