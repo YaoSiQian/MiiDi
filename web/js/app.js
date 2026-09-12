@@ -33,6 +33,7 @@ let currentTracks = [];
 let currentComp = null;
 let pipelineStage = "plan"; // plan → core → arrange (derived from the composition)
 let midiPlayer = null;
+let currentTracksInTicks = true; // false = parseMidi 产物（秒）
 
 // Initialize
 const wm = new WindowManager();
@@ -179,6 +180,7 @@ async function loadComposition() {
     const comp = await resp.json();
     currentComp = comp;
     currentTracks = comp.tracks || [];
+    currentTracksInTicks = true;
     renderPianoRoll(comp);
     renderPlan(comp);
     updateGate();
@@ -698,6 +700,7 @@ document.getElementById("midi-file-input").addEventListener("change", async (e) 
     const buf = await file.arrayBuffer();
     const tracks = parseMidi(new Uint8Array(buf));
     currentTracks = tracks;
+    currentTracksInTicks = false;
     renderPianoRoll({ tracks });
     document.getElementById("status-text").textContent = `Loaded: ${file.name}`;
     setStep(STEPS.PREVIEW);
@@ -707,8 +710,12 @@ document.getElementById("midi-file-input").addEventListener("change", async (e) 
 });
 
 // ─── MIDI Player (Web Audio API) ───────────────────────────────
+// 音符时间单位：生成作品是 tick（PPQ=480），上传的 MIDI 已由 parseMidi
+// 转成秒。secPerTick 由调用方按当前素材传入。
+const PPQ = 480;
+
 class MidiPlayer {
-  constructor(tracks) {
+  constructor(tracks, secPerTick = 1) {
     this.ctx = null;
     this.playing = false;
     this.pauseTime = 0;
@@ -720,7 +727,13 @@ class MidiPlayer {
     this.events = [];
     tracks.forEach((t, ti) => {
       (t.notes || []).forEach((n) => {
-        this.events.push({ onset: n[0], dur: n[1], pitch: n[2], vel: n[3] || 100, trackIdx: ti });
+        this.events.push({
+          onset: n[0] * secPerTick,
+          dur: n[1] * secPerTick,
+          pitch: n[2],
+          vel: n[3] || 100,
+          trackIdx: ti,
+        });
       });
     });
     this.events.sort((a, b) => a.onset - b.onset);
@@ -898,7 +911,9 @@ document.getElementById("btn-play").addEventListener("click", () => {
     document.getElementById("btn-play").textContent = "Pause";
     return;
   }
-  midiPlayer = new MidiPlayer(currentTracks);
+  const bpm = currentTracksInTicks ? currentComp?.meta?.bpm || 120 : 120;
+  const secPerTick = currentTracksInTicks ? 60 / (bpm * PPQ) : 1;
+  midiPlayer = new MidiPlayer(currentTracks, secPerTick);
   midiPlayer.play(renderCursor);
   document.getElementById("btn-play").textContent = "Pause";
 });

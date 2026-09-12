@@ -30,8 +30,13 @@
   }
 
   function currentVersion() {
-    const key = state.phase || "plan";
-    const n = S[key];
+    if (!state.phase) {
+      // 未走流程（如直接从 Sessions 恢复）时回退到 arrange 完成版，保证可播放
+      return (
+        VERSIONS.find((v) => v.version === S.arrange) || VERSIONS[VERSIONS.length - 1]
+      );
+    }
+    const n = S[state.phase];
     return VERSIONS.find((v) => v.version === n) || VERSIONS[0];
   }
 
