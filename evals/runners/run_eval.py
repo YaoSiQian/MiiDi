@@ -197,6 +197,17 @@ def _write_markdown(results: list[EvalResult], path: Path) -> None:
 
 if __name__ == "__main__":
     import argparse
+    import os
+    from pathlib import Path as _Path
+
+    # 与 serve.py 一致：CLI 直接运行时手动加载仓库根的 .env
+    env_path = _Path(__file__).resolve().parents[2] / ".env"
+    if env_path.exists():
+        for _line in env_path.read_text().splitlines():
+            _line = _line.strip()
+            if _line and not _line.startswith("#") and "=" in _line:
+                _k, _v = _line.split("=", 1)
+                os.environ.setdefault(_k.strip(), _v.strip())
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--samples", type=Path, required=True)
