@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from miidi.eval.axes import declining
+from miidi.eval.axes import declining, note_order_key
 from miidi.eval.context import EvaluationContext
 from miidi.musicutil.band import band
 
 
 def _grams_ratio(track) -> float:
-    seq = sorted(track.notes, key=lambda n: n[0])
+    seq = sorted(track.notes, key=note_order_key)
     tokens = []
     for a, b in zip(seq, seq[1:], strict=False):
         gap = b[0] - (a[0] + a[1])

@@ -172,3 +172,29 @@ def test_scattered_offbeats_penalized():
     loose = axis_rhythm(ctx_of(_offbeat_track([220, 340, 1180, 1420]), style="jazz"))
     assert loose.details["swing_consistency"] == pytest.approx(0.2)
     assert loose.score < tight.score
+
+
+def test_voice_order_invariant_under_note_reordering():
+    # 同 onset 的和弦音在输入顺序翻转后，评分必须完全一致（IVR 顺序无关性）
+    tracks = [
+        {
+            "name": "Mel",
+            "role": "melody",
+            "program": 73,
+            "notes": [(0, 480, 74, 96), (0, 480, 77, 96), (480, 480, 76, 96), (480, 480, 72, 96)]
+            + [(i * 480 + 960, 480, p, 96) for i, p in enumerate(MELODY_PITCHES[:8])],
+        },
+        {
+            "name": "Bs",
+            "role": "bass",
+            "program": 33,
+            "notes": [(0, 960, 43, 96), (0, 960, 43, 96), (960, 960, 45, 96), (960, 960, 45, 96)],
+        },
+    ]
+    base = axis_voice(ctx_of(tracks))
+    reversed_tracks = [
+        {**t, "notes": list(reversed(t["notes"]))} for t in tracks
+    ]
+    flipped = axis_voice(ctx_of(reversed_tracks))
+    assert flipped.score == pytest.approx(base.score)
+    assert flipped.details == base.details

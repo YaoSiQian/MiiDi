@@ -13,6 +13,11 @@ from miidi.schema.validate import Violation, validate_composition
 ACCOMP_ROLES = {"bass", "harmony", "color", "counter"}
 
 
+def note_order_key(n: tuple):
+    """全键排序：同 onset 音符的相对顺序不得影响配对结果（IVR 顺序无关性）。"""
+    return (n[0], n[2], n[1], n[3])
+
+
 @dataclass
 class AxisResult:
     score: float
@@ -152,7 +157,7 @@ def axis_voice(ctx: EvaluationContext) -> AxisResult:
         comf_fracs.append(
             sum(1 for n in t.notes if comf_rng[0] <= n[2] <= comf_rng[1]) / len(t.notes)
         )
-        seq = sorted(t.notes, key=lambda n: n[0])
+        seq = sorted(t.notes, key=note_order_key)
         for a, b in zip(seq, seq[1:], strict=False):
             if b[0] >= a[0] + a[1]:
                 steps += 1
@@ -169,8 +174,8 @@ def axis_voice(ctx: EvaluationContext) -> AxisResult:
     parallels = 0
     for i in range(len(melodic)):
         for j in range(i + 1, len(melodic)):
-            ta = sorted(melodic[i].notes, key=lambda n: n[0])
-            tb = sorted(melodic[j].notes, key=lambda n: n[0])
+            ta = sorted(melodic[i].notes, key=note_order_key)
+            tb = sorted(melodic[j].notes, key=note_order_key)
             k = 0
             prev: int | None = None
             for na in ta:
@@ -338,10 +343,10 @@ def axis_structure(ctx: EvaluationContext) -> AxisResult:
     recall = 0.8
     if melody and len(ctx.sections) >= 2 and len(melody.notes) >= 4:
         first = [
-            n for n in sorted(melody.notes, key=lambda n: n[0]) if ctx.section_of_tick(n[0]) == 0
+            n for n in sorted(melody.notes, key=note_order_key) if ctx.section_of_tick(n[0]) == 0
         ]
         rest = [
-            n for n in sorted(melody.notes, key=lambda n: n[0]) if ctx.section_of_tick(n[0]) > 0
+            n for n in sorted(melody.notes, key=note_order_key) if ctx.section_of_tick(n[0]) > 0
         ]
         if len(first) >= 4 and rest:
             target = _contour(first[:8])
@@ -379,7 +384,7 @@ def _std(xs: list[float]) -> float:
 
 
 def _contour(notes) -> list[int]:
-    seq = sorted(notes, key=lambda n: n[0])
+    seq = sorted(notes, key=note_order_key)
     out: list[int] = []
     for a, b in zip(seq, seq[1:], strict=False):
         d = b[2] - a[2]
