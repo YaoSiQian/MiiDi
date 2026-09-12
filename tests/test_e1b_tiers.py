@@ -3,7 +3,7 @@ from __future__ import annotations
 import pytest
 
 from evals.experiments.e1_discrimination import DegradationOp, degrade_composition
-from evals.experiments.e1b_tiers import degrade_stacked
+from evals.experiments.e1b_tiers import MILD_OPS, SEVERE_OPS, degrade_stacked
 from evals.experiments.stats import spearman
 from miidi.eval.score import evaluate_rules
 from miidi.schema.model import Composition
@@ -59,19 +59,8 @@ def test_stacked_severe_keeps_single_ops_order():
     comp = _comp()
     defaults = StyleDefaults()
     r_orig = evaluate_rules(comp, defaults)
-    r_mild = evaluate_rules(degrade_stacked(comp, [DegradationOp.SCATTER_ONSET]), defaults)
-    r_sev = evaluate_rules(
-        degrade_stacked(
-            comp,
-            [
-                DegradationOp.SCATTER_PITCH,
-                DegradationOp.SCATTER_ONSET,
-                DegradationOp.REPEAT_FIRST_BAR,
-                DegradationOp.REMOVE_CORE_TRACK,
-            ],
-        ),
-        defaults,
-    )
+    r_mild = evaluate_rules(degrade_stacked(comp, MILD_OPS), defaults)
+    r_sev = evaluate_rules(degrade_stacked(comp, SEVERE_OPS), defaults)
     # 重度必须显著低于原始；轻度不升（允许并列）
     assert r_orig.R_rule >= r_mild.R_rule
     assert r_sev.R_rule < r_orig.R_rule

@@ -36,8 +36,12 @@
 | 交付项 | 文件 |
 |--------|------|
 | E1 区分度（四种规则轨退化） | `evals/experiments/e1_discrimination.py` |
+| E1b 三档生成样本判别力（原始/轻度/重度） | `evals/experiments/e1b_tiers.py` |
 | E2 确定性 | `evals/experiments/e2_consistency.py` |
+| E2-Judge 评委轨重复一致性 | `evals/experiments/e2_judge_consistency.py` |
 | E3 对抗性 | `evals/experiments/e3_adversarial.py` |
+| E4 异构 Judge | `evals/experiments/e4_hetero_judge.py` |
+| E5 无害变形不变性（IVR） | `evals/experiments/e5_invariance.py` |
 | 实验结果 | [evals/results/experiments.md](../evals/results/experiments.md)、[docs/report.md §5](report.md) |
 | 失败样本重测归因 | [evals/results/rerun_failed.md](../evals/results/rerun_failed.md) |
 

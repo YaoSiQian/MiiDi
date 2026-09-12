@@ -21,6 +21,7 @@ class LLMError(RuntimeError):
 
 
 # 端点偶发返回空响应（如 reasoning 模型只回 reasoning_content）——视为瞬时故障，可重试
+# Judge 回复的结构性 JSON 损坏同样可重试：服务端采样在温度 0 下也非严格确定
 _TRANSIENT_PREFIXES = (
     "HTTP 429",
     "HTTP 5",
@@ -28,6 +29,7 @@ _TRANSIENT_PREFIXES = (
     "no choices in response",
     "no output text in response",
     "malformed JSON body",
+    "invalid JSON in reply",
 )
 
 

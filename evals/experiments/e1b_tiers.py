@@ -34,10 +34,11 @@ from miidi.llm.client import LLMClient, load_config
 from miidi.schema.model import Composition
 from miidi.skills.loader import load_style_pack
 
-MILD_OPS = [DegradationOp.SCATTER_ONSET]
+# 退化操作不得触发 A1 格式门（如 scatter_onset 的音符重叠会把整档直接归零，
+# 三档退化为两档）——故避开 scatter_onset，用保持 composition 合法性的操作组合
+MILD_OPS = [DegradationOp.SCATTER_PITCH]
 SEVERE_OPS = [
     DegradationOp.SCATTER_PITCH,
-    DegradationOp.SCATTER_ONSET,
     DegradationOp.REPEAT_FIRST_BAR,
     DegradationOp.REMOVE_CORE_TRACK,
 ]
@@ -76,8 +77,32 @@ def run_tiers(
         tier_out = {}
         for name, tier_comp in tiers.items():
             rr = evaluate_rules(tier_comp, defaults)
-            print(f"    {name}: R_rule={rr.R_rule:.2f} G_balance={rr.gates['balance']:.3f}", flush=True)
-            jr = evaluate_judge(tier_comp, rr, client, sample.style, sample.prompt)
+            g_bal = rr.gates.get("balance")
+            g_str = "A1-invalid" if g_bal is None else f"{g_bal:.3f}"
+            print(f"    {name}: R_rule={rr.R_rule:.2f} G_balance={g_str}", flush=True)
+            if rr.invalid:
+                # A1 格式门拦截（如抖动导致音符重叠）：R_rule=0，Judge 无从评起
+                tier_out[name] = {
+                    "R_rule": 0.0,
+                    "composite": 0.0,
+                    "gate_balance": None,
+                    "intercepted": "A1_format",
+                }
+                continue
+            jr = None
+            judge_error = None
+            try:
+                jr = evaluate_judge(tier_comp, rr, client, sample.style, sample.prompt)
+            except Exception as exc:
+                judge_error = str(exc)[:200]
+            if jr is None:
+                tier_out[name] = {
+                    "R_rule": round(rr.R_rule, 2),
+                    "gate_balance": round(rr.gates["balance"], 3),
+                    "composite": None,
+                    "judge_error": judge_error,
+                }
+                continue
             tier_out[name] = {
                 "R_rule": round(rr.R_rule, 2),
                 "J1": jr.J1,
@@ -89,9 +114,10 @@ def run_tiers(
         # 探针：仅删旋律核心轨（规则轨，无 Judge 调用）
         probe_rule = evaluate_rules(degrade_composition(comp, DegradationOp.REMOVE_CORE_TRACK), defaults)
         probe_delta = probe_rule.R_rule - tier_out["original"]["R_rule"]
+        probe_gbal = probe_rule.gates.get("balance")
         print(
             f"    probe remove_core_track: R_rule={probe_rule.R_rule:.2f} "
-            f"(delta {probe_delta:+.2f}) G_balance={probe_rule.gates['balance']:.3f}",
+            f"(delta {probe_delta:+.2f}) G_balance={probe_gbal:.3f}",
             flush=True,
         )
         records.append(
@@ -102,7 +128,7 @@ def run_tiers(
                 "probe_remove_core_track": {
                     "R_rule": round(probe_rule.R_rule, 2),
                     "R_rule_delta_vs_original": round(probe_delta, 2),
-                    "gate_balance": round(probe_rule.gates["balance"], 3),
+                    "gate_balance": round(probe_gbal, 3),
                 },
             }
         )
@@ -127,22 +153,30 @@ def _summarize(records: list[dict]) -> dict:
     composites: list[float] = []
     tier_ranks: list[int] = []
     probe_deltas = []
+    judge_failed = 0
     for rec in records:
         t = rec["tiers"]
         c_orig, c_mild, c_sev = t["original"]["composite"], t["mild"]["composite"], t["severe"]["composite"]
-        if c_orig > c_mild > c_sev:
+        if None in (c_orig, c_mild, c_sev):
+            judge_failed += 1  # 某档 Judge 调用失败（轮内已重试），不计入排序统计
+        elif c_orig > c_mild > c_sev:
             strict += 1
+            composites += [c_orig, c_mild, c_sev]
+            tier_ranks += [0, 1, 2]
         elif c_orig >= c_mild >= c_sev:
             partial += 1
+            composites += [c_orig, c_mild, c_sev]
+            tier_ranks += [0, 1, 2]
         else:
             violated += 1
-        composites += [c_orig, c_mild, c_sev]
-        tier_ranks += [0, 1, 2]
+            composites += [c_orig, c_mild, c_sev]
+            tier_ranks += [0, 1, 2]
         probe_deltas.append(rec["probe_remove_core_track"]["R_rule_delta_vs_original"])
 
     rho = spearman(tier_ranks, composites)
     summary = {
         "samples": len(records),
+        "judge_failed_samples": judge_failed,
         "strict_ordering": strict,
         "weak_ordering_incl_ties": partial,
         "ordering_violated": violated,
@@ -161,7 +195,7 @@ def to_markdown(payload: dict) -> str:
         "## 方法",
         "",
         "- 每曲风取 1 个已完成评测的 basic 样本（共 5 个），构造原始 / 轻度 / 重度三档："
-        "轻度=起拍抖动（单一操作）；重度=音高随机化+起拍抖动+首小节复制+删旋律核心轨（叠加）",
+        "轻度=音高随机化（单操作）；重度=音高随机化+首小节复制+删旋律核心轨（叠加）",
         "- 每档均做规则轨 + Judge 轨评分（Judge 与生成同源，见 e1b_tiers.json 冻结块），"
         "考察 composite 层面的档位排序",
         "- 探针行：只删旋律核心轨、只评规则轨——对应 E1 发现的「删轨反升」盲区与 "
@@ -175,6 +209,18 @@ def to_markdown(payload: dict) -> str:
     for rec in payload["records"]:
         for tier in ("original", "mild", "severe"):
             t = rec["tiers"][tier]
+            if "intercepted" in t:
+                lines.append(
+                    f"| {rec['sample_id']} | {tier}（A1 格式门拦截） "
+                    f"| {t['R_rule']:.2f} | - | - | - | - | {t['composite']:.2f} |"
+                )
+                continue
+            if "judge_error" in t:
+                lines.append(
+                    f"| {rec['sample_id']} | {tier}（Judge 调用失败） "
+                    f"| {t['R_rule']:.2f} | {t['gate_balance']:.3f} | - | - | - | - |"
+                )
+                continue
             lines.append(
                 f"| {rec['sample_id']} | {tier} | {t['R_rule']:.2f} | {t['gate_balance']:.3f} "
                 f"| {t['J1']:.1f} | {t['J2']:.1f} | {t['J3']:.1f} | {t['composite']:.2f} |"
@@ -191,7 +237,12 @@ def to_markdown(payload: dict) -> str:
         "",
         f"- composite 严格排序（original > mild > severe）："
         f"{s['strict_ordering']}/{s['samples']} 个样本；含并列弱排序 "
-        f"{s['weak_ordering_incl_ties']}/{s['samples']}；违反排序 {s['ordering_violated']} 个",
+        f"{s['weak_ordering_incl_ties']}/{s['samples']}；违反排序 {s['ordering_violated']} 个"
+        + (
+            f"（另有 {s['judge_failed_samples']} 个样本因 Judge 调用失败未计入排序统计）"
+            if s["judge_failed_samples"]
+            else ""
+        ),
         f"- 档位 vs composite 的 Spearman ρ = {s['spearman_tier_vs_composite']}",
         f"- 删旋律轨探针：平均 ΔR_rule = {s['probe_remove_core_track_mean_delta']:+.2f}，"
         f"全部检出（Δ≤0）：{'是' if s['probe_all_detected'] else '否'}"
