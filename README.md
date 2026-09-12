@@ -17,6 +17,9 @@
 
 🌐 **[在线 Demo](https://yaosiqian.github.io/MiiDi/demo)** — 无需 API key 与本地部署，浏览器直接体验完整流程（预置数据回放）
 
+> [!IMPORTANT]
+> 评审请从 **[交付清单](docs/delivery-checklist.md)** 入手：任务书五块交付项（应用侧 / 评估方法设计 / 评测样本 / 有效性验证 / 评测执行与交付物）→ 仓库文件的一页式对照索引。
+
 ## 功能
 
 - **自然语言作曲**：五种风格（流行、古典、爵士、Lo-Fi、东方 Project），每种风格有独立知识包约束 LLM 的音乐语言
