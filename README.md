@@ -15,6 +15,8 @@
 <img src="https://img.shields.io/badge/LLM-Tencent_Hy3-00a4ef" alt="Tencent Hy3" />
 <img src="https://img.shields.io/badge/腾讯犀牛鸟开源人才培养计划-Shape_with_AI「开源课题实战」-0078d4" alt="Windows 11" />
 
+🌐 **[在线 Demo](https://yaosiqian.github.io/MiiDi/demo)** — 无需 API key 与本地部署，浏览器直接体验完整流程（预置数据回放）
+
 ## 功能
 
 - **自然语言作曲**：五种风格（流行、古典、爵士、Lo-Fi、东方 Project），每种风格有独立知识包约束 LLM 的音乐语言
@@ -92,6 +94,12 @@ docker compose down            # 停止并移除容器
 浏览器打开 `http://localhost:8000`。LLM 配置（可选）在 `docker-compose.yml` 的 `environment` 中填写 `OPENAI_BASE_URL` / `OPENAI_API_KEY` / `MODEL_NAME`，不配置则默认使用 OpenCode Zen 免费模型；`./sessions` 与 `./midi` 已挂载为持久卷，会话快照与渲染的 MIDI 不随容器移除而丢失。
 
 ## Demo
+
+<div align="center">
+
+下方是真实生成的完整会话录屏；也可以打开 <a href="https://yaosiqian.github.io/MiiDi/demo">🌐 在线 Demo</a> 亲手操作。
+
+</div>
 
 <div align="center">
 
