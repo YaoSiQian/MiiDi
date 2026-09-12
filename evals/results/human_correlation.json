@@ -1,0 +1,153 @@
+{
+ "ratings": [
+  {
+   "sample_id": "classical_basic_04",
+   "human": 3,
+   "R_rule": 80.0647112349448,
+   "J1": 56.0,
+   "J2": 90.0,
+   "J3": 80.1,
+   "J_mean": 75.4,
+   "composite": 78.2
+  },
+  {
+   "sample_id": "classical_basic_02",
+   "human": 4,
+   "R_rule": 44.69071969899517,
+   "J1": 69.0,
+   "J2": 95.0,
+   "J3": 100.0,
+   "J_mean": 88.0,
+   "composite": 62.0
+  },
+  {
+   "sample_id": "constraint_08",
+   "human": 3,
+   "R_rule": 27.84828046881511,
+   "J1": 69.0,
+   "J2": 75.0,
+   "J3": 78.0,
+   "J_mean": 74.0,
+   "composite": 46.3
+  },
+  {
+   "sample_id": "adversarial_04",
+   "human": 3,
+   "R_rule": 63.96085877224318,
+   "J1": 55.0,
+   "J2": 10.0,
+   "J3": 80.0,
+   "J_mean": 48.3,
+   "composite": 57.7
+  },
+  {
+   "sample_id": "hard_01",
+   "human": 5,
+   "R_rule": 36.6197214568562,
+   "J1": 50.0,
+   "J2": 20.0,
+   "J3": 80.0,
+   "J_mean": 50.0,
+   "composite": 42.0
+  },
+  {
+   "sample_id": "adversarial_01",
+   "human": 4,
+   "R_rule": 43.92177001425831,
+   "J1": 87.0,
+   "J2": 15.0,
+   "J3": 80.0,
+   "J_mean": 60.7,
+   "composite": 50.6
+  },
+  {
+   "sample_id": "pop_basic_04",
+   "human": 5,
+   "R_rule": 18.666470376276454,
+   "J1": 75.0,
+   "J2": 85.0,
+   "J3": 84.0,
+   "J_mean": 81.3,
+   "composite": 43.7
+  },
+  {
+   "sample_id": "touhou_basic_01",
+   "human": 5,
+   "R_rule": 5.885554660546332,
+   "J1": 80.0,
+   "J2": 95.0,
+   "J3": 85.0,
+   "J_mean": 86.7,
+   "composite": 38.2
+  },
+  {
+   "sample_id": "adversarial_03",
+   "human": 5,
+   "R_rule": 7.6634391115476435,
+   "J1": 50.0,
+   "J2": 66.0,
+   "J3": 90.0,
+   "J_mean": 68.7,
+   "composite": 32.1
+  },
+  {
+   "sample_id": "adversarial_02",
+   "human": 5,
+   "R_rule": 18.50487753035908,
+   "J1": 63.0,
+   "J2": 0.0,
+   "J3": 60.0,
+   "J_mean": 41.0,
+   "composite": 27.5
+  },
+  {
+   "sample_id": "constraint_05",
+   "human": 5,
+   "R_rule": 6.62920913326825,
+   "J1": 40.0,
+   "J2": 67.0,
+   "J3": 80.0,
+   "J_mean": 62.3,
+   "composite": 28.9
+  },
+  {
+   "sample_id": "lofi_basic_02",
+   "human": 4,
+   "R_rule": 4.802146365924494,
+   "J1": 44.0,
+   "J2": 100.0,
+   "J3": 40.0,
+   "J_mean": 61.3,
+   "composite": 27.4
+  }
+ ],
+ "summary": {
+  "n": 12,
+  "dims": {
+   "R_rule": {
+    "spearman": -0.615,
+    "pearson": -0.717
+   },
+   "J1": {
+    "spearman": -0.103,
+    "pearson": -0.046
+   },
+   "J2": {
+    "spearman": -0.12,
+    "pearson": -0.06
+   },
+   "J3": {
+    "spearman": 0.209,
+    "pearson": 0.046
+   },
+   "J_mean": {
+    "spearman": -0.023,
+    "pearson": -0.049
+   },
+   "composite": {
+    "spearman": -0.649,
+    "pearson": -0.696
+   }
+  }
+ }
+}

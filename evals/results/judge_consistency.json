@@ -1,0 +1,2132 @@
+{
+ "freeze": {
+  "provider": "openai",
+  "base_url": "https://free.quanthatch.com/v1",
+  "model": "glm-5.3-flash",
+  "temperature": 0.0,
+  "rounds": 3,
+  "note": "同一输入冻结后独立重复评分；模型型号仅记录于此 JSON（gitignored）"
+ },
+ "records": [
+  {
+   "sample_id": "adversarial_01",
+   "style": "pop",
+   "category": "adversarial",
+   "composition_sha256": "d2d03a827fad40386ff88ec21705ec2f9b9bd7cf2b095d9c641bb67de7e80e1a",
+   "prompt_sha256": "dcefa506d323cfe76514d767b3daca83f78690bb3d268fca7e1f39b74caab2f6",
+   "rounds": [
+    {
+     "round": 1,
+     "J1": 84.0,
+     "J2": 15.0,
+     "J3": 55.0,
+     "composite": 46.89,
+     "per_item": {
+      "J1": [
+       {
+        "item": "checklist item 1",
+        "verdict": "partial",
+        "evidence": "Track 'Lead' uses GM program 73 (flute) rather than the style's specified sawtooth lead (81), and 'Piano' is GM 0 (grand) instead of Rhodes (4); however the four-piece band shape (drums, finger bass 33, piano comping, single lead) matches the pop idiom."
+       },
+       {
+        "item": "checklist item 2",
+        "verdict": "yes",
+        "evidence": "Track 'Lead' spans C4-B5 (60-83, e.g. bar 4 onset 7680 pitch 64 through bar 19 pitch 83), 'Bass' spans F1-D3 (29-50, bar 0: 36 then 43), 'Piano' sits C3-G4 (48-67, bar 0 chord 48/52/55) — all within the style's register limits, bass clear of the hook."
+       },
+       {
+        "item": "checklist item 3",
+        "verdict": "yes",
+        "evidence": "Track 'Drums' bar 2: kick (36) at ticks 3840/4800 on beats 1 and 3, snare (38) at 4320/5280 on beats 2 and 4, with straight eighth hi-hats — textbook pop backbeat, no swing."
+       },
+       {
+        "item": "checklist item 4",
+        "verdict": "yes",
+        "evidence": "Harmony bars 0-11 cycle C-G-Am-F (I-V-vi-IV); chorus bars 12-19 uses Fmaj7-G-Am7-G7; bridge bars 20-23 is Am-F-C-G — entirely the diatonic I-V-vi-IV family expected of pop."
+       },
+       {
+        "item": "checklist item 5",
+        "verdict": "partial",
+        "evidence": "Track 'Lead' bars 12-19 (chorus) is an unbroken stream of eighth notes with no rests (e.g. bar 13: 79-77-74-71), reading as an instrumental run rather than a breathing vocal-style hook; 'Piano' comping is static whole-bar block chords with no rhythmic push."
+       },
+       {
+        "item": "checklist item 6",
+        "verdict": "yes",
+        "evidence": "Only one lead voice at a time ('Lead' silent bars 0-3, enters at bar 4); no orchestral colors, no distorted textures, no competing solos or virtuosic fills anywhere in the piece."
+       },
+       {
+        "item": "checklist item 7",
+        "verdict": "yes",
+        "evidence": "Texture layers correctly: hats-only intro bar 0, full band by verse, chorus lift via 4-note piano chords and rising velocities ('Piano' 88-92 and 'Drums' kick 65-70 in bars 12-19), then outro thins with fading velocities (piano down to 68, hats to 24 by bar 27)."
+       },
+       {
+        "item": "checklist item 8",
+        "verdict": "yes",
+        "evidence": "Meta bpm 120 in 4/4 — squarely inside the typical pop tempo range with steady grid alignment throughout all 28 bars."
+       }
+      ],
+      "J2": [
+       {
+        "item": "BPM",
+        "verdict": "violated",
+        "evidence": "Prompt explicitly requests 300 BPM; composition meta.bpm = 120. Tempo is less than half of what was asked for."
+       },
+       {
+        "item": "Lullaby genre",
+        "verdict": "violated",
+        "evidence": "Composition is styled as 'pop' with a verse/chorus/bridge structure (bars 4-23), a continuous pop backbeat (kick on beats 1/3, snare-pattern notes on 2/4, constant eighth-note closed hi-hats), and electric bass (program 33). No lullaby markers such as slow triple meter, sparse texture, or rock-free gentle accompaniment."
+       },
+       {
+        "item": "Extremely fast",
+        "verdict": "violated",
+        "evidence": "At 120 BPM with melody notes of mostly 480-tick (quarter) and 960-tick (half) durations, the lead moves at a moderate pop pace (e.g., bars 4-11). No rapid sixteenth/thirty-second runs or virtuosic speed anywhere in the lead or bass parts."
+       },
+       {
+        "item": "Very soothing",
+        "verdict": "violated",
+        "evidence": "Driving hi-hat/kick pattern persists from bar 1 to bar 27 with rising velocities (kick velocity climbs from 52 to 70 through the chorus, bars 12-23); piano chords reach velocity 92 (bar 18) and lead melody hits velocity 90 (bar 16). Only the outro (bars 24-27, velocities fading to 65-24) is mildly calming, which is not enough to offset the energetic pop texture. The C-major diatonic harmony and flute lead (program 73) are the only soothing elements."
+       },
+       {
+        "item": "Key/Tonality",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify a key; composition is in C major (tonic_pc 0, major)."
+       },
+       {
+        "item": "Duration",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify length; composition is 28 bars."
+       },
+       {
+        "item": "Specified instruments",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify instrumentation; composition uses programs 73 (flute/lead), 33 (bass), 0 (piano), and drums."
+       }
+      ],
+      "J3": [
+       {
+        "item": "rubric",
+        "verdict": "3",
+        "evidence": "Technically correct but flat. Harmony is entirely diatonic and functional (C-G-Am-F loop bars 0-11; Fmaj7-G-Am7-G7 chorus bars 12-19), all piano voicings are valid, and there is a real dynamic arc (piano velocity 75 at bar 0 building to 92 by bar 16, decaying to 68 by bar 27). However, the melody is pure chord-tone arpeggiation with zero syncopation, the chorus is a literal copy of itself (bar 16 = bar 12), and the rhythm is a mechanical stream of on-beat quarter notes. No memorable hook emerges; it sounds formulaic despite being error-free."
+       }
+      ]
+     }
+    },
+    {
+     "round": 2,
+     "error": "LLM call failed after retries: Server disconnected without sending a response."
+    },
+    {
+     "round": 3,
+     "J1": 78.0,
+     "J2": 22.0,
+     "J3": 55.0,
+     "composite": 47.02,
+     "per_item": {
+      "J1": [
+       {
+        "item": "checklist item 1",
+        "verdict": "partial",
+        "evidence": "Bass (program 33, finger) and Drums match the standard four-piece pop ensemble, but Lead uses program 73 (flute) instead of the specified sawtooth lead (81), and Piano uses program 0 (grand) instead of Rhodes (4); the optional warm pad is absent, which is acceptable."
+       },
+       {
+        "item": "checklist item 2",
+        "verdict": "yes",
+        "evidence": "Lead spans C4-B5 (MIDI 60-83, e.g. bar 15 peak B5) inside C4-C6; Bass spans F1-D3 (MIDI 29-50, bar 19 D3) inside E1-G3; Piano voicings sit C3-G4 (bars 0-27) inside C3-C5. Bass stays clear of the lead's register."
+       },
+       {
+        "item": "checklist item 3",
+        "verdict": "yes",
+        "evidence": "Drums bar 2 onward: kick on beats 1/3 (e.g. onsets 3840, 4800), snare on beats 2/4 (4320, 5280), straight eighth hi-hats — a textbook pop backbeat at 120 BPM; Bass reinforces with a root-half-note + fifth-on-beat-3 pattern (Bass bars 0-3)."
+       },
+       {
+        "item": "checklist item 4",
+        "verdict": "partial",
+        "evidence": "Harmony chart is exemplary pop (I-V-vi-IV in verse bars 0-11, Fmaj7-G-Am7-G7 chorus bars 12-19), but the Bass deviates from the chart: Bass bar 8 plays F1 (MIDI 29) under the C chord and Bass bar 14 plays F1 under Am7, reharmonizing those bars as Fmaj7-type sonorities; Bass bar 11 plays G1 under F."
+       },
+       {
+        "item": "checklist item 5",
+        "verdict": "yes",
+        "evidence": "Four tracks only (Lead, Bass, Piano, Drums), one lead voice throughout (Lead enters bar 4, onset 7680), no solos or virtuosic fills; chorus builds density appropriately with 4-note Piano voicings at bars 12-19 and velocities rising 75→92."
+       },
+       {
+        "item": "checklist item 6",
+        "verdict": "partial",
+        "evidence": "No distorted textures and drums are appropriate for pop, but the Lead is a flute (program 73, e.g. Lead bar 4 onward), which reads as an orchestral color the style explicitly says to skip; the grand piano comping is defensible under the 'piano or guitar comping' idiom."
+       },
+       {
+        "item": "checklist item 7",
+        "verdict": "yes",
+        "evidence": "Clean layering: single memorable lead above the hook line, Piano holds mid-register block voicings (whole-bar chords, e.g. Piano bar 0), Bass supplies root-and-fifth motion, Drums keep steady backbeat; velocities vary musically (Lead 65-90, Drums build 24→70 into chorus)."
+       },
+       {
+        "item": "checklist item 8",
+        "verdict": "yes",
+        "evidence": "Meta bpm 120 in 4/4 — squarely in the pop tempo range, with clear 4/8-bar phrase structure (intro 0-3, verse 4-11, chorus 12-19, bridge 20-23, outro 24-27)."
+       }
+      ],
+      "J2": [
+       {
+        "item": "BPM",
+        "verdict": "violated",
+        "evidence": "Prompt explicitly requests 300 BPM; composition metadata shows bpm: 120. This is the clearest hard constraint failure — the tempo is less than half of what was asked."
+       },
+       {
+        "item": "Tempo character: 'extremely fast'",
+        "verdict": "violated",
+        "evidence": "At 120 BPM with quarter/eighth-note melody movement (e.g., Lead notes of 480-tick durations), the piece feels moderate, not 'extremely fast.' Nothing in the composition (no double-time feel, no rapid subdivision bursts) conveys extreme speed."
+       },
+       {
+        "item": "Genre: lullaby",
+        "verdict": "violated",
+        "evidence": "Style tag is 'pop' and the Drums track plays a continuous pop backbeat throughout (kick note 36 on beats, snare note 38 backbeats, closed hi-hat note 42 eighths, e.g., bars 1–28). Lullabies are characterized by gentle rocking rhythms without a drum-kit backbeat; this reads as a pop ballad, not a lullaby."
+       },
+       {
+        "item": "Mood: 'very soothing'",
+        "verdict": "violated",
+        "evidence": "Partially soothing elements exist — C major tonality, soft diatonic harmony (C–G–Am–F, Fmaj7, Am7, Fadd9), mellow flute lead (program 73), and a dynamic fade in the outro (piano velocities drop 92→68 by bar 24–27). However, the driving hi-hat/kick/snare groove at moderate tempo and velocities up to ~92 undermine a genuinely soothing, sleep-inducing character."
+       },
+       {
+        "item": "Key/Tonality",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify a key; composition uses C major (tonic_pc 0, major). No constraint to check."
+       },
+       {
+        "item": "Duration",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify length; composition is 28 bars (intro/verse/chorus/bridge/outro). No constraint to check."
+       },
+       {
+        "item": "Specified instruments",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify instrumentation; composition uses programs 73 (flute lead), 33 (bass), 0 (piano), plus drums. No constraint to check."
+       }
+      ],
+      "J3": [
+       {
+        "item": "rubric",
+        "verdict": 3,
+        "evidence": "Technically clean and coherent (harmony axis 0.88, no wrong notes, functional I-V-vi-IV pop progression in C), with a real global dynamic arch (Piano velocities 75→92 peaking bar 18, fading to 68 by bar 27) and clear intro/verse/chorus/bridge/outro form. However, it is formulaic and mechanical: the verse melody is pure chord arpeggiation (Lead bars 4-11), the chorus is a 2-bar cell repeated verbatim 4x (bars 12-19, consistent with G_repetition 0.553), the Drums play one identical kick/snare/hat pattern for all 28 bars with no fills or crashes, and the Bass uses the same root-fifth half+quarter rhythm every bar. No memorable hook or motivic development emerges — competent but flat, matching rubric level 3."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "sample_id": "classical_basic_01",
+   "style": "classical",
+   "category": "basic",
+   "composition_sha256": "24970e30e80bb7e4a71705647f4bf197af8e9e06ea0ba477339e0b9aa86af907",
+   "prompt_sha256": "1bc40b7d5faccbf1af8812b141ed766a883634e7e22e4ddb2ec33d52fa17eefe",
+   "rounds": [
+    {
+     "round": 1,
+     "error": "LLM call failed after retries: invalid JSON in reply: Expecting ',' delimiter: line 34 column 3 (char 1911)"
+    },
+    {
+     "round": 2,
+     "error": "LLM call failed after retries: invalid JSON in reply: Expecting ',' delimiter: line 44 column 3 (char 2880)"
+    },
+    {
+     "round": 3,
+     "J1": 70.0,
+     "J2": 92.0,
+     "J3": 60.0,
+     "composite": 76.12,
+     "per_item": {
+      "J1": [
+       {
+        "item": "checklist item 1",
+        "verdict": "partial",
+        "evidence": "Violin (program 40, melody), Cello (42, bass) and Flute (73, color) match the classical roster, but the harmony role is filled by Viola (program 41) instead of the specified Acoustic Grand Piano (0); meta also self-identifies as style 'pop'."
+       },
+       {
+        "item": "checklist item 2",
+        "verdict": "yes",
+        "evidence": "Violin spans A4-G5 (bars 0-23) well inside G3-E6; Cello stays C2-D3 (bars 0-23) within C2-G3; Flute D5-C6 (bars 1-23) within C4-C7; Viola E4-C6 is high but idiomatic for the substitute instrument."
+       },
+       {
+        "item": "checklist item 3",
+        "verdict": "partial",
+        "evidence": "Nearly every note in all tracks is a whole or half note (Cello bars 0-5 are all 1920-tick whole notes; Violin bar 0 is a whole-note C5); there is no quarter/eighth subdivision anywhere, so the pulse is almost absent rather than carried by the notation, and the cello never 'walks'."
+       },
+       {
+        "item": "checklist item 4",
+        "verdict": "yes",
+        "evidence": "Functional C-major vocabulary with clear tonic-dominant polarity: C-F-C-G7 intro (bars 0-3), I-vi-ii-V verse (bars 4-11), G7 resolving to C at bars 11-12, 15, 18-19 and 22-23."
+       },
+       {
+        "item": "checklist item 5",
+        "verdict": "partial",
+        "evidence": "Texture is transparent (4 voices, one chord per bar), but the form is pop verse/chorus/outro (bars 4-11, 12-19, 20-23) rather than classical phrase architecture, the melody holds one note per bar (Violin bars 0-4, 12), and motivic development is limited to a repeated E-G-F-E figure (Violin bars 17-18 vs 21-22)."
+       },
+       {
+        "item": "checklist item 6",
+        "verdict": "yes",
+        "evidence": "No drum track exists (all tracks is_drum: false), and there is no percussion, brass or backbeat figure in any of the 24 bars."
+       },
+       {
+        "item": "checklist item 7",
+        "verdict": "partial",
+        "evidence": "Pleasant flute-violin dialogue (Flute enters on beat 3 of bar 0 with G5 against Violin's C5, again bars 3, 5, 9), but the Viola sustains block double-stops every single bar (e.g., E4+G4 bars 0-2, F4+A4 bar 1) acting as a static pop-style pad rather than voice-led part writing."
+       },
+       {
+        "item": "checklist item 8",
+        "verdict": "yes",
+        "evidence": "66 BPM in 4/4 is a plausible Adagio/Andante for a 'serenade', supported by the one-chord-per-bar harmonic rhythm (harmony track, bars 0-23)."
+       }
+      ],
+      "J2": [
+       {
+        "item": "Key/Tonality",
+        "verdict": "satisfied",
+        "evidence": "Prompt specifies C major; meta.key is tonic_pc=0, mode='major'. All harmony is diatonic to C major (C, F, G7, Am, Dm) and every pitch in all four tracks (e.g., violin 72/74/76/79, cello 36/41/43/45) belongs to C major — no chromaticism."
+       },
+       {
+        "item": "Tempo (adagio)",
+        "verdict": "satisfied",
+        "evidence": "Prompt requests 'adagio'; composition is at 66 BPM, which sits at the bottom of the adagio range (~66-76). Slow harmonic rhythm (one chord per bar) and long note values (1920-tick whole notes) reinforce the adagio character."
+       },
+       {
+        "item": "Mood/Image (serene, peaceful lake at dawn)",
+        "verdict": "satisfied",
+        "evidence": "Gentle diatonic harmony, soft flute color entries (velocities 35-55), quiet melody opening (violin vel 55), and a sunrise-like dynamic arc: build from vel ~55 (bar 0) to a warm peak in the chorus (bars 12-19, cello vel 85) then fade to vel 50 (cello) and 35 (flute) by bar 23 — evoking dawn brightening then settling. Strings + flute timbre is pastoral and calm. Minor detraction: viola sustains vel 85-92, louder than the melody, slightly thickening the texture."
+       },
+       {
+        "item": "BPM (numeric)",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify a numeric tempo; generator chose 66 BPM."
+       },
+       {
+        "item": "Duration",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify length; composition is 24 bars (intro 4, verse 8, chorus 8, outro 4)."
+       },
+       {
+        "item": "Specified instruments",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify instrumentation; generator chose Violin (40), Cello (42), Viola (41), Flute (73) — a fitting choice for the requested mood, but not a prompt constraint."
+       }
+      ],
+      "J3": [
+       {
+        "item": "rubric",
+        "verdict": 3,
+        "evidence": "Technically flawless but mechanically constructed: every track moves in whole/half-note blocks aligned to the chord grid (Violin bars 0-11, Cello one whole note per bar throughout, Viola static whole-bar dyads). There is a genuine dynamic arch (velocity 55 at bar 0 building to 82 at bar 17.5, fading to 35-50 in the outro) and the chorus lifts register, but there is no rhythmic subdivision anywhere (no note shorter than a quarter at 66 BPM), no articulation variation, no contrasting bridge, and no memorable hook — the 'chorus' is the verse idea repeated higher and louder. Fits 'competent but flat / mechanical' (3) rather than 'coherent with dynamics' (4), because the expression that exists is only global velocity shaping, not musical phrasing."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "sample_id": "jazz_basic_03",
+   "style": "jazz",
+   "category": "basic",
+   "composition_sha256": "458019e7c342db90d3504002026908dec40585c5c8b7decb559c08989f2904ea",
+   "prompt_sha256": "d56c09439390f1ef9ca1c9edf1a2673810e280a02c8a325b92c34dadd21001b1",
+   "rounds": [
+    {
+     "round": 1,
+     "J1": 55.0,
+     "J2": 85.0,
+     "J3": 35.0,
+     "composite": 34.99,
+     "per_item": {
+      "J1": [
+       {
+        "item": "checklist item 1",
+        "verdict": "partial",
+        "evidence": "Track roster partially matches: 'Bass' uses GM 32 Acoustic Bass (correct) and melody is a trumpet variant (program 59 Muted Trumpet, not GM 56), but 'Piano' is program 0 Grand Piano instead of Rhodes (GM 4), and the Tenor Sax color role (GM 66) is entirely absent; a drum track was added, which is idiomatic for jazz but not in the roster."
+       },
+       {
+        "item": "checklist item 2",
+        "verdict": "partial",
+        "evidence": "Muted Trumpet bars 0-3 sit at MIDI 70-82 (inside G4-G6, good) and Bass spans 31-48 (inside E1-G3, good), but Piano at bar 8 (tick 3840) plays pitches 40/50/56/59 (E2-B2), well below the specified C3-B4 window and into bass territory."
+       },
+       {
+        "item": "checklist item 3",
+        "verdict": "partial",
+        "evidence": "Drums bars 0-8 play closed hi-hat (note 42) quarters with kick-on-1/3 and snare-on-2/4 backbeat (e.g., tick 2400 snare, tick 2880 kick) — a pop backbeat, not the required ride-swing pulse; melody bar 1 (ticks 480/720) uses straight-eighth spacing with only a long-short duration lilt; only the consistent -40 tick laid-back offsets and the Bass walking quarters (every 480 ticks, e.g., bars 4-11) give any jazz feel."
+       },
+       {
+        "item": "checklist item 4",
+        "verdict": "yes",
+        "evidence": "Harmony is built almost entirely of seventh chords with textbook ii-V-I motion: bars 5-7 Dm7-G7-Cmaj7, bars 9-11 Bm7b5-E7-Am7 (minor ii-V-i), bars 21-23 Dm7-G7-Cmaj7, closing bars 28-31 Bm7b5-E7-Am7-Am6."
+       },
+       {
+        "item": "checklist item 5",
+        "verdict": "partial",
+        "evidence": "Piano comping frequency is ballad-appropriate but each hit is a 4-note stack (e.g., bar 0 tick 0: 45/55/60/64 Am7) rather than sparse shells, and the melody track stops at tick 7680, leaving bars 4-31 with no horn line at all — density and complexity don't match a horn-led small combo."
+       },
+       {
+        "item": "checklist item 6",
+        "verdict": "partial",
+        "evidence": "Prohibition 'keep the piano comping sparse (two-note shells)' is violated throughout (every piano voicing is 4 notes, e.g., bar 16 tick 13440: 48/55/59/64); 'trumpet out of its low muddy octave' is respected (lowest melody note 70); piano's low E2/F2 (ticks 3840, 16080) muddies the bass register though it never literally doubles the bass line."
+       },
+       {
+        "item": "checklist item 7",
+        "verdict": "no",
+        "evidence": "The defining texture — horn-led melody over comping — exists only in the 4-bar intro (Muted Trumpet ends at tick 7680); verse, bridge, second verse and outro (bars 4-31) are piano/bass/drums only, with no Tenor Sax harmony/soli answers, reading as a pop-ballad backing track rather than a jazz combo."
+       },
+       {
+        "item": "checklist item 8",
+        "verdict": "yes",
+        "evidence": "meta.bpm = 112 falls within the style's 110-208 range (low end suits the ballad title), and structure/harmony grid is on a consistent 4/4 ppq=480 layout."
+       }
+      ],
+      "J2": [
+       {
+        "item": "BPM",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify a tempo. Composition uses 112 BPM; no constraint to grade."
+       },
+       {
+        "item": "Key/Tonality",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify a key. Composition is in A minor (Am7 tonic, Bm7b5–E7 minor ii–V), which suits the pensive mood but is not a graded constraint."
+       },
+       {
+        "item": "Duration",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify length. Composition is 32 bars (intro–verse–bridge–verse–outro)."
+       },
+       {
+        "item": "Specified instruments (muted trumpet)",
+        "verdict": "satisfied",
+        "evidence": "Prompt requests 'muted trumpet'. Track 'Muted Trumpet' uses GM program 59, which is Muted Trumpet in 0-indexed General MIDI. The parsed expected value (program 56) corresponds to open Trumpet; program 59 is the correct, closer match for the prompt's 'muted trumpet'. Note: the trumpet only performs during bars 0–4 (ticks 0–7440) and is silent for the remaining 28 bars, leaving piano/bass/drums to carry the piece."
+       },
+       {
+        "item": "Mood: cool jazz ballad, thoughtful and understated",
+        "verdict": "satisfied",
+        "evidence": "Jazz vocabulary throughout (Am7, Dm7, G7, Cmaj7, Fmaj7, Bm7b5, E7, Am6; ii–V–I and minor ii–V–i turnarounds), sparse melody at moderate velocities (80–92), soft piano comping (vel 56–67), and low-velocity drums (vel 27–58) create a restrained, thoughtful character. Caveats: 112 BPM is brisk for a ballad (typically 60–90), meta style is tagged 'pop', and the featured trumpet drops out after the intro."
+       }
+      ],
+      "J3": [
+       {
+        "item": "rubric",
+        "verdict": "2",
+        "evidence": "The piece has real structure (32-bar intro/verse/bridge/verse/outro) and an idiomatic jazz progression (Am7-E7, Fmaj7-Bm7b5-E7-Am7, Am6 ending), but the featured melody is in the wrong key: the trumpet's entire pitch set {C, Db, Eb, F, Gb, Ab, Bb} is Db-major/Bb-minor material sounding against an A-minor chart, so nearly every melody note (Bb, C#, Eb, Gb, Ab) clashes with Am7/E7 harmony. Worse, the melody exists only for the 4-bar intro (last note ends at tick 7680 = bar 4), leaving 28 bars with no melody at all, and the drums drop out at bar 20, so the final third is a bare piano/bass duo. This is 'some musical structure with dense, obvious theory violations' — rubric level 2, not 3."
+       }
+      ]
+     }
+    },
+    {
+     "round": 2,
+     "J1": 58.0,
+     "J2": 68.0,
+     "J3": 56.0,
+     "composite": 35.92,
+     "per_item": {
+      "J1": [
+       {
+        "item": "checklist item 1",
+        "verdict": "partial",
+        "evidence": "Track roster: 'Muted Trumpet' uses program 59 (spec calls for Trumpet 56), 'Piano' uses program 0 grand (spec calls for Rhodes program 4), the Tenor Sax color track is missing entirely, and a Drum track not in the roster is added. Acoustic Bass (32) matches."
+       },
+       {
+        "item": "checklist item 2",
+        "verdict": "partial",
+        "evidence": "Muted Trumpet bars 0-3 sit at MIDI 70-82, safely inside G4-G6. Bass spans 31-48, inside E1-G3. But Piano bar 2 (tick 3840) voicing 40/50/56/59 includes E2 (40), below the specified C3-B4 voicing register, dipping into bass territory."
+       },
+       {
+        "item": "checklist item 3",
+        "verdict": "partial",
+        "evidence": "Bass walks solid quarters (bar 0: onsets 0/480/960/1440). However, Muted Trumpet bar 0 pairs onsets 480->720 and 1200->1440 are 240 ticks apart = straight eighths, not swung (~320). Drums bar 1 (tick 1920-3839) play kick on 1&3 (1920, 2880) and snare on 2&4 (2400, 3360) - a pop backbeat, not a ride-swing pulse; no ride pattern anywhere."
+       },
+       {
+        "item": "checklist item 4",
+        "verdict": "yes",
+        "evidence": "Harmony is all seventh chords: bars 4-7 Am7-Dm7-G7-Cmaj7 (ii-V-I), bars 9-11 Bm7b5-E7-Am7 (minor ii-V-i), closing Am6 in bar 31. Textbook jazz vocabulary in A minor."
+       },
+       {
+        "item": "checklist item 5",
+        "verdict": "partial",
+        "evidence": "Piano comps with four-note stacks (bar 0: 45/55/60/64; bar 2: 40/50/56/59) instead of the specified sparse two-note shells, and comps in nearly every bar with long 1440-1920 tick holds; melody density itself is appropriately ballad-sparse."
+       },
+       {
+        "item": "checklist item 6",
+        "verdict": "partial",
+        "evidence": "No guitar shredding or pad stacks, and the trumpet avoids its muddy low octave. But the swing feel does not come from written offsets: Drums use a rigid -40 tick push on every quarter hi-hat (ticks 440/920/1400/1880) with a stiff backbeat, plus crash accents at ticks 7680 and 23040 - drum-machine pop stiffness the style prohibits."
+       },
+       {
+        "item": "checklist item 7",
+        "verdict": "partial",
+        "evidence": "Core texture (horn-led melody over comping piano and walking bass) is present, e.g. Muted Trumpet bar 0 over Piano bar 0 and Bass bar 0. But the Tenor Sax color role (harmony lines/soli answers) is absent, and the drum backbeat pulls the layering toward a pop rhythm section rather than a jazz combo."
+       },
+       {
+        "item": "checklist item 8",
+        "verdict": "yes",
+        "evidence": "Meta bpm = 112, inside the 110-208 small-combo swing range (at the relaxed low end, consistent with the ballad title)."
+       }
+      ],
+      "J2": [
+       {
+        "item": "BPM",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify tempo. Composition uses 112 BPM; while unaddressed as a constraint, this is brisk for a ballad (typically 60–90 BPM) and is factored into the mood evaluation."
+       },
+       {
+        "item": "Key/Tonality",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify a key. Composition is in A minor (tonic_pc=9, minor), which is tonally consistent with a thoughtful, introspective character."
+       },
+       {
+        "item": "Duration",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify length. Composition is 32 bars with a ballad-appropriate form (intro – verse – bridge – verse – outro)."
+       },
+       {
+        "item": "Specified instruments: muted trumpet",
+        "verdict": "satisfied",
+        "evidence": "Prompt requests 'muted trumpet'. Track 'Muted Trumpet' uses GM program 59, which is the Muted Trumpet patch (program 56 is the open trumpet, so the parser's expected value was a mis-normalization). The muted trumpet carries the melody throughout all 32 bars, directly fulfilling the request."
+       },
+       {
+        "item": "Genre: cool jazz",
+        "verdict": "satisfied",
+        "evidence": "Harmony is idiomatic jazz throughout: Am7–E7 opening, ii–V–I cycles (Dm7–G7–Cmaj7, Fmaj7–Bm7b5–E7), and an Am6 picardy-style turnaround at bar 31. Sparse, laid-back trumpet melody supports the cool-jazz idiom, though the meta style tag reads 'pop'."
+       },
+       {
+        "item": "Mood: ballad, thoughtful and understated",
+        "verdict": "violated",
+        "evidence": "Mixed but net negative. Supporting: very sparse melody (only 20 notes across 32 bars), minor tonality, moderate trumpet velocities (80–92). Undermining: 112 BPM is a medium groove tempo rather than ballad tempo; drums play a hi-hat/snare backbeat pattern with crash accents (e.g., crash at bar 4 and bar 12, snare velocities up to 56) instead of the soft brushwork a cool ballad implies; bass velocities climb steadily to 86 (bar 7), making the accompaniment prominent rather than understated."
+       }
+      ],
+      "J3": [
+       {
+        "item": "rubric",
+        "verdict": 3,
+        "evidence": "Technically correct and idiomatic throughout — circle-of-fifths minor jazz progression (Am7-Dm7-G7-Cmaj7-Fmaj7-Bm7b5-E7), accurate walking bass, humanized ballad drum pattern, and a genuinely motivic intro melody. But it is 'competent but flat': the titular Muted Trumpet plays only 20 notes in the 4-bar intro (ticks 0-7680) and then vanishes for 28 of 32 bars, leaving verses and bridge as a melody-less vamp. Bass recycles identical cells per chord and drums drop out after bar 19. No wrong notes or theory violations (rules out 2), but no sustained theme, hooks, or development (rules out 4)."
+       }
+      ]
+     }
+    },
+    {
+     "round": 3,
+     "J1": 58.0,
+     "J2": 60.0,
+     "J3": 54.0,
+     "composite": 34.59,
+     "per_item": {
+      "J1": [
+       {
+        "item": "checklist item 1",
+        "verdict": "partial",
+        "evidence": "Tracks use Muted Trumpet (GM 59, roster specifies GM 56 Trumpet) and Acoustic Grand Piano (GM 0, roster specifies GM 4 Rhodes); Acoustic Bass GM 32 is correct; the Tenor Sax color track from the roster is entirely absent; Drums are acceptable since the idiom calls for a ride-swing pulse."
+       },
+       {
+        "item": "checklist item 2",
+        "verdict": "partial",
+        "evidence": "Muted Trumpet bars 0-3 sits A#4-A#5 (ticks 0-7680), safely above the muddy low octave, and Bass stays within E1-G3 (notes 31-48); however Piano voicings repeatedly dip below the C3-B4 window, e.g. bar 2 (tick 3840) includes E2 (note 40) and bar 9 (tick 16080) includes F2 (note 41), colliding with the bass register."
+       },
+       {
+        "item": "checklist item 3",
+        "verdict": "partial",
+        "evidence": "Bass walks solid quarters every 480 ticks (e.g., bars 4-11), but Drums bar 1 (ticks 1920-3840) play kick on beats 1/3 (ticks 1920, 2880) with snare backbeats on 2/4 (ticks 2400, 3360) — a pop backbeat, not a swung ride pattern; the hat plays straight quarters (ticks 0/440/920/1400) and the melody's offbeat at tick 720 is a straight eighth, so the swing feel is largely missing."
+       },
+       {
+        "item": "checklist item 4",
+        "verdict": "yes",
+        "evidence": "Harmony is built from seventh chords throughout: bars 4-7 Am7-Dm7-G7-Cmaj7 and bars 9-11 Bm7b5-E7-Am7 form textbook ii-V-I and minor ii-V-i chains, closing with a tagged Am6 at bar 31 — fully idiomatic jazz vocabulary."
+       },
+       {
+        "item": "checklist item 5",
+        "verdict": "partial",
+        "evidence": "Piano comping frequency is reasonable (~2-3 hits/bar, e.g., bars 4-6), but voicings are 4-note stacks (bar 0, tick 0: 45/55/60/64 Am7 with root) instead of the specified sparse two-note shells; the melody track thins to nothing after bar 3, leaving the density profile of a pop ballad backing track."
+       },
+       {
+        "item": "checklist item 6",
+        "verdict": "partial",
+        "evidence": "No guitar shredding or pad stacks, but the prohibition 'never double the bass melody' is violated: Piano bar 0 (tick 0, note 45=A2) doubles Bass (tick 0, note 45) and Piano bar 2 (tick 3840, note 40=E2) doubles Bass (tick 3840, note 40) in unison; drum parts are also quite grid-stiff."
+       },
+       {
+        "item": "checklist item 7",
+        "verdict": "partial",
+        "evidence": "The horn-led texture exists only in the intro: Muted Trumpet's final note ends at tick 7680 (end of bar 3), so bars 4-31 (verse/bridge/verse/outro) have no horn at all — no melody, no tenor-sax soli answers — reducing the piece to a piano-bass-drums pop ballad for 80% of its length."
+       },
+       {
+        "item": "checklist item 8",
+        "verdict": "yes",
+        "evidence": "meta.bpm = 112 falls within the style's 110-208 BPM swing range, at the relaxed ballad end appropriate to the title."
+       }
+      ],
+      "J2": [
+       {
+        "item": "BPM",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify a tempo; composition is set at 112 BPM."
+       },
+       {
+        "item": "Key/Tonality",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify a key; composition is in A minor (tonic_pc 9, minor)."
+       },
+       {
+        "item": "Duration",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify length; composition is 32 bars (intro–verse–bridge–verse–outro)."
+       },
+       {
+        "item": "Specified instruments (muted trumpet)",
+        "verdict": "violated",
+        "evidence": "Prompt calls for muted trumpet (expected program 56). The melody track is named 'Muted Trumpet' but uses GM program 59 (standard Trumpet in 0-indexed GM; Muted Trumpet is program 62/63). Compounding this, the trumpet plays only during bars 0–4 and is silent for the remaining 28 bars, so the requested featured instrument is both wrong-patched and barely present."
+       },
+       {
+        "item": "Mood: cool jazz ballad, thoughtful and understated",
+        "verdict": "satisfied",
+        "evidence": "Jazz idiom is well realized: Am7–Dm7–G7–Cmaj7 and Bm7b5–E7 progressions, jazz-quartet instrumentation (trumpet/piano/bass/drums), a sparse lyrical melody in long note values, soft piano comping (vel. 56–67) and light drumming (vel. 27–58) all support a thoughtful, understated character. Caveats: 112 BPM is faster than a typical ballad, the drum backbeat is pop-flavored rather than swung, and the meta style tag reads 'pop' rather than jazz."
+       }
+      ],
+      "J3": [
+       {
+        "item": "rubric",
+        "verdict": 3,
+        "evidence": "Technically correct and harmonically sophisticated, but effectively a backing track: the 'Muted Trumpet' melody exists only in the 4-bar intro (last note ends at tick 7680, bar 4), leaving 28 bars of verse/bridge/outro with no theme, no development, and no hook restatement. Drums also stop after bar 19. Strong harmony (correct jazz voicings throughout) and rhythm (steady walking bass, section fills) keep it out of rubric 2, but the absence of melodic content over the changes makes the piece flat and formulaic — rubric 3."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "sample_id": "lofi_basic_01",
+   "style": "lofi",
+   "category": "basic",
+   "composition_sha256": "676b1b8de6638b60e3644daf32c4e1210969683b686284df09405b6b6256d4d5",
+   "prompt_sha256": "920f50904bbd8c81c6b3e75a6a75f47d9d0da589943985b1d6f3ff7cdc2fa16e",
+   "rounds": [
+    {
+     "round": 1,
+     "J1": 74.0,
+     "J2": 92.0,
+     "J3": 55.0,
+     "composite": 41.97,
+     "per_item": {
+      "J1": [
+       {
+        "item": "checklist item 1",
+        "verdict": "partial",
+        "evidence": "Rhodes (program 4), finger bass (33), and drums match the lofi roster, but the melody is Acoustic Piano (program 0) instead of soft-mallet Vibraphone (11) — e.g. Piano bar 5 (tick 8640, pitch 88) — and the color role is Breath Noise (123) as 'Vinyl Crackle' rather than the warm pad (89). The crackle layer is stylistically apt for lofi even though it's off-roster."
+       },
+       {
+        "item": "checklist item 2",
+        "verdict": "partial",
+        "evidence": "Bass sits correctly in E1-D3 (Bass bar 1: F2=41 down to A1=33 in bar 20). Rhodes voicings frequently top out above the C3-B4 window (Rhodes bar 9, tick 16320: pitch 77=F5). Piano melody badly exceeds C4-A5, reaching 91-93 (G6-A6) in bars 10-13 (tick 24000: pitch 93)."
+       },
+       {
+        "item": "checklist item 3",
+        "verdict": "yes",
+        "evidence": "Drums bar 1-2: hats placed at +120 ticks after every 8th (ticks 120, 600, 1080, 1560) and snare on beats 2/4 delayed +60 ticks (ticks 2400, 3480) — a textbook lazy, dragging backbeat; kick at 0 and 1020 lands just behind beat 3."
+       },
+       {
+        "item": "checklist item 4",
+        "verdict": "yes",
+        "evidence": "Harmony bars 1-20: descending diatonic loop Fmaj7-Em7-Dm7-Cmaj7 with an Am7 turnaround in bar 20 — exactly the maj7/min9 chillhop vocabulary; Rhodes realizes them as 4-note same-onset stacks (bar 1: 65/69/72/76)."
+       },
+       {
+        "item": "checklist item 5",
+        "verdict": "partial",
+        "evidence": "Texture is mostly sparse — Rhodes holds whole-bar chords (bar 1, dur 1920), bass plays whole/half notes, melody rests for the entire 4-bar intro. But up to five layers sound at once in the verse/chorus (Rhodes + Bass + Drums + Vinyl Crackle + Piano, e.g. bar 5), one over the four-layer guideline."
+       },
+       {
+        "item": "checklist item 6",
+        "verdict": "yes",
+        "evidence": "No distorted guitar, no staccato synth stabs, no busy fills anywhere; the only mild wake-up moments are crash accents (49) at section changes — Drums bar 5 (tick 7680, vel 85) and bar 13 (tick 23040, vel 90) — otherwise soft dynamics throughout."
+       },
+       {
+        "item": "checklist item 7",
+        "verdict": "partial",
+        "evidence": "Overall layering is close: Vinyl Crackle sits at vel 26-35 as a barely-audible wash (bar 1, tick 0, vel 35), and velocities vary musically across tracks (Rhodes 59-78, hats 40-65). However the Piano melody's bright high register (bar 13, pitch 93, vel 80) pokes through the hazy texture rather than blending."
+       },
+       {
+        "item": "checklist item 8",
+        "verdict": "yes",
+        "evidence": "Meta bpm = 75, squarely inside the 66-92 lofi range; 20-bar structure at 1920 ticks/bar is consistent across all tracks (last onset 36480 + 1920 = bar 20 end)."
+       }
+      ],
+      "J2": [
+       {
+        "item": "BPM",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify tempo. Composition uses 75 BPM, which is stylistically appropriate for lo-fi hip hop but cannot be scored as followed/violated."
+       },
+       {
+        "item": "Key/Tonality",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify a key. Composition is in C major with a diatonic seventh-chord progression."
+       },
+       {
+        "item": "Duration",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify length. Composition is 20 bars (intro/verse/chorus/outro)."
+       },
+       {
+        "item": "Specified instruments (piano, program 0)",
+        "verdict": "satisfied",
+        "evidence": "Prompt requests 'soft piano'; a dedicated Piano track with program 0 is present (melody role, bars 4-20). Additional tracks (Rhodes prog 4, Bass prog 33, Drums, Vinyl Crackle prog 123) support the requested beat and crackle rather than conflicting with the request."
+       },
+       {
+        "item": "Vinyl crackle",
+        "verdict": "satisfied",
+        "evidence": "Explicitly requested and delivered: a dedicated 'Vinyl Crackle' track (program 123) with sparse, low-velocity (26-35) noise events running continuously from bar 0 through bar 20."
+       },
+       {
+        "item": "Lo-fi hip hop beat",
+        "verdict": "satisfied",
+        "evidence": "75 BPM with a laid-back kick/snare/hi-hat pattern (kick on 36, snare on 38, hats on 42), electric bass, and jazzy Fmaj7-Em7-Dm7-Cmaj7 harmony — idiomatic lo-fi hip hop. Minor note: meta.style is tagged 'pop', but the musical content matches the requested style."
+       },
+       {
+        "item": "Dreamy mood",
+        "verdict": "satisfied",
+        "evidence": "Dreamy character supported by seventh-chord harmony throughout, warm Rhodes comping, moderate tempo, and soft texture; final Am7 at bar 19 adds a gentle harmonic color."
+       },
+       {
+        "item": "Soft piano",
+        "verdict": "satisfied",
+        "evidence": "Piano velocities range 48-80 (mostly 56-76), consistent with 'soft'. Melody sits in a fairly high register (pitches 76-93), slightly bright for lo-fi but not a violation."
+       },
+       {
+        "item": "For studying",
+        "verdict": "satisfied",
+        "evidence": "Calm, repetitive, low-intensity arrangement with steady groove and no harsh dynamics; drum velocities peak at 90 only briefly in the chorus (bar 12), otherwise moderate."
+       }
+      ],
+      "J3": [
+       {
+        "item": "rubric",
+        "verdict": 3,
+        "evidence": "Technically clean and dynamically shaped, but fundamentally formulaic: the same Fmaj7-Em7-Dm7-Cmaj7 loop repeats unchanged for all 20 bars, the bass plays bare roots with no figuration, and the melody is too sparse (27 notes in 20 bars) to establish a memorable hook or motivic development. Sits at 'competent but flat' rather than 'coherent with dynamics' because the dynamic arc is real but the thematic content never develops beyond the loop."
+       }
+      ]
+     }
+    },
+    {
+     "round": 2,
+     "J1": 74.0,
+     "J2": 92.0,
+     "J3": 55.0,
+     "composite": 41.97,
+     "per_item": {
+      "J1": [
+       {
+        "item": "checklist item 1",
+        "verdict": "partial",
+        "evidence": "Rhodes (program 4, harmony), fingered Electric Bass (program 33), and a 'Vinyl Crackle' noise color are all idiomatic lofi choices, but the melody is Acoustic Grand Piano (program 0) instead of the style's Vibraphone (program 11), and the color role is a crackle effect rather than the warm pad — thematically lofi but off-roster."
+       },
+       {
+        "item": "checklist item 2",
+        "verdict": "partial",
+        "evidence": "Bass sits perfectly in E1-D3 (e.g., Bass bar 19, tick 36480, note 33 A1 under Am7), but Rhodes voicings reach 72-77 (C5-F5), above the C3-B4 window (Rhodes bar 12, tick 23040: notes 76, 77), and the Piano melody climbs to 88-93 (Piano bar 12, tick 24000, note 93 = A6), far above the vibraphone's C4-A5 ceiling — too bright/high for the style."
+       },
+       {
+        "item": "checklist item 3",
+        "verdict": "yes",
+        "evidence": "Drums bar 0: closed hats at ticks 120/600/1080/1560 sit a uniform 120 ticks behind each quarter-note, and the kick at tick 1020 lands ~60 ticks late after beat 2 — a groove that consistently drags behind the beat; snares on 2 and 4 (ticks 2400, 3480) with the beat-4 snare 120 ticks late give the lazy backbeat."
+       },
+       {
+        "item": "checklist item 4",
+        "verdict": "yes",
+        "evidence": "Harmony bars 0-3: Fmaj7 - Em7 - Dm7 - Cmaj7, a diatonic maj7/min7 descent repeated across all 20 bars with a final Am7 (bar 19) — exactly the dusty maj7/min9 chord vocabulary of chillhop."
+       },
+       {
+        "item": "checklist item 5",
+        "verdict": "partial",
+        "evidence": "Bass is very sparse (whole/half-note roots, e.g., Bass bars 0-3) and the Piano melody leaves large gaps (e.g., silence from ticks 11520-14160), but verse/chorus stacks five simultaneous layers (Rhodes 4-note chords + bass + drums + piano + crackle), exceeding the four-layer sparseness guideline."
+       },
+       {
+        "item": "checklist item 6",
+        "verdict": "yes",
+        "evidence": "No distorted guitars, no staccato synth stabs, no drum fills anywhere in the Drums track; only mild concern is a crash (note 49, velocity 90) at chorus start bar 12 (tick 23040), which is loud but a single section marker, not a wake-up fill."
+       },
+       {
+        "item": "checklist item 7",
+        "verdict": "partial",
+        "evidence": "The intro (bars 0-3) is a proper sparse bed of Rhodes + bass + drums + low-velocity crackle (velocities 26-35), and the outro fades drum velocities from ~86 down to 40-68 (bars 16-19), but from bar 4 onward the piano melody pushes the texture to five layers, slightly denser than the style's ideal."
+       },
+       {
+        "item": "checklist item 8",
+        "verdict": "yes",
+        "evidence": "Meta bpm = 75, squarely inside the 66-92 BPM lofi range, and the 20-bar intro/verse/chorus/outro arc at that tempo reads as a hazy bedroom chillhop piece (though meta.style is mislabeled 'pop')."
+       }
+      ],
+      "J2": [
+       {
+        "item": "BPM",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify a tempo. Composition uses 75 BPM, which happens to sit squarely in the typical lo-fi hip hop range (60-90), so no conflict."
+       },
+       {
+        "item": "Key/Tonality",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify a key. Composition is in C major (tonic_pc=0, major) with diatonic maj7/m7 chords."
+       },
+       {
+        "item": "Duration",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify length. Composition is 20 bars (~64 seconds at 75 BPM) with intro/verse/chorus/outro structure."
+       },
+       {
+        "item": "Specified instruments (piano, program=0)",
+        "verdict": "satisfied",
+        "evidence": "Prompt requests soft piano; composition includes a dedicated 'Piano' track with program 0 (Acoustic Grand Piano) playing the melody from bar 4 onward. Other tracks (Rhodes prog 4, Bass prog 33, Drums, Vinyl Crackle prog 123) supplement rather than replace the piano."
+       },
+       {
+        "item": "Vinyl crackle",
+        "verdict": "satisfied",
+        "evidence": "Dedicated 'Vinyl Crackle' track (program 123, noise-type timbre) runs continuously across all 20 bars with sparse, low-velocity events (velocities 26-35), emulating surface noise without overwhelming the mix."
+       },
+       {
+        "item": "Soft piano (dynamics)",
+        "verdict": "satisfied",
+        "evidence": "Piano melody velocities average ~64 (range 48-80), i.e., moderate-to-soft touch; the melody thins out and softens in the outro (bars 18-20, velocities 48-56). A few peak notes at 78-80 in the chorus (bars 13-14) are slightly brighter but still within a gentle range."
+       },
+       {
+        "item": "Dreamy mood",
+        "verdict": "satisfied",
+        "evidence": "Slow 75 BPM tempo, lush 7th-chord harmony (Fmaj7-Em7-Dm7-Cmaj7 descending loop), Rhodes electric piano pads, and low-intensity dynamics all support a dreamy, hazy character."
+       },
+       {
+        "item": "Lo-fi hip hop beat",
+        "verdict": "satisfied",
+        "evidence": "Classic boom-bap/lo-fi drum pattern throughout: kick (note 36) on beats 1/3, snare (note 38) on the backbeat, closed hats (note 42) in eighth notes; Rhodes comping, laid-back bass, and vinyl crackle complete the idiom. Minor caveat: metadata 'style' field is tagged 'pop', though the actual musical content is lo-fi hip hop."
+       },
+       {
+        "item": "Suitability for studying",
+        "verdict": "satisfied",
+        "evidence": "Highly repetitive 4-chord harmonic loop, consistent drum groove with no fills or drops, no jarring transitions between sections, and moderate dynamics (drum velocities rise modestly to 88-90 only at the chorus peak in bar 13) make it unobtrusive background music."
+       }
+      ],
+      "J3": [
+       {
+        "item": "rubric",
+        "verdict": "3",
+        "evidence": "Technically clean but formulaic. Every track is error-free: Rhodes voicings match the chart exactly (Fmaj7 = 65/69/72/76 at bar 0 through Am7 = 60/64/67/69 at bar 19), the melody is 100% consonant with the harmony, and there is a genuine long-form dynamic arc (drums vel 74→90→40, melody vel 48→80→48). But the harmony is a single Fmaj7-Em7-Dm7-Cmaj7 loop repeated five times with no variation, the bass plays only root whole/half notes, and the melody is a sparse chord-tone arpeggio without a memorable hook — 'competent but flat / formulaic' rather than engaging. Not a 2: there are no wrong notes, register violations, or rhythmic breakdowns anywhere."
+       }
+      ]
+     }
+    },
+    {
+     "round": 3,
+     "J1": 78.0,
+     "J2": 92.0,
+     "J3": 56.0,
+     "composite": 42.64,
+     "per_item": {
+      "J1": [
+       {
+        "item": "checklist item 1",
+        "verdict": "partial",
+        "evidence": "Rhodes (program 4, harmony), fingered electric bass (program 33), and a drum track match the lofi roster, but the melody is Piano (program 0) instead of Vibraphone (11), and the color slot is 'Vinyl Crackle' (program 123) rather than the warm pad (89)."
+       },
+       {
+        "item": "checklist item 2",
+        "verdict": "partial",
+        "evidence": "Bass sits correctly low (F2/E2/D2/C2, ticks 0-5760, within E1-D3), but Rhodes top voices reach D5-F5 (notes 74-77, e.g. tick 7680) above the C3-B4 band, and the Piano melody spans E5-A6 (notes 76-93, ticks 7680-36960) — roughly an octave above the C4-A5 soft-mallet register."
+       },
+       {
+        "item": "checklist item 3",
+        "verdict": "yes",
+        "evidence": "Drums bars 1-2 (ticks 0-3840): kick on 1 and 3 (ticks 0, 1020 — the latter dragged +60 ticks), snare on 2 and 4 with the beat-4 snare 120 ticks late (tick 3480), one soft hat per beat (vel 40-57) — a lazy behind-the-beat backbeat with no fills."
+       },
+       {
+        "item": "checklist item 4",
+        "verdict": "yes",
+        "evidence": "Harmony bars 0-19: Fmaj7-Em7-Dm7-Cmaj7 loop closing on Am7 (bar 19); Rhodes realizations are all four-note maj7/min7 voicings (bar 0: F4-A4-C5-E5; bar 1: E4-G4-B4-D5)."
+       },
+       {
+        "item": "checklist item 5",
+        "verdict": "yes",
+        "evidence": "Piano melody has only 27 notes across 20 bars and is silent until tick 7680 (bar 16); Rhodes holds whole-note chords, bass is roots-only whole/half notes — sparse texture with deep calm."
+       },
+       {
+        "item": "checklist item 6",
+        "verdict": "partial",
+        "evidence": "No distorted guitars, staccato stabs, or wake-up fills anywhere; however, crash accents at vel 85-90 (Drums ticks 7680 and 23040, bar 13) and the bright high piano peak (note 93, vel 80, tick 24000) are the least lofi moments."
+       },
+       {
+        "item": "checklist item 7",
+        "verdict": "yes",
+        "evidence": "Peak chorus layering (bar 16, tick 7680) is four musical layers (Rhodes, Piano, Bass, Drums) plus a subliminal crackle wash (vel 26-35); intro bars 0-3 use only Rhodes, bass, and drums — hazy and soft throughout."
+       },
+       {
+        "item": "checklist item 8",
+        "verdict": "yes",
+        "evidence": "meta.bpm = 75, comfortably inside the 66-92 chillhop window."
+       }
+      ],
+      "J2": [
+       {
+        "item": "BPM",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify a tempo. Composition uses 75 BPM, which happens to sit squarely in the lo-fi hip hop range, but per rules this is unaddressed."
+       },
+       {
+        "item": "Key/Tonality",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify a key. Composition is in C major (tonic_pc=0, major) with a diatonic 7th-chord loop."
+       },
+       {
+        "item": "Duration",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify length. Composition is 20 bars (intro/verse/chorus/outro), roughly 64 seconds at 75 BPM."
+       },
+       {
+        "item": "Specified instruments (piano, program=0)",
+        "verdict": "satisfied",
+        "evidence": "A dedicated 'Piano' track with program 0 is present (role: melody) alongside Rhodes (4), Bass (33), Drums, and Vinyl Crackle (123). The requested piano is included; extra supporting instruments are consistent with a 'beat' and are not a violation."
+       },
+       {
+        "item": "'soft piano' (timbre/dynamics)",
+        "verdict": "satisfied",
+        "evidence": "Piano velocities average ~67 (range 48-80) and taper to 48-56 in the outro. Brief peaks to 78-80 in the chorus (bars 12-13) are the only moments pushing beyond 'soft'."
+       },
+       {
+        "item": "'vinyl crackle'",
+        "verdict": "satisfied",
+        "evidence": "Dedicated 'Vinyl Crackle' track (program 123) runs from bar 0 to the end: sparse high-register ticks (pitch 103-111) at very low velocities (26-35), effectively simulating surface noise."
+       },
+       {
+        "item": "'dreamy' (mood)",
+        "verdict": "satisfied",
+        "evidence": "Slow 75 BPM, mellow maj7/m7 harmonic loop (Fmaj7-Em7-Dm7-Cmaj7, ending Am7), warm Rhodes voicings, and gentle dynamic arc create a hazy, dreamlike character."
+       },
+       {
+        "item": "'lo-fi hip hop beat' (genre)",
+        "verdict": "satisfied",
+        "evidence": "Relaxed kick/snare/hi-hat groove with bass and Rhodes at 75 BPM matches lo-fi hip hop idioms. Minor caveat: meta.style is tagged 'pop', but the actual musical content conforms to the requested genre."
+       },
+       {
+        "item": "'for studying' (function)",
+        "verdict": "satisfied",
+        "evidence": "Repetitive 4-chord loop, no abrupt transitions, moderate dynamics that build only slightly in the chorus and decay to velocity ~68 by the outro — suitable as unobtrusive study music."
+       }
+      ],
+      "J3": [
+       {
+        "item": "rubric",
+        "verdict": "3",
+        "evidence": "Technically clean but flat. No wrong notes or rhythmic errors anywhere (Piano melody is entirely chord tones/extensions, e.g. bar 8: C6/E6/G6 over Fmaj7 = 5th/7th/9th; Bass roots align with every charted chord). Dynamics are genuinely shaped (Drums kick vel 76→90 into chorus, fade to 40 at bar 19; Piano melody peaks vel 80 on A6 in bar 12, decays to 48-50 in outro). However, the piece is a single 4-chord loop (Fmaj7-Em7-Dm7-Cmaj7) repeated verbatim 5 times with only bar 19 deviating (Am7), the Bass is static root whole-notes throughout, and the melody is too sparse to form a hook (~27 notes in 20 bars; single held notes in bars 11, 15, 16). This matches G_repetition 0.719 and G_balance 0.400. Competent, playable, idiomatic lo-fi pop, but formulaic and lacking memorable thematic content — solidly a 3, not a 4."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "sample_id": "pop_basic_04",
+   "style": "pop",
+   "category": "basic",
+   "composition_sha256": "0d21409303b47f900a98a8488f606188f02e189ee40ad6f32706ff45e891e1ab",
+   "prompt_sha256": "b483f1f4ce95670635f17e281661da984f0cc03b80dab25abc3ec0c3fd125812",
+   "rounds": [
+    {
+     "round": 1,
+     "error": "LLM call failed after retries: [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)"
+    },
+    {
+     "round": 2,
+     "J1": 74.0,
+     "J2": 93.0,
+     "J3": 58.0,
+     "composite": 41.2,
+     "per_item": {
+      "J1": [
+       {
+        "item": "checklist item 1",
+        "verdict": "partial",
+        "evidence": "Track roster matches the four-piece band shape (Drums, Acoustic Bass, Acoustic Guitar comping, Flute lead), but the lead is Flute (GM 73) instead of the specified bright sawtooth lead (GM 81), and the bass is Acoustic Bass (GM 32) rather than Electric Bass finger (GM 33); guitar comping itself is an allowed alternative to Rhodes."
+       },
+       {
+        "item": "checklist item 2",
+        "verdict": "partial",
+        "evidence": "Acoustic Bass stays in root register (C2-G2, e.g., bar 0 note 36, bar 1 note 43) and Flute sits at C5-C6 within the lead range, but the Acoustic Guitar arpeggios climb to A5/C6 (bar 0 tick 720 note 84; bar 51 tick 98400 note 84), exceeding the C3-C5 harmony register and crowding the lead's territory."
+       },
+       {
+        "item": "checklist item 3",
+        "verdict": "yes",
+        "evidence": "Drums bar 1 (ticks 0-1920): kick on beats 1 and 3 (ticks 0, 960), snare on beats 2 and 4 (ticks 480, 1440), straight eighth-note hats at 240-tick spacing - a textbook pop backbeat, with velocity lifting from 60/50/40 in verse (bar 4) to 75/65/55 in chorus (bar 12)."
+       },
+       {
+        "item": "checklist item 4",
+        "verdict": "yes",
+        "evidence": "Harmony is entirely I-V-vi-IV family: intro/chorus C-G-Am-F (bars 0-3, 12-15), verse Am-F-C-G (bars 4-7), bridge Fmaj7-G-Am7-G7 (bars 36-39) adding gentle seventh-color before the final chorus - fully diatonic pop vocabulary."
+       },
+       {
+        "item": "checklist item 5",
+        "verdict": "yes",
+        "evidence": "Density is appropriately lean: Acoustic Bass plays simple root half-note-plus-quarter patterns (bar 0: C2 held 960 ticks), Acoustic Guitar is a steady eighth-note arpeggio, and the Flute melody uses long, singable values (bar 8: whole-note G at tick 5760) - no virtuosic fills competing with the hook."
+       },
+       {
+        "item": "checklist item 6",
+        "verdict": "partial",
+        "evidence": "No distorted textures or clashing solos appear, but the Flute lead (present from bar 0 through bar 51) is an orchestral timbre the pop idiom explicitly says to skip in favor of a bright synth-style lead."
+       },
+       {
+        "item": "checklist item 7",
+        "verdict": "partial",
+        "evidence": "Layering is mostly clean - one lead voice at a time (Flute only), bass kept well below the melody - but the guitar arpeggio peaks (e.g., bar 0 tick 720 note 84, bar 13 tick 12240 note 84) repeatedly enter the Flute's C5-C6 register, slightly muddying the separation the style asks for."
+       },
+       {
+        "item": "checklist item 8",
+        "verdict": "yes",
+        "evidence": "Meta bpm is 92 with 4/4 time - a plausible mid-tempo pop ballad groove that fits the steady backbeat drum pattern throughout."
+       }
+      ],
+      "J2": [
+       {
+        "item": "BPM",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify a tempo; composition uses 92 BPM, which is moderate and consistent with the requested mellow feel."
+       },
+       {
+        "item": "Key/Tonality",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify a key; composition is in C major, a bright, consonant choice that supports the peaceful mood."
+       },
+       {
+        "item": "Duration",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify length; composition runs 52 bars with a standard pop form (intro, 2x verse/chorus, bridge, chorus, outro)."
+       },
+       {
+        "item": "Specified instruments",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not name specific instruments; composition uses acoustic bass (32), acoustic guitar (25), flute (73), and drums (118)."
+       },
+       {
+        "item": "Genre: pop",
+        "verdict": "satisfied",
+        "evidence": "Meta style is 'pop' and the structure follows a classic pop form: intro (bars 0-3), verse (4-11), chorus (12-19), repeated verse/chorus, bridge (36-39), final chorus (40-47), outro (48-51)."
+       },
+       {
+        "item": "Instrumentation: acoustic",
+        "verdict": "satisfied",
+        "evidence": "Core harmony and bass are carried by Acoustic Guitar (program 25) and Acoustic Bass (program 32); the flute adds a soft, organic color rather than synthetic textures."
+       },
+       {
+        "item": "Mood: mellow",
+        "verdict": "satisfied",
+        "evidence": "Moderate 92 BPM, moderate velocities (guitar 45-78, flute 65-90, drums 30-75), and gentle consonant harmony (C-G-Am-F with soft extensions Fmaj7, Am7, G7, Fadd9) create a relaxed, low-intensity character with a quiet dynamic arc."
+       },
+       {
+        "item": "Theme: finding peace in a quiet garden",
+        "verdict": "satisfied",
+        "evidence": "Title 'Quiet Garden Harmony' directly mirrors the theme; the peaceful quality is conveyed musically (pastoral flute melody, soft intro/outro, resolving final cadence Am7-Fadd9-C), appropriate for an instrumental tune."
+       }
+      ],
+      "J3": [
+       {
+        "item": "rubric",
+        "verdict": 3,
+        "evidence": "Technically clean but formulaic: harmony is entirely diatonic C-major pop (bars 0-51, only C/G/Am/F plus Fmaj7-Am7-G7 in the bridge), no wrong notes or register violations, and section-level dynamics are well planned (Flute velocity 65 in verses vs 90 at chorus peaks, bars 13/32/46; Drums 60→75 across form). However, the composition is severely formulaic — the Drums repeat one identical bar 52 times with only velocity changes, the Acoustic Bass plays the same root half-note + beat-3 quarter pattern all piece long, and the Acoustic Guitar recycles the same arpeggio contour every bar (G_repetition gate 0.23 confirms). The Flute melody is rhythmically inert (mostly half/whole notes on chord tones, e.g., whole-bar G in bar 6, whole-bar B in bar 12) and the three choruses (bars 12-19, 28-35, 40-47) each have different melodic content, so no recurring pop hook ever establishes itself. Competent and playable, but mechanical and lacking memorable moments — rubric level 3."
+       }
+      ]
+     }
+    },
+    {
+     "round": 3,
+     "J1": 68.0,
+     "J2": 90.0,
+     "J3": 56.0,
+     "composite": 39.73,
+     "per_item": {
+      "J1": [
+       {
+        "item": "checklist item 1",
+        "verdict": "partial",
+        "evidence": "Four-piece roster is present (Drums, Acoustic Bass, Acoustic Guitar, Flute) but the lead is a Flute (GM 73) instead of a pop lead (GM 81), and the bass is Acoustic Bass (GM 32) rather than fingered electric bass (GM 33); the guitar comping itself is an accepted pop option."
+       },
+       {
+        "item": "checklist item 2",
+        "verdict": "partial",
+        "evidence": "Acoustic Bass bar 1 sits correctly at C2 (36), and Flute bar 1 (72) stays within C4-C6, but Acoustic Guitar bar 1 arpeggiates 72-76-79-84 (C5-E5-G5-C6), climbing a full octave above the C3-C5 harmony band and touching the lead's top register."
+       },
+       {
+        "item": "checklist item 3",
+        "verdict": "yes",
+        "evidence": "Drums bar 1: kick on beats 1 and 3 (ticks 0/960), snare on beats 2 and 4 (ticks 480/1440), straight eighth hi-hats (240-tick spacing) - a textbook pop backbeat with no swing, maintained consistently through bar 52."
+       },
+       {
+        "item": "checklist item 4",
+        "verdict": "yes",
+        "evidence": "Harmony bars 12-19: chorus loops C-G-Am-F (I-V-vi-IV); verse uses Am-F-C-G; bridge bars 36-39 uses Fmaj7-G-Am7-G7 as a diatonic turnaround - entirely within the I-V-vi-IV pop family."
+       },
+       {
+        "item": "checklist item 5",
+        "verdict": "yes",
+        "evidence": "Acoustic Bass plays simple root-only half/quarter notes (e.g., bars 1-4, ticks 0-5760), drums repeat one tight pattern, and the Flute carries a single unhurried hook line - density matches pop's few-layers-on-the-grid expectation."
+       },
+       {
+        "item": "checklist item 6",
+        "verdict": "no",
+        "evidence": "Flute track (GM 73) throughout, e.g., Flute bar 1 (tick 0, note 72): the style explicitly says to skip orchestral colors, and a flute lead is an orchestral color standing in for the pop sawtooth-style hook voice."
+       },
+       {
+        "item": "checklist item 7",
+        "verdict": "partial",
+        "evidence": "Layering is mostly clean - one lead at a time (Flute), bass well below the hook - but Acoustic Guitar bars 1-8 and 108+ (e.g., tick 6240 note 76, tick 12240 note 84) arpeggiate into C5-C6, overlapping the Flute's register instead of staying in mid-range comping territory."
+       },
+       {
+        "item": "checklist item 8",
+        "verdict": "yes",
+        "evidence": "Meta bpm 92 with 4/4 meter: a midtempo pop feel that fits the style's typical range and matches the steady eighth-note backbeat in the Drums track."
+       }
+      ],
+      "J2": [
+       {
+        "item": "BPM",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify a tempo; composition uses 92 BPM, a moderate tempo that happens to suit the mellow request but was not a constraint."
+       },
+       {
+        "item": "Key/Tonality",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify a key; composition is in C major (tonic_pc 0, major mode)."
+       },
+       {
+        "item": "Duration",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify length; composition runs 52 bars (intro/verse/chorus x2/bridge/chorus/outro)."
+       },
+       {
+        "item": "Specified instruments",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not name instruments; composition uses Acoustic Bass (32), Acoustic Guitar (25), Flute (73), and drum kit (118)."
+       },
+       {
+        "item": "Mood: 'mellow'",
+        "verdict": "satisfied",
+        "evidence": "Moderate 92 BPM, gentle diatonic C-G-Am-F harmony, moderate velocities (melody peaks ~90, drums kick vel 60-75), and soft extended chords (Fmaj7, Am7, Fadd9) in bridge/outro create a relaxed, low-intensity character."
+       },
+       {
+        "item": "Style: 'acoustic'",
+        "verdict": "satisfied",
+        "evidence": "Core accompaniment is Acoustic Guitar (program 25) arpeggiating throughout and Acoustic Bass (program 32); Flute (73) is also an acoustic instrument. No electric/synthetic timbres besides the standard drum kit."
+       },
+       {
+        "item": "Genre: 'pop'",
+        "verdict": "satisfied",
+        "evidence": "Meta style tag is 'pop'; structure follows a standard pop form (intro, 2x verse-chorus, bridge, final chorus, outro) with a steady 4/4 backbeat drum groove."
+       },
+       {
+        "item": "Theme: 'finding peace in a quiet garden'",
+        "verdict": "satisfied",
+        "evidence": "Conveyed instrumentally: title 'Quiet Garden Harmony' directly references the garden theme; pastoral flute melody over arpeggiated acoustic guitar evokes a garden setting, and the piece resolves peacefully in the outro (bars 48-51: Am7 - Fadd9 - C) suggesting attained peace."
+       }
+      ],
+      "J3": [
+       {
+        "item": "rubric",
+        "verdict": "3",
+        "evidence": "Technically clean but mechanical: all parts are diatonic and correctly aligned with the chord chart (bass roots match every symbol, flute melody fits harmony with only tasteful 6th/7th colors), and there is a real section-level dynamic arc. However, the accompaniment is a literal loop — the drum pattern is identical for all 52 bars with zero fills, the bass repeats the same root-only long-short figure every bar, and the guitar repeats one arpeggio formula — while the melody uses a single rhythmic template (half–quarter–quarter | whole) in every phrase. No transition material between sections; sections simply switch. This lands it at 'competent but flat / formulaic' rather than 'coherent with dynamics and variation'."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "sample_id": "touhou_basic_01",
+   "style": "touhou",
+   "category": "basic",
+   "composition_sha256": "702c3c94563b914c67e34f96f167326c8a260d3e82ecdea12201f0a17b4b6811",
+   "prompt_sha256": "ec3384125639d27278f28c8c9a4aeb4b158cc0ca08d985488d5a3240370cfbff",
+   "rounds": [
+    {
+     "round": 1,
+     "J1": 62.0,
+     "J2": 78.0,
+     "J3": 28.0,
+     "composite": 25.93,
+     "per_item": {
+      "J1": [
+       {
+        "item": "checklist item 1",
+        "verdict": "partial",
+        "evidence": "Track 'Trumpet' (program 56) is the only lead and it plays only bars 0-4 (last note ends tick 7680); no Square Lead (80) or Saw Lead (81) track exists at all, and signature harpsichord (6)/celesta (8) are absent. Organ is program 18 (Rock Organ, roster says 16) and bass is program 38 (roster says 36) — near-miss timbres. Strings (48), piano (1), trumpet (56) are correctly drawn from the roster."
+       },
+       {
+        "item": "checklist item 2",
+        "verdict": "yes",
+        "evidence": "Track 'Synth Bass' stays at pitches 28-45 (E1-A2), well below C5 as required; 'Trumpet' melody sits A4-A5 (69-81) in the C4-C8 lead zone; 'Strings' bar 12 voicing E4-A5 and 'Organ' max pitch D6 (86) all fall within stated registers."
+       },
+       {
+        "item": "checklist item 3",
+        "verdict": "partial",
+        "evidence": "Track 'Synth Bass' bar 0: eight consecutive 240-tick notes on E2 — textbook locked 8th-note drive, straight with zero swing, maintained all 28 bars. However, track 'Drums' last hit is at tick 12960 (~bar 7); the backbeat disappears for the final 21 bars, breaking the relentless first-to-last energy. Drum pattern is also irregular (snare on beat 2.5 at tick 2400 vs beat 2 elsewhere)."
+       },
+       {
+        "item": "checklist item 4",
+        "verdict": "yes",
+        "evidence": "Harmony bars 0-3: E7-E7-Am-Am opens with a hard authentic close; bars 15-16 and 19-20 repeat E7→Am; verse uses Am-F-G (bars 4-7); bridge Am-Dm-G-C (bars 20-23). Appropriate bright minor-key vocabulary with dominant E7 functioning as the style's signature cadence."
+       },
+       {
+        "item": "checklist item 5",
+        "verdict": "partial",
+        "evidence": "Bars 0-11 the harmonic bed is only Piano + Organ (2 timbres) — e.g., bar 4 has just Bright Piano 16ths and organ half-notes over bass. Strings join at bar 12 giving 3 bed timbres, but Piano exits at bar 21 (last note tick 40800), thinning the outro to Strings+Organ. The required 3-5 timbre stack is never exceeded, and there is no lead melody over verse/chorus at all."
+       },
+       {
+        "item": "checklist item 6",
+        "verdict": "yes",
+        "evidence": "No prohibited elements: drums (track 'Drums', kick 36/snare 38/hat 42/crash 49) are appropriate for high-energy doujin electronic rock; no swing figures, no style-clashing instruments (no sax/choir etc.)."
+       },
+       {
+        "item": "checklist item 7",
+        "verdict": "partial",
+        "evidence": "Track 'Strings' bar 12 (tick 23040) shows the defining ZUN trait: a same-onset 5-note Am stack (E4-A4-C5-E5-A5) with independent voice leading between chords, and Organ stacks 3-4 chord tones per half note. But the wall of sound is undercut by dropouts — Trumpet gone after bar 4, Drums after bar 7, Piano after bar 21 — so the texture never assembles lead + 3-5 bed timbres + bass simultaneously."
+       },
+       {
+        "item": "checklist item 8",
+        "verdict": "yes",
+        "evidence": "Meta bpm: 160, squarely inside the 120-170 Touhou range; 4/4 with ppq=480 grid (bar = 1920 ticks) confirmed by the 240-tick 8th-note bass pulse."
+       }
+      ],
+      "J2": [
+       {
+        "item": "BPM",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify a tempo; composition uses 160 BPM, which happens to support the requested high-energy feel."
+       },
+       {
+        "item": "Key/Tonality",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify a key; composition is in A minor (tonic_pc=9, minor), consistent with the requested style."
+       },
+       {
+        "item": "Duration",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify length; composition is 28 bars (intro 4, verse 8, chorus 8, bridge 4, outro 4)."
+       },
+       {
+        "item": "Specified instruments",
+        "verdict": "violated",
+        "evidence": "Trumpet matches exactly (program 56, role=melody), but the piano is program 1 (Bright Acoustic Piano) rather than the specified program 0 (Acoustic Grand Piano); program 0 in the file is only the drum track. Extra tracks (Synth Bass 38, Strings 48, Organ 18, drums) were added — not requested, but not prohibited."
+       },
+       {
+        "item": "Fast piano arpeggios",
+        "verdict": "satisfied",
+        "evidence": "Piano plays continuous 16th-note arpeggios (120-tick spacing ≈ 10.7 notes/sec at 160 BPM), e.g., bar 0: E4-G#4-B4-D5-E5 over E7, descending figure in bar 1, Am figures from bar 3; arpeggios persist through ~bar 21."
+       },
+       {
+        "item": "Trumpet melody",
+        "verdict": "satisfied",
+        "evidence": "Trumpet (program 56) carries the lead melody with expressive velocities (80-95), but only in bars 0-4 (intro); it never returns in verse/chorus/bridge/outro, weakening its role as the arrangement's melody."
+       },
+       {
+        "item": "High-energy",
+        "verdict": "satisfied",
+        "evidence": "160 BPM, driving drum groove (kick/snare/hats, velocities up to 125), relentless 8th-note synth bass (velocities 86-112), and dense, loud piano writing (velocities up to 96)."
+       },
+       {
+        "item": "Touhou-style",
+        "verdict": "satisfied",
+        "evidence": "Idiom hallmarks present: fast minor-key harmony with harmonic-minor E7 dominants (bars 0-1, 15, 19, 24-25), arpeggiated piano, trumpet lead, pop/rock backbeat; meta style tag 'pop' and the organ/strings padding dilute the idiom only slightly."
+       }
+      ],
+      "J3": [
+       {
+        "item": "rubric",
+        "verdict": "2",
+        "evidence": "This is not random MIDI — the harmony is idiomatic A-minor pop (E7→Am intro, Am–F–G verse, Am–G–F–E7 chorus turnaround at bars 12–15, Dm–G–C bridge), the bass tracks chord roots correctly, and the Strings pads (bars 12–27) are well-voiced, correct chords. But the arrangement fails at a basic level: the title 'Trumpet' melody plays exactly one 4-bar phrase and then vanishes — there is no melody at all in the verse, chorus, bridge, or outro (bars 4–28). The Drums stop at bar ~7, so the chorus — the energy peak — has no percussion. What remains is a Synth Bass pumping eight identical eighth-notes per bar on one root pitch, a Piano running continuous staccato arpeggios with every note exactly 120 ticks, and an Organ doubling harmony up to D6 (above the melody's A5 peak). Dense, obvious errors of arrangement, register crowding, and extreme repetition (G_repetition = 0.186) outweigh the correct note choices, placing this at level 2 rather than 3."
+       }
+      ]
+     }
+    },
+    {
+     "round": 2,
+     "J1": 65.0,
+     "J2": 90.0,
+     "J3": 27.0,
+     "composite": 27.8,
+     "per_item": {
+      "J1": [
+       {
+        "item": "checklist item 1",
+        "verdict": "partial",
+        "evidence": "Trumpet/piano/strings/organ/bass match the roster, but the signature Square Lead (80) and Saw Lead (81) are entirely absent; Synth Bass uses program 38 instead of 36, Organ uses 18 (Rock Organ) instead of 16 (Drawbar), and harpsichord/celesta color is missing."
+       },
+       {
+        "item": "checklist item 2",
+        "verdict": "yes",
+        "evidence": "Synth Bass stays at MIDI 28-45 (well below C5) with locked low drive; Trumpet lead sits at MIDI 67-81; Piano (60-79), Strings (60-83) and Organ pad in mid register as the style prescribes."
+       },
+       {
+        "item": "checklist item 3",
+        "verdict": "partial",
+        "evidence": "While present, the groove is correct: Synth Bass locked 8ths at 240-tick intervals from bar 0, Piano straight 16ths (120-tick) arpeggios, Drums straight hats with kick/snare backbeat in bars 0-6. However the drum track's last note is at tick 12960 (bar 6.75) — the beat vanishes for the remaining 21 bars, breaking the relentless drive."
+       },
+       {
+        "item": "checklist item 4",
+        "verdict": "yes",
+        "evidence": "A minor with Am-F-G-Am cycles and hard authentic E7-Am closes: bars 0-1 E7 resolve to Am at bar 2 (bass E2→A2, piano E7 tones → Am tones at tick 3840), again bars 15→16, 19→20, and 24-25 E7 → 26 Am with full-band arrival."
+       },
+       {
+        "item": "checklist item 5",
+        "verdict": "partial",
+        "evidence": "Bars 0-21 are dense (piano 16ths + organ stacks + 8th bass + drums), but the only lead melody (Trumpet) ends at bar 4 — verse and chorus have no lead at all; Piano exits at tick 40680 (bar 21.25), so the outro is a thin organ/strings/bass trio, contradicting the 'relentless energy from first bar to last' trait."
+       },
+       {
+        "item": "checklist item 6",
+        "verdict": "yes",
+        "evidence": "No prohibited elements: drum kit (tracks 'Drums', kick 36/snare 38/hat 42/crash 49) is idiomatic for doujin rock, and no style-inappropriate timbres (e.g., no sax/brass section beyond the sanctioned Trumpet lead) appear."
+       },
+       {
+        "item": "checklist item 7",
+        "verdict": "partial",
+        "evidence": "Chord-tone stacking appears — Strings at bar 12 (tick 23040) hold a 4-voice Am stack (E4/A4/C5/E5) and Organ layers 3-4 chord tones per half note — but the harmonic bed is only 2 timbres (Piano+Organ) during intro/verse (bars 0-12), below the required 3+ stack, and no lead rides above the chorus bed."
+       },
+       {
+        "item": "checklist item 8",
+        "verdict": "yes",
+        "evidence": "Meta bpm=160 falls inside the 120-170 range, 4/4 with straight grid, A minor (tonic_pc 9) matching the style's minor-key profile."
+       }
+      ],
+      "J2": [
+       {
+        "item": "BPM",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify a tempo. Composition uses 160 BPM, which is consistent with the requested high-energy character but was not a stated constraint."
+       },
+       {
+        "item": "Key/Tonality",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify a key. Composition is in A minor (tonic_pc=9, minor), a typical tonality for the requested style."
+       },
+       {
+        "item": "Duration",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify length. Composition is 28 bars with intro (4), verse (8), chorus (8), bridge (4), outro (4)."
+       },
+       {
+        "item": "Trumpet melody",
+        "verdict": "satisfied",
+        "evidence": "Track 'Trumpet' uses program 56 and is explicitly assigned role='melody', carrying the lead line from bar 0 onward (e.g., A4→B4→C5→E5 in bar 0, peak A5 in bar 2, velocities 80–95)."
+       },
+       {
+        "item": "Fast piano arpeggios",
+        "verdict": "satisfied",
+        "evidence": "Track 'Piano' plays continuous 16th-note arpeggios for nearly the entire piece (e.g., bar 0 over E7: E4–G#4–B4–D5–E5–D5–B4–G#4, 120-tick durations). Minor deviation: piano uses program 1 (Bright Acoustic Piano) rather than program 0 (Acoustic Grand Piano), but it is still a piano timbre."
+       },
+       {
+        "item": "Specified instruments (piano + trumpet)",
+        "verdict": "satisfied",
+        "evidence": "Both requested instruments are present: Trumpet (program 56, melody) and Piano (program 1, harmony). Additional tracks (Synth Bass program 38, Strings program 48, Organ program 18, Drums) supplement the arrangement, which is consistent with 'arrangement' wording rather than a violation."
+       },
+       {
+        "item": "High-energy (mood/style)",
+        "verdict": "satisfied",
+        "evidence": "160 BPM, relentless eighth-note synth bass at velocities 86–112, driving drum groove (kick/snare/hats, velocities up to 125), and dense 16th-note piano figuration all support a high-energy character."
+       },
+       {
+        "item": "Touhou-style (mood/style)",
+        "verdict": "satisfied",
+        "evidence": "Fast minor-key idiom with trumpet lead, motoric piano arpeggios, E7–Am harmonic vocabulary, and a full pop/rock rhythm section closely matches Touhou arrangement conventions."
+       }
+      ],
+      "J3": [
+       {
+        "item": "rubric",
+        "verdict": "2",
+        "evidence": "The piece has real musical structure (functional Am pop progression Am-F-G / Am-G-F-E7, correct bass roots, correct string voicings), but it is undermined by dense, obvious arrangement defects: the lead melody exists only in the 4-bar intro and then vanishes entirely, the drums cut out at bar 6.75 and never return (including the entire chorus), and the bass repeats the identical one-pitch eighth-note ostinato with the same velocity contour in all 28 bars (G_repetition 0.186). The result sounds like a backing track with tracks accidentally muted, not a finished composition — below 'competent but flat' (3), above 'random MIDI events' (1)."
+       }
+      ]
+     }
+    },
+    {
+     "round": 3,
+     "J1": 60.0,
+     "J2": 88.0,
+     "J3": 30.0,
+     "composite": 27.26,
+     "per_item": {
+      "J1": [
+       {
+        "item": "checklist item 1",
+        "verdict": "partial",
+        "evidence": "Ensemble is close but off-spec: lead is Trumpet (56) only and it exits at bar 4; the primary Square (80)/Saw (81) leads are absent entirely. Synth Bass uses program 38 (Synth Bass 2) instead of 36, Organ uses 18 (Rock Organ) instead of 16 Drawbar. Strings (48), Bright Piano (1) and drums are appropriate."
+       },
+       {
+        "item": "checklist item 2",
+        "verdict": "yes",
+        "evidence": "Synth Bass stays low (pitches 28-45, e.g. bar 0 E2/A2), Trumpet sits in lead register (67-81, bars 0-4), Strings pad mid-register (60-83, bar 12: E4-A4-C5-E5), Organ high chord tones (72-86) are within its C2-B7 range."
+       },
+       {
+        "item": "checklist item 3",
+        "verdict": "yes",
+        "evidence": "Synth Bass bar 0: unbroken 8th notes every 240 ticks on chord roots with velocity accents 88-112; Piano bar 0: straight 16th arpeggiation (120-tick steps); Drums bar 0-6: straight backbeat (kick 36 on 1, snare 38 on 2/4, 8th hats 42), zero swing anywhere."
+       },
+       {
+        "item": "checklist item 4",
+        "verdict": "yes",
+        "evidence": "A-minor vocabulary with harmonic-minor E7: intro E7->Am (bars 0-2), verse Am-F-G (bars 4-7), chorus Am-G-F-E7 descending fourths (bars 12-15), hard authentic closes E7->Am at bars 19->20 and 25->26, Dm-G-C bridge cadence (bars 21-23). Bass tracks every root exactly."
+       },
+       {
+        "item": "checklist item 5",
+        "verdict": "partial",
+        "evidence": "Chorus (bar 12+) is reasonably dense: Strings 4-note pads + Organ 3-4 note stacks + Piano 16ths + bass. But verse bed (bars 4-11) is only Piano+Organ with no lead, and the outro (bars 24-27) thins to bass+organ+strings — far below the style's relentless full-band energy."
+       },
+       {
+        "item": "checklist item 6",
+        "verdict": "yes",
+        "evidence": "No prohibited elements: drum kit (bars 0-6) is idiomatic for doujin rock, no out-of-style timbres (no sax/vibes/choir), velocities varied musically (bass 86-112, piano 70-96, drums 67-125) rather than flat."
+       },
+       {
+        "item": "checklist item 7",
+        "verdict": "partial",
+        "evidence": "The signature stacked bed appears only in the chorus: Strings bar 12 (E4/A4/C5/E5) and Organ bar 12 (E5/G#5/B5/D6) share chord tones with independent voicing. But Piano arpeggiates single 16ths instead of padding chord tones, and layers drop out over time (Drums end ~bar 7, Piano ends bar 21, Trumpet ends bar 4) — the opposite of the always-stacked wall of sound."
+       },
+       {
+        "item": "checklist item 8",
+        "verdict": "yes",
+        "evidence": "Meta bpm 160, squarely inside the 120-170 touhou range; 4/4 with straight grid at ppq=480 throughout."
+       }
+      ],
+      "J2": [
+       {
+        "item": "BPM",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify a tempo; composition uses 160 BPM (fits the high-energy character but is not a graded constraint)."
+       },
+       {
+        "item": "Key/Tonality",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify a key; composition is in A minor (tonic_pc 9, minor)."
+       },
+       {
+        "item": "Duration",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify length; composition is 28 bars (~42 s at 160 BPM in 4/4)."
+       },
+       {
+        "item": "Specified instruments (piano, trumpet)",
+        "verdict": "satisfied",
+        "evidence": "Trumpet present as program 56 (exact match) with role 'melody'; piano present as program 1 (Bright Acoustic Piano — a piano timbre, though the canonical mapping expected program 0 Acoustic Grand). Additional tracks (synth bass 38, strings 48, organ 18, drums) are consistent with the requested 'arrangement' and do not conflict with the prompt."
+       },
+       {
+        "item": "High-energy (mood)",
+        "verdict": "satisfied",
+        "evidence": "160 BPM, relentless 16th-note piano, driving 8th-note synth bass (velocities 86–112), and drums with accents up to velocity 125 sustain an aggressive, energetic character throughout."
+       },
+       {
+        "item": "Touhou-style (style)",
+        "verdict": "satisfied",
+        "evidence": "A minor with recurring E7 dominant (harmonic-minor inflection at bars 0–1, 15, 19, 24–25), fast tempo, trumpet lead over a full band (bass/drums/organ/strings) — idiomatic of Touhou fan arrangements."
+       },
+       {
+        "item": "Fast piano arpeggios",
+        "verdict": "satisfied",
+        "evidence": "Piano plays continuous 16th-note arpeggios (120-tick spacing ≈ 10.7 notes/sec), e.g., bar 0: E4–G#4–B4–D5–E5 up/down over E7; bar 2: A–C–E arpeggio over Am; texture runs from bar 0 through ~bar 21, though the piano is absent from the final ~7 bars."
+       },
+       {
+        "item": "Trumpet melody",
+        "verdict": "satisfied",
+        "evidence": "Trumpet (program 56) states a clear A-minor melody in the intro (A4–B4–C5–E5... up to A5, velocities 80–95), but it drops out after bar 4 — bars 4–28 contain no trumpet, so the featured lead sounds in only ~4 of 28 bars."
+       }
+      ],
+      "J3": [
+       {
+        "item": "rubric",
+        "verdict": 2,
+        "evidence": "The piece has a real harmonic plan (E7→Am intro, Am–F–G–Am verse, Am–G–F–E7 chorus) and a competent 4-bar trumpet phrase, but the arrangement collapses: the melody exists only in the 4-bar intro (Trumpet's last note ends at bar 4.0), drums cut out at bar ~6.75 and never return, and piano stops abruptly at bar ~21.25. The remaining 20+ bars are a metronomic bass/organ/strings bed with no lead voice. That is dense, obvious structural failure — more than 'flat', short of chaotic."
+       },
+       {
+        "item": "harmony",
+        "verdict": "OK",
+        "evidence": "Chord chart is idiomatic pop minor: V7–i opening (E7 bars 0–1 → Am bar 2), verse Am–F–G–Am, chorus Am–G–F–E7, bridge Am–Dm–G–C, outro E7→Am. Bass roots (E2/A2/F2/G2/D2/C2) and string voicings (e.g., bar 12: E4–A4–C5–E5 over Am; bar 23: C–E–G–C over C) all match the chart. No wrong-note problems found."
+       },
+       {
+        "item": "rhythm/texture",
+        "verdict": "Poor",
+        "evidence": "Every track is grid-locked with zero variation: Synth Bass plays the identical eighth-note pattern in all 28 bars, Piano plays an unbroken sixteenth-note stream for 21 bars, Organ plays quarter-note stacks throughout. No syncopation, fills, pushes, or rhythmic development anywhere (consistent with G_repetition = 0.186)."
+       },
+       {
+        "item": "dynamics/expression",
+        "verdict": "Weak",
+        "evidence": "Strings are the only expressive element: they enter at bar 12 (vel ~82–85), crescendo to ~93 by bar 19, dip to ~57–66 at the bridge (bar 20), and rebuild — a genuine shape. But the Organ does a global fade from vel ~70–80 at bar 0 to 51–57 by bar 28, so the final bars nearly evaporate, and the bass's oscillating 88–112 accents repeat mechanically every bar."
+       },
+       {
+        "item": "structure",
+        "verdict": "Broken",
+        "evidence": "Section labels (intro/verse/chorus/bridge/outro) are not realized in the arrangement: the 'chorus' (bars 12–19) — nominally the climax — contains no melody and no drums, only pads over the bass ostinato. The outro (bars 24–28) is fading organ chords, string pads, and bass eighths with piano and melody long gone; the piece dissolves rather than ends."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "sample_id": "constraint_01",
+   "style": "pop",
+   "category": "constraint",
+   "composition_sha256": "e39540e1f125e5da05c44f2a14e499517f2ca70cba359618d6c737fce378072e",
+   "prompt_sha256": "5cf41678f5c73cd072883de154a9940db8c6e62d84da517c7b66e2b70132fb28",
+   "rounds": [
+    {
+     "round": 1,
+     "J1": 60.0,
+     "J2": 95.0,
+     "J3": 30.0,
+     "composite": 36.13,
+     "per_item": {
+      "J1": [
+       {
+        "item": "checklist item 1",
+        "verdict": "partial",
+        "evidence": "Roster is close to the four-piece pop band (Drums, Bass prog 33 finger, clean Guitar prog 27, Lead synth) but Lead is prog 80 not 81, the Guitar never plays chords (single notes only, e.g. bar 8), and the lead voice exists only in the intro."
+       },
+       {
+        "item": "checklist item 2",
+        "verdict": "partial",
+        "evidence": "Bass stays in E1-G3 (C2-E3, bar 0: G2-D3) and Lead sits at G4-D5, but Guitar harmony plays C5-C6 (bar 8-9: repeated C6=84), above the C3-C5 harmony target and above the lead's register."
+       },
+       {
+        "item": "checklist item 3",
+        "verdict": "yes",
+        "evidence": "Drums bar 0-1: kick on beats 1/3 (ticks 0, 960), snare on 2/4 (480, 1440), straight eighth hi-hats, crash accents at section lines (bar 0, 4, 12, 24) - textbook pop backbeat at 120 BPM."
+       },
+       {
+        "item": "checklist item 4",
+        "verdict": "partial",
+        "evidence": "Harmony bars 0-3 G-D-Em-C (I-V-vi-IV) and chorus bars 12-19 C-G-Am-D are idiomatic, but Guitar holds a static F#5 (78) staccato pulse from bar 14 to bar 31, clashing with C (bar 16), G (bar 18) and Am (bar 20) as a non-chord tone."
+       },
+       {
+        "item": "checklist item 5",
+        "verdict": "no",
+        "evidence": "Lead track's last note ends at tick 7680 (bar 4); the verse, bridge and both choruses (bars 4-31) have no melody/hook at all, leaving only bass, guitar ostinato and drums - pop expects the memorable lead to carry the final chorus."
+       },
+       {
+        "item": "checklist item 6",
+        "verdict": "yes",
+        "evidence": "No orchestral or distorted colors: Guitar uses clean program 27, no solos or virtuosic fills compete with the hook; Drum fills are modest (e.g. bar 12 pickup ticks 22800-22920)."
+       },
+       {
+        "item": "checklist item 7",
+        "verdict": "partial",
+        "evidence": "Layers are grid-tight, but from bar 8 the Guitar plays a single-note staccato quarter pulse (C6/G5/A5/F#5) that reads as a second lead line rather than comping, and its velocity is flat (80 then 85 throughout), violating musical velocity variation."
+       },
+       {
+        "item": "checklist item 8",
+        "verdict": "yes",
+        "evidence": "Meta bpm 120 with 4/4 and clear 4/8-bar sections (intro/verse/chorus/bridge/chorus) sits squarely in the pop tempo and form range."
+       }
+      ],
+      "J2": [
+       {
+        "item": "Style (pop)",
+        "verdict": "satisfied",
+        "evidence": "meta.style = 'pop'; classic pop form (intro 4 / verse 8 / chorus 8 / bridge 4 / chorus 8) with four-chord pop progression (G-D-Em-C) and backbeat drum pattern."
+       },
+       {
+        "item": "BPM",
+        "verdict": "satisfied",
+        "evidence": "Prompt requires exactly 120 BPM; meta.bpm = 120. Note grid (480 ticks/beat, 1920 ticks/bar) is consistent with 120 BPM in 4/4."
+       },
+       {
+        "item": "Key/Tonality",
+        "verdict": "satisfied",
+        "evidence": "Prompt requires G major; meta.key = {tonic_pc: 7 (G), mode: 'major'}. All harmony (G, D, Em, C, Am) is diatonic to G major; melody pitches (G, A, B, D, E) fit the key."
+       },
+       {
+        "item": "Duration",
+        "verdict": "satisfied",
+        "evidence": "Prompt requires 32 bars; structure sections sum to 32 bars (4+8+8+4+8). Bass/Guitar/Drums content extends to tick 61440 = exactly 32 bars (32 × 1920 ticks)."
+       },
+       {
+        "item": "Specified instruments",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify instruments; composition uses Lead (program 80), Bass (33), Guitar (27), and Drums — no constraint to check."
+       }
+      ],
+      "J3": [
+       {
+        "item": "rubric",
+        "verdict": "2",
+        "evidence": "The piece has real structure (intro/verse/chorus/bridge/chorus), functional diatonic harmony (G-D-Em-C; C-G-Am-D), and an idiomatic pop rhythm section — but it fails fundamentally as a composition: the Lead track contains its final note at bar 4 and is completely silent for the remaining 28 bars, leaving verse, chorus, and bridge with no melody at all. Meanwhile the Guitar track degenerates into a single repeated F#5 (MIDI 78) from bar ~14 to bar 32, which clashes as a tritone against the C major chords in bars 24-26 and colors the Am bars (16-18, 28-30) incorrectly. These are obvious, sustained violations of pop idiom and music theory rather than a merely 'flat' execution, placing this at 2 rather than 3: the accompaniment is competent, but the whole is a backing track with a 4-bar melody stub and an 18-bar monotonous guitar pedal."
+       }
+      ]
+     }
+    },
+    {
+     "round": 2,
+     "error": "LLM call failed after retries: [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)"
+    },
+    {
+     "round": 3,
+     "J1": 68.0,
+     "J2": 100.0,
+     "J3": 28.0,
+     "composite": 37.6,
+     "per_item": {
+      "J1": [
+       {
+        "item": "checklist item 1",
+        "verdict": "partial",
+        "evidence": "Tracks Lead/Bass/Guitar/Drums form a four-piece band, but the Guitar (role 'harmony', program 27) never plays chords — e.g., Guitar bar 8 (tick 15720+) is a single repeated pitch 84 with no same-onset doubles; no piano/Rhodes or any comping layer exists, so the harmony chair is unfilled."
+       },
+       {
+        "item": "checklist item 2",
+        "verdict": "partial",
+        "evidence": "Lead bars 0-4 sits correctly at G4-D5 (67-74) and Bass stays at C2-E3 (36-52), but the Guitar line bars 0-8 (pitches 79/78/76/72 = G5-F#5-E5-C5) sits above the C3-C5 harmony band and intrudes into the lead register."
+       },
+       {
+        "item": "checklist item 3",
+        "verdict": "yes",
+        "evidence": "Drums bar 0 onward: kick (36) on beats 1/3, snare (38) on beats 2/4, closed hats (42) in steady eighths — a textbook straight pop backbeat; Bass bar 0 (tick 0, G2 half note) locks with the kick, with crash 49 marking bars 4, 12, 20, 24."
+       },
+       {
+        "item": "checklist item 4",
+        "verdict": "yes",
+        "evidence": "Harmony bars 0-11 cycle G-D-Em-C (I-V-vi-IV), chorus bars 12-19 uses C-G-Am-D (IV-I-ii-V), bridge bars 20-23 Am-C-G-D — entirely diatonic I-V-vi-IV-family pop vocabulary in G major."
+       },
+       {
+        "item": "checklist item 5",
+        "verdict": "no",
+        "evidence": "Lead track's final note ends at tick 7680 (bar 4) — the memorable hook is absent for 28 of 32 bars; Guitar substitutes a single static pitch 78 (F#5) on every beat from ~bar 14 to bar 32, which clashes as a tritone over the C chords in bars 24-26."
+       },
+       {
+        "item": "checklist item 6",
+        "verdict": "yes",
+        "evidence": "Only clean/expected colors used: program 27 clean guitar, 33 finger bass, GM drum map (36/38/42/49); no orchestral or distorted textures, no virtuosic solos — only brief drum fills (e.g., ticks 22800-22920 before the chorus)."
+       },
+       {
+        "item": "checklist item 7",
+        "verdict": "partial",
+        "evidence": "Bars 0-4 stack two single-note lines (Lead G4-D5 against Guitar G5-F#5-E5-C5), violating the one-lead rule; after bar 4 the texture thins to bass+drums plus the static guitar ostinato, leaving the mid-register (C3-C5) empty all song."
+       },
+       {
+        "item": "checklist item 8",
+        "verdict": "yes",
+        "evidence": "meta.bpm = 120 at 4/4 — squarely inside pop's typical 100-130 range, and the grid (ppq 480, onsets on 120-tick multiples) keeps everything tightly quantized."
+       }
+      ],
+      "J2": [
+       {
+        "item": "Style (pop)",
+        "verdict": "satisfied",
+        "evidence": "meta.style = 'pop'; instrumentation (synth lead program 80, fingered bass 33, guitar 27, drum kit) and verse/chorus/bridge structure are consistent with a pop arrangement."
+       },
+       {
+        "item": "BPM",
+        "verdict": "satisfied",
+        "evidence": "Prompt requires exactly 120 BPM; meta.bpm = 120. Tick grid confirms: 1920 ticks/bar at 480 ticks/beat, 4 beats/bar."
+       },
+       {
+        "item": "Key/Tonality",
+        "verdict": "satisfied",
+        "evidence": "meta.key = {tonic_pc: 7 (G), mode: 'major'} = G major. All content is diatonic: harmony uses G, D, Em, C, Am; melody pitches (G4=67, A4=69, B4=71, C5=72, D5=74); bass roots (G2=43, D2=38, C2=36, E2=40); guitar accents (G5=79, F#5=78, E5=76, C5=72) all belong to G major."
+       },
+       {
+        "item": "Duration",
+        "verdict": "satisfied",
+        "evidence": "Structure sums to exactly 32 bars: intro 4 (bar 0) + verse 8 (bar 4) + chorus 8 (bar 12) + bridge 4 (bar 20) + chorus 8 (bar 24) = 32. Harmony spans bars 0–31 (last chord D at bar 30, 2 bars). Last note ends at tick 61440 = 32 bars × 1920 ticks, exactly the 32-bar boundary."
+       },
+       {
+        "item": "Specified instruments",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify instruments; composition uses Lead (80), Bass (33), Guitar (27), Drums (0). No constraint to check."
+       }
+      ],
+      "J3": [
+       {
+        "item": "rubric",
+        "verdict": "2",
+        "evidence": "Coherent structure, harmony, bass and drums exist, but dense obvious errors: Lead track is completely empty after bar 4 (no melody in verse/chorus/bridge/final chorus), and Guitar repeats the single pitch F#5 every beat from bar 14 to bar 31, clashing as a tritone over C major chords (bars 21, 24-25). These repeated violations place the piece at 2 rather than 3."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "sample_id": "hard_01",
+   "style": "jazz",
+   "category": "hard",
+   "composition_sha256": "a85c4c767a0323692e42388c2db014951e513905d2359546b99aa87f8a3a706f",
+   "prompt_sha256": "195c7628c815c66de6f40516b6f1af09d413b5f79744235438bc526cac1f95d4",
+   "rounds": [
+    {
+     "round": 1,
+     "J1": 58.0,
+     "J2": 85.0,
+     "J3": 52.0,
+     "composite": 47.97,
+     "per_item": {
+      "J1": [
+       {
+        "item": "checklist item 1",
+        "verdict": "partial",
+        "evidence": "Track 'Lead' uses program 57 (Trombone) instead of 56 Trumpet; 'Piano' uses program 0 (Grand Piano) instead of 4 Rhodes; 'Bass' uses program 43 (Contrabass) instead of 32 Acoustic Bass; the Tenor Sax color track from the roster is entirely missing (only Lead/Piano/Bass/Drums present)."
+       },
+       {
+        "item": "checklist item 2",
+        "verdict": "partial",
+        "evidence": "Bass sits correctly in E1-G3 (e.g., 'Bass' bar 0: 38/41/45/44), but 'Lead' bar 0-1 dips to 62 (D4) and bar 4 to 57 (A3), well below the Trumpet's G4-G6 register ('low muddy octave' the style prohibits); 'Piano' bar 0 plays 74-86 (D5-C6), above the specified C3-B4 comping register."
+       },
+       {
+        "item": "checklist item 3",
+        "verdict": "partial",
+        "evidence": "'Bass' bars 0-3 walk steady quarter notes (480-tick spacing) and 'Lead' uses 320+160 swung-eighth pairs (e.g., bar 1: onsets 2400/2720), but 'Drums' bars 0-8 are a kick-on-1&3 / snare-on-2&4 backbeat pattern (36 at 0/960/1920, 38 at 480/1440) with hi-hat (42) instead of a ride-swing pulse; hat offsets at 440/920 are swung but the kit grammar is pop, not jazz."
+       },
+       {
+        "item": "checklist item 4",
+        "verdict": "yes",
+        "evidence": "Harmony bars 0-2 spell Dm7-G7-Cmaj7 (ii-V-I in C), repeated across verses; bar 13 uses Db7, a tritone substitution of G7 — idiomatic jazz vocabulary with seventh chords as the default."
+       },
+       {
+        "item": "checklist item 5",
+        "verdict": "partial",
+        "evidence": "'Piano' bars 4-8 comp with a single note every 480 ticks (onsets 1920/2400/2880/3360), which is beat-by-beat and not the sparse two-note shell comping the style expects; melody and bass densities are appropriate."
+       },
+       {
+        "item": "checklist item 6",
+        "verdict": "partial",
+        "evidence": "Prohibitions on bass-doubling and pad stacks are respected, but 'Lead' bar 4 (onset 1440, pitch 57) places the horn in the forbidden low octave, and the piano never uses two-note shells — every comp event is a lone pitch (e.g., 'Piano' bar 0: 74, then 77, then 81)."
+       },
+       {
+        "item": "checklist item 7",
+        "verdict": "partial",
+        "evidence": "Core texture (horn-led melody over comping, walking bass, drums) matches the small-combo ideal, but the tenor-sax harmony/soli layer is absent and the form is labeled with pop sections (verse/bridge at bars 4-35) rather than jazz chorus structures."
+       },
+       {
+        "item": "checklist item 8",
+        "verdict": "yes",
+        "evidence": "Meta bpm = 140, comfortably inside the 110-208 small-combo swing range."
+       }
+      ],
+      "J2": [
+       {
+        "item": "Only ii-V-I progressions throughout all sections",
+        "verdict": "violated",
+        "evidence": "11 of 12 harmonic cycles are textbook Dm7-G7-Cmaj7 (ii-V-I in C major) covering intro, all verses, bridge, and outro. However, bar 13 substitutes Db7 for G7 (Dm7-Db7-Cmaj7), a tritone substitution that breaks the strict 'only ii-V-I' rule. The deviation is confirmed in performance: Bass plays Db (MIDI 37) at bar 13 and Lead outlines Db7 (Ab at tick 25440, Db at tick 26400). Minor, single-occurrence violation."
+       },
+       {
+        "item": "Jazz genre/style",
+        "verdict": "satisfied",
+        "evidence": "Musical content is jazz-like despite the metadata style tag reading 'pop': swung hi-hat pattern (offbeats at ~440 ticks after each beat, an extreme swing placement), kick/snare backbeat, walking-style quarter-note bass line, 7th-chord harmony throughout (Dm7/G7/Cmaj7), and ii-V-I vocabulary. Title 'C Major Swing' reinforces the intended idiom."
+       },
+       {
+        "item": "Full piece (multi-section form)",
+        "verdict": "satisfied",
+        "evidence": "40-bar composition with complete structure: intro (bars 0-3), three 8-bar verses (4-11, 12-19, 28-35), bridge (20-27), and outro (36-39), ending on a sustained tonic C with crash."
+       },
+       {
+        "item": "BPM",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify tempo; composition uses 140 BPM."
+       },
+       {
+        "item": "Key/Tonality",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify key; composition is in C major (tonic_pc 0, major mode)."
+       },
+       {
+        "item": "Duration",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify length; composition is 40 bars."
+       },
+       {
+        "item": "Specified instruments",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify instruments; composition uses programs 57 (Lead), 0 (Piano), 43 (Bass), plus a drum track."
+       }
+      ],
+      "J3": [
+       {
+        "item": "rubric",
+        "verdict": 3,
+        "evidence": "Technically solid and idiomatic swing writing (chord-tone melody, walking bass, swung 320/160-tick eighth pairs, drum fills), but the 40-bar piece recycles one 2-bar melodic cell nearly a dozen times, the 'bridge' (bars 20-27) is harmonically and melodically identical to the verses, and the harmony track never plays actual chords — resulting in a competent but mechanical, formulaic result rather than an engaging composition."
+       }
+      ]
+     }
+    },
+    {
+     "round": 2,
+     "J1": 58.0,
+     "J2": 75.0,
+     "J3": 46.0,
+     "composite": 45.84,
+     "per_item": {
+      "J1": [
+       {
+        "item": "checklist item 1",
+        "verdict": "partial",
+        "evidence": "Track 'Lead' uses program 57 (Trombone in the skill's 0-indexed GM table; Trumpet is 56), 'Piano' uses program 0 (Acoustic Grand) instead of Rhodes (4), 'Bass' uses 43 (Contrabass) instead of Acoustic Bass (32), and the required Tenor Sax color track is absent; a drum track is included though drums are not in the style roster."
+       },
+       {
+        "item": "checklist item 2",
+        "verdict": "partial",
+        "evidence": "Track 'Bass' bar 0 (pitches 38-45, A1-E3 range overall) sits correctly in E1-G3 walking register, but 'Lead' bar 0 dips to MIDI 57-62 (A3-D4), well below the Trumpet's G4 floor, and 'Piano' bar 0 plays MIDI 74 (D5), above the Rhodes C3-B4 voicing register."
+       },
+       {
+        "item": "checklist item 3",
+        "verdict": "partial",
+        "evidence": "Track 'Lead' bar 1 (ticks 1920-2880) shows proper swung eighths (480 then 320+160 tick split), and 'Bass' walks in steady quarters, but 'Drums' bar 0 is a pop backbeat (kick 36 on 1&3, snare 38 on 2&4, closed hi-hat 42 at -40 tick offsets) with no ride cymbal (51), so the ride-swing pulse is missing."
+       },
+       {
+        "item": "checklist item 4",
+        "verdict": "yes",
+        "evidence": "Harmony bars 0-2 spell Dm7-G7-Cmaj7 (ii-V-I in C), all chords are sevenths, and bar 13 introduces Db7, a tritone substitution — textbook jazz vocabulary."
+       },
+       {
+        "item": "checklist item 5",
+        "verdict": "partial",
+        "evidence": "Track 'Piano' plays a single note every 480 ticks (bars 0-3: 74, 77, 81, 84...) — a metronomic quarter-note pulse rather than sparse syncopated comping; the 'Lead' runs in continuous quarter/eighth lines with almost no rests, denser than a relaxed small-combo horn statement."
+       },
+       {
+        "item": "checklist item 6",
+        "verdict": "partial",
+        "evidence": "No guitar shredding, no pad stacks, and the bass melody is never doubled — good; but 'Lead' bar 0-1 sits in the low muddy octave (57-62) the style prohibits for trumpet, and 'Drums' repeats an identical stiff pattern every bar (e.g., bars 0-7 identical to bars 8-15), the drum-machine stiffness the style warns against."
+       },
+       {
+        "item": "checklist item 7",
+        "verdict": "partial",
+        "evidence": "Horn-led melody over walking bass is present ('Lead'/'Bass' bars 4-11), but the piano never comps in two-note shells (single high notes only), the tenor sax harmony/soli layer is missing entirely, and the intro/verse/bridge/outro form is a pop structure rather than a jazz head format."
+       },
+       {
+        "item": "checklist item 8",
+        "verdict": "yes",
+        "evidence": "Meta bpm = 140, comfortably inside the 110-208 small-combo swing range."
+       }
+      ],
+      "J2": [
+       {
+        "item": "Genre: jazz piece",
+        "verdict": "violated",
+        "evidence": "Composition meta explicitly declares style 'pop', contradicting the requested jazz genre. The drum groove is a straight pop backbeat (kick on 1&3, snare on 2&4, hi-hat pushed 40 ticks before every beat) rather than a swing ride feel. Mitigating jazz characteristics are present — ii-V-I 7th-chord harmony, walking bass, trumpet lead, swung 2:1 melody eighths, title 'C Major Swing' — so the mismatch is partial, but the 'pop' classification fails the genre request."
+       },
+       {
+        "item": "Harmony: only ii-V-I progressions throughout all sections",
+        "verdict": "satisfied",
+        "evidence": "All 10 harmonic cycles in every section (intro bars 0-2, verses 4-6/8-10/12-14/16-18/28-30/32-34, bridge 20-22/24-26, outro 36-38) are Dm7-G7-Cmaj7 ii-V-I in C major; no foreign progression appears. One minor deviation: bar 13 uses Db7 (tritone substitute for G7) in Dm7-Db7-Cmaj7, with the melody deliberately outlining Db7 (F-Ab-Db) — functionally a ii-V-I variant, but strictly not the diatonic V."
+       },
+       {
+        "item": "Full piece (complete structure)",
+        "verdict": "satisfied",
+        "evidence": "40-bar composition with intro (4 bars), three 8-bar verses, an 8-bar bridge, and a 4-bar outro — a complete piece rather than a loop or fragment."
+       },
+       {
+        "item": "BPM",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify tempo; composition uses 140 BPM."
+       },
+       {
+        "item": "Key/Tonality",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify a key; composition is in C major."
+       },
+       {
+        "item": "Duration",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify length; composition is 40 bars."
+       },
+       {
+        "item": "Specified instruments",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify instrumentation; composition uses trumpet (program 57), piano (0), upright bass (43), and drums."
+       }
+      ],
+      "J3": [
+       {
+        "item": "rubric",
+        "verdict": "3",
+        "evidence": "Technically correct but formulaic: a single Dm7-G7-Cmaj7 loop spans all 40 bars (bars 0-38) with only one variation (Db7 tritone-sub at bar 13); verses repeat literally (Lead motif 67-71-69-67-65 at bars 1-2 recurs verbatim at bars 5-6, 21-22, 29-30); the 'bridge' (bars 20-27) has identical harmony and near-identical melody to the verses, so there is no real contrast or development. Correctness (locked swing groove, chord-tone melody, walking bass) keeps it above a 2; lack of memorable hooks, thin single-note piano comping, and heavy repetition (G_repetition 0.507) keep it at 3."
+       }
+      ]
+     }
+    },
+    {
+     "round": 3,
+     "J1": 58.0,
+     "J2": 85.0,
+     "J3": 55.0,
+     "composite": 48.37,
+     "per_item": {
+      "J1": [
+       {
+        "item": "checklist item 1",
+        "verdict": "partial",
+        "evidence": "Lead uses program 57 (Trombone) instead of 56 Trumpet, Piano is program 0 (Grand) instead of 4 Rhodes, Bass is program 43 (Contrabass) instead of 32 Acoustic Bass, and the Tenor Sax color track is entirely missing (bars 4-11 verse contains only Lead/Piano/Bass/Drums)."
+       },
+       {
+        "item": "checklist item 2",
+        "verdict": "partial",
+        "evidence": "Bass bar 0 (pitches 38-45) sits correctly in E1-G3 walking territory, but Lead bar 1 spans A3-C5 (57-72), below the Trumpet G4-G6 register and in its muddy low octave, and Piano bar 0 plays D5-D6 (74-86), entirely above the specified C3-B4 mid-register comping zone."
+       },
+       {
+        "item": "checklist item 3",
+        "verdict": "partial",
+        "evidence": "Lead bar 1 beat 2 uses genuine 320/160-tick triplet-swing eighths and Bass walks steady quarters (bar 0: D-F-A-Ab), but Drums bars 0-3 are a straight pop backbeat (kick beats 1&3, snare 2&4, hats 40 ticks ahead of each beat, no ride cymbal) with straight-16th snare fills at bar 3 (ticks 7320-7560)."
+       },
+       {
+        "item": "checklist item 4",
+        "verdict": "yes",
+        "evidence": "Harmony bars 0-2 state Dm7-G7-Cmaj7; bar 13 uses a Db7 tritone sub resolving to Cmaj7 in bar 14; every chord in all sections is a seventh chord moving in ii-V-I chains."
+       },
+       {
+        "item": "checklist item 5",
+        "verdict": "partial",
+        "evidence": "Overall density is appropriately sparse, but Piano bar 0 comping is one single note per beat (74/77/81/84 arpeggiating Dm7) rather than two-note shells; there are no same-onset voicing clusters anywhere in the Piano track."
+       },
+       {
+        "item": "checklist item 6",
+        "verdict": "partial",
+        "evidence": "No dense pad stacks and the Piano never doubles the Bass (Piano 74-86 vs Bass 33-52), but the piano comping violates the two-note-shell rule and the Lead repeatedly dips to 57-62 (bars 2, 9, 29), the low muddy octave the style prohibits for the horn."
+       },
+       {
+        "item": "checklist item 7",
+        "verdict": "partial",
+        "evidence": "The core layering (horn-led melody over comping, walking bass, drums) matches a small combo, but the Tenor Sax harmony/soli answer layer is absent (bridge bars 20-27 has no second horn) and the high single-note Piano line reads as a second melody rather than comping under the horn."
+       },
+       {
+        "item": "checklist item 8",
+        "verdict": "yes",
+        "evidence": "Meta bpm 140 falls squarely within the 110-208 small-combo swing range."
+       }
+      ],
+      "J2": [
+       {
+        "item": "Genre: jazz piece",
+        "verdict": "satisfied",
+        "evidence": "Composition exhibits core jazz characteristics: all-7th-chord harmony (Dm7/G7/Cmaj7), walking bass line in steady quarter notes (Bass track, e.g., bars 0-8 stepwise motion D-F-A-G#...), jazz combo instrumentation (piano/bass/drums + horn lead), and swing-style title 'C Major Swing'. Note: meta.style field is tagged 'pop', a minor metadata inconsistency, but the musical content is jazz-idiomatic."
+       },
+       {
+        "item": "Full piece structure",
+        "verdict": "satisfied",
+        "evidence": "Complete 40-bar form with intro (bars 0-3), three verses (bars 4-19, 28-35), bridge (bars 20-27), and outro (bars 36-39), with melody, comping, bass, and drums all fully written out."
+       },
+       {
+        "item": "Only ii-V-I progressions throughout all sections",
+        "verdict": "violated",
+        "evidence": "9 of 10 harmonic cells are textbook ii-V-I in C (Dm7-G7-Cmaj7, e.g., bars 0-2, 4-6, 8-10, 16-18, 20-22, 24-26, 28-30, 32-34, 36-38). However, the cell at bars 12-14 uses Dm7-Db7-Cmaj7: the Db7 at bar 13 is a tritone substitution for G7, not the diatonic V. Strictly, this breaks the 'only ii-V-I' requirement (ii-subV-I, not ii-V-I). It is the single deviation in an otherwise compliant harmonic scheme (~90% strict compliance)."
+       },
+       {
+        "item": "BPM",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify tempo; composition uses 140 BPM."
+       },
+       {
+        "item": "Key/Tonality",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify key; composition is in C major, which supports the ii-V-I requirement."
+       },
+       {
+        "item": "Duration",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify length; composition is 40 bars."
+       },
+       {
+        "item": "Specified instruments",
+        "verdict": "unaddressed",
+        "evidence": "Prompt does not specify instruments; composition uses programs 57 (trombone lead), 0 (piano), 43 (acoustic bass), and drums."
+       }
+      ],
+      "J3": [
+       {
+        "item": "rubric",
+        "verdict": 3,
+        "evidence": "Technically correct but flat. All four tracks are idiomatic and error-free (diatonic chord-tone melody, walking bass, consistent swing drums), but the same Dm7-G7-Cmaj7 loop runs unchanged for all 40 bars, verses are note-for-note identical, and the 'bridge' offers no harmonic or thematic contrast. One genuine highlight (tritone substitution at bar 13) is not enough to lift it to a 4; the G_repetition penalty (0.507) confirms severe recycling. No wrong notes, register violations, or rhythmic errors, so not a 2."
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ],
+ "summary": {
+  "per_sample": [
+   {
+    "sample_id": "adversarial_01",
+    "rounds_ok": 2,
+    "J1": {
+     "mean": 81.0,
+     "std": 4.24,
+     "range": 6.0
+    },
+    "J2": {
+     "mean": 18.5,
+     "std": 4.95,
+     "range": 7.0
+    },
+    "J3": {
+     "mean": 55.0,
+     "std": 0.0,
+     "range": 0.0
+    },
+    "composite_range": 0.13,
+    "J1_item_agreement": 0.625,
+    "J1_items_aligned": true,
+    "J2_verdict_agreement": 1.0,
+    "J3_band_exact": true,
+    "J3_band_within1": true
+   },
+   {
+    "sample_id": "classical_basic_01",
+    "rounds_ok": 1
+   },
+   {
+    "sample_id": "jazz_basic_03",
+    "rounds_ok": 3,
+    "J1": {
+     "mean": 57.0,
+     "std": 1.73,
+     "range": 3.0
+    },
+    "J2": {
+     "mean": 71.0,
+     "std": 12.77,
+     "range": 25.0
+    },
+    "J3": {
+     "mean": 48.33,
+     "std": 11.59,
+     "range": 21.0
+    },
+    "composite_range": 1.33,
+    "J1_item_agreement": 0.875,
+    "J1_items_aligned": true,
+    "J2_verdict_agreement": 0.8,
+    "J3_band_exact": false,
+    "J3_band_within1": true
+   },
+   {
+    "sample_id": "lofi_basic_01",
+    "rounds_ok": 3,
+    "J1": {
+     "mean": 75.33,
+     "std": 2.31,
+     "range": 4.0
+    },
+    "J2": {
+     "mean": 92.0,
+     "std": 0.0,
+     "range": 0.0
+    },
+    "J3": {
+     "mean": 55.33,
+     "std": 0.58,
+     "range": 1.0
+    },
+    "composite_range": 0.67,
+    "J1_item_agreement": 0.625,
+    "J1_items_aligned": true,
+    "J2_verdict_agreement": 1.0,
+    "J3_band_exact": true,
+    "J3_band_within1": true
+   },
+   {
+    "sample_id": "pop_basic_04",
+    "rounds_ok": 2,
+    "J1": {
+     "mean": 71.0,
+     "std": 4.24,
+     "range": 6.0
+    },
+    "J2": {
+     "mean": 91.5,
+     "std": 2.12,
+     "range": 3.0
+    },
+    "J3": {
+     "mean": 57.0,
+     "std": 1.41,
+     "range": 2.0
+    },
+    "composite_range": 1.47,
+    "J1_item_agreement": 0.875,
+    "J1_items_aligned": true,
+    "J2_verdict_agreement": 1.0,
+    "J3_band_exact": true,
+    "J3_band_within1": true
+   },
+   {
+    "sample_id": "touhou_basic_01",
+    "rounds_ok": 3,
+    "J1": {
+     "mean": 62.33,
+     "std": 2.52,
+     "range": 5.0
+    },
+    "J2": {
+     "mean": 85.33,
+     "std": 6.43,
+     "range": 12.0
+    },
+    "J3": {
+     "mean": 28.33,
+     "std": 1.53,
+     "range": 3.0
+    },
+    "composite_range": 1.87,
+    "J1_item_agreement": 0.875,
+    "J1_items_aligned": true,
+    "J2_verdict_agreement": 0.875,
+    "J3_band_exact": true,
+    "J3_band_within1": true
+   },
+   {
+    "sample_id": "constraint_01",
+    "rounds_ok": 2,
+    "J1": {
+     "mean": 64.0,
+     "std": 5.66,
+     "range": 8.0
+    },
+    "J2": {
+     "mean": 97.5,
+     "std": 3.54,
+     "range": 5.0
+    },
+    "J3": {
+     "mean": 29.0,
+     "std": 1.41,
+     "range": 2.0
+    },
+    "composite_range": 1.47,
+    "J1_item_agreement": 0.875,
+    "J1_items_aligned": true,
+    "J2_verdict_agreement": 1.0,
+    "J3_band_exact": true,
+    "J3_band_within1": true
+   },
+   {
+    "sample_id": "hard_01",
+    "rounds_ok": 3,
+    "J1": {
+     "mean": 58.0,
+     "std": 0.0,
+     "range": 0.0
+    },
+    "J2": {
+     "mean": 81.67,
+     "std": 5.77,
+     "range": 10.0
+    },
+    "J3": {
+     "mean": 51.0,
+     "std": 4.58,
+     "range": 9.0
+    },
+    "composite_range": 2.53,
+    "J1_item_agreement": 1.0,
+    "J1_items_aligned": true,
+    "J2_verdict_agreement": 0.7142857142857143,
+    "J3_band_exact": true,
+    "J3_band_within1": true
+   }
+  ],
+  "J1": {
+   "mean_of_std": 2.96,
+   "max_range": 8.0
+  },
+  "J2": {
+   "mean_of_std": 5.08,
+   "max_range": 25.0
+  },
+  "J3": {
+   "mean_of_std": 3.01,
+   "max_range": 21.0
+  },
+  "J1_item_agreement_mean": 0.821,
+  "J2_verdict_agreement_mean": 0.913,
+  "J3_pairwise_kappa_qw": 0.7058823529411765
+ }
+}

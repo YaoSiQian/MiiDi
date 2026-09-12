@@ -1,0 +1,201 @@
+{
+ "freeze": {
+  "provider": "openai",
+  "base_url": "https://free.quanthatch.com/v1",
+  "model": "glm-5.3-flash",
+  "mild_ops": [
+   "scatter_pitch"
+  ],
+  "severe_ops": [
+   "scatter_pitch",
+   "repeat_first_bar",
+   "remove_core_track"
+  ],
+  "note": "模型型号仅记录于此 JSON（gitignored）"
+ },
+ "records": [
+  {
+   "sample_id": "classical_basic_01",
+   "style": "classical",
+   "tiers": {
+    "original": {
+     "R_rule": 77.53,
+     "J1": 70.0,
+     "J2": 92.0,
+     "J3": 78.0,
+     "composite": 78.52,
+     "gate_balance": 1.0
+    },
+    "mild": {
+     "R_rule": 57.22,
+     "J1": 55.0,
+     "J2": 86.0,
+     "J3": 40.0,
+     "composite": 58.46,
+     "gate_balance": 1.0
+    },
+    "severe": {
+     "R_rule": 0.0,
+     "gate_balance": 0.6,
+     "composite": null,
+     "judge_error": "LLM call failed after retries: [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1006)"
+    }
+   },
+   "probe_remove_core_track": {
+    "R_rule": 47.34,
+    "R_rule_delta_vs_original": -30.19,
+    "gate_balance": 0.6
+   }
+  },
+  {
+   "sample_id": "jazz_basic_03",
+   "style": "jazz",
+   "tiers": {
+    "original": {
+     "R_rule": 19.43,
+     "J1": 52.0,
+     "J2": 76.0,
+     "J3": 33.0,
+     "composite": 33.12,
+     "gate_balance": 0.4
+    },
+    "mild": {
+     "R_rule": 22.09,
+     "J1": 44.0,
+     "J2": 60.0,
+     "J3": 24.0,
+     "composite": 30.32,
+     "gate_balance": 0.4
+    },
+    "severe": {
+     "R_rule": 0.0,
+     "J1": 28.0,
+     "J2": 30.0,
+     "J3": 27.0,
+     "composite": 11.33,
+     "gate_balance": 0.6
+    }
+   },
+   "probe_remove_core_track": {
+    "R_rule": 29.35,
+    "R_rule_delta_vs_original": 9.92,
+    "gate_balance": 0.6
+   }
+  },
+  {
+   "sample_id": "lofi_basic_01",
+   "style": "lofi",
+   "tiers": {
+    "original": {
+     "R_rule": 20.84,
+     "J1": 84.0,
+     "J2": 92.0,
+     "J3": 55.0,
+     "composite": 43.3,
+     "gate_balance": 0.4
+    },
+    "mild": {
+     "R_rule": 21.46,
+     "J1": 40.0,
+     "J2": 88.0,
+     "J3": 25.0,
+     "composite": 33.27,
+     "gate_balance": 0.4
+    },
+    "severe": {
+     "R_rule": 0.0,
+     "J1": 55.0,
+     "J2": 72.0,
+     "J3": 28.0,
+     "composite": 20.67,
+     "gate_balance": 0.27
+    }
+   },
+   "probe_remove_core_track": {
+    "R_rule": 12.53,
+    "R_rule_delta_vs_original": -8.31,
+    "gate_balance": 0.24
+   }
+  },
+  {
+   "sample_id": "pop_basic_04",
+   "style": "pop",
+   "tiers": {
+    "original": {
+     "R_rule": 18.67,
+     "J1": 70.0,
+     "J2": 93.0,
+     "J3": 72.0,
+     "composite": 42.53,
+     "gate_balance": 1.0
+    },
+    "mild": {
+     "R_rule": 56.15,
+     "J1": 45.0,
+     "J2": 88.0,
+     "J3": 35.0,
+     "composite": 56.09,
+     "gate_balance": 1.0
+    },
+    "severe": {
+     "R_rule": 0.0,
+     "J1": 34.0,
+     "J2": 90.0,
+     "J3": 28.0,
+     "composite": 20.27,
+     "gate_balance": 0.6
+    }
+   },
+   "probe_remove_core_track": {
+    "R_rule": 8.43,
+    "R_rule_delta_vs_original": -10.24,
+    "gate_balance": 0.6
+   }
+  },
+  {
+   "sample_id": "touhou_basic_01",
+   "style": "touhou",
+   "tiers": {
+    "original": {
+     "R_rule": 5.89,
+     "J1": 58.0,
+     "J2": 72.0,
+     "J3": 31.0,
+     "composite": 25.0,
+     "gate_balance": 0.4
+    },
+    "mild": {
+     "R_rule": 21.71,
+     "J1": 30.0,
+     "J2": 75.0,
+     "J3": 23.0,
+     "composite": 30.09,
+     "gate_balance": 0.4
+    },
+    "severe": {
+     "R_rule": 0.0,
+     "J1": 45.0,
+     "J2": 45.0,
+     "J3": 22.0,
+     "composite": 14.93,
+     "gate_balance": 0.6
+    }
+   },
+   "probe_remove_core_track": {
+    "R_rule": 7.53,
+    "R_rule_delta_vs_original": 1.64,
+    "gate_balance": 0.507
+   }
+  }
+ ],
+ "summary": {
+  "samples": 5,
+  "judge_failed_samples": 1,
+  "strict_ordering": 2,
+  "weak_ordering_incl_ties": 0,
+  "ordering_violated": 2,
+  "spearman_tier_vs_composite": -0.71,
+  "probe_remove_core_track_mean_delta": -7.44,
+  "probe_all_detected": false
+ }
+}

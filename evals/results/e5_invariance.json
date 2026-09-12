@@ -1,0 +1,243 @@
+{
+ "records": [
+  {
+   "sample_id": "classical_basic_01",
+   "style": "classical",
+   "R_rule": 77.529192,
+   "transforms": {
+    "reorder_tracks": {
+     "R_rule_delta": 0.0,
+     "axis_deltas": {
+      "harmony": 0.0,
+      "voice": 0.0,
+      "rhythm": 0.0,
+      "structure": 0.0,
+      "dynamics": 0.0
+     }
+    },
+    "shuffle_notes_in_track": {
+     "R_rule_delta": 0.0,
+     "axis_deltas": {
+      "harmony": 0.0,
+      "voice": 0.0,
+      "rhythm": 0.0,
+      "structure": 0.0,
+      "dynamics": 0.0
+     }
+    },
+    "rename_title": {
+     "R_rule_delta": 0.0,
+     "axis_deltas": {
+      "harmony": 0.0,
+      "voice": 0.0,
+      "rhythm": 0.0,
+      "structure": 0.0,
+      "dynamics": 0.0
+     }
+    },
+    "harmful_control_repeat_first_bar": {
+     "R_rule_delta": -77.529192
+    },
+    "scatter_pitch_probe": {
+     "R_rule_delta": -20.309827
+    }
+   }
+  },
+  {
+   "sample_id": "jazz_basic_03",
+   "style": "jazz",
+   "R_rule": 19.427942,
+   "transforms": {
+    "reorder_tracks": {
+     "R_rule_delta": 0.0,
+     "axis_deltas": {
+      "harmony": 0.0,
+      "voice": 0.0,
+      "rhythm": 0.0,
+      "structure": 0.0,
+      "dynamics": 0.0
+     }
+    },
+    "shuffle_notes_in_track": {
+     "R_rule_delta": 0.0,
+     "axis_deltas": {
+      "harmony": 0.0,
+      "voice": 0.0,
+      "rhythm": 0.0,
+      "structure": 0.0,
+      "dynamics": 0.0
+     }
+    },
+    "rename_title": {
+     "R_rule_delta": 0.0,
+     "axis_deltas": {
+      "harmony": 0.0,
+      "voice": 0.0,
+      "rhythm": 0.0,
+      "structure": 0.0,
+      "dynamics": 0.0
+     }
+    },
+    "harmful_control_repeat_first_bar": {
+     "R_rule_delta": -19.427942
+    },
+    "scatter_pitch_probe": {
+     "R_rule_delta": 2.666487
+    }
+   }
+  },
+  {
+   "sample_id": "lofi_basic_01",
+   "style": "lofi",
+   "R_rule": 20.838236,
+   "transforms": {
+    "reorder_tracks": {
+     "R_rule_delta": 0.0,
+     "axis_deltas": {
+      "harmony": 0.0,
+      "voice": 0.0,
+      "rhythm": 0.0,
+      "structure": 0.0,
+      "dynamics": 0.0
+     }
+    },
+    "shuffle_notes_in_track": {
+     "R_rule_delta": 0.0,
+     "axis_deltas": {
+      "harmony": 0.0,
+      "voice": 0.0,
+      "rhythm": 0.0,
+      "structure": 0.0,
+      "dynamics": 0.0
+     }
+    },
+    "rename_title": {
+     "R_rule_delta": 0.0,
+     "axis_deltas": {
+      "harmony": 0.0,
+      "voice": 0.0,
+      "rhythm": 0.0,
+      "structure": 0.0,
+      "dynamics": 0.0
+     }
+    },
+    "harmful_control_repeat_first_bar": {
+     "R_rule_delta": -20.838236
+    },
+    "scatter_pitch_probe": {
+     "R_rule_delta": 0.61996
+    }
+   }
+  },
+  {
+   "sample_id": "pop_basic_04",
+   "style": "pop",
+   "R_rule": 18.66647,
+   "transforms": {
+    "reorder_tracks": {
+     "R_rule_delta": 0.0,
+     "axis_deltas": {
+      "harmony": 0.0,
+      "voice": 0.0,
+      "rhythm": 0.0,
+      "structure": 0.0,
+      "dynamics": 0.0
+     }
+    },
+    "shuffle_notes_in_track": {
+     "R_rule_delta": 0.0,
+     "axis_deltas": {
+      "harmony": 0.0,
+      "voice": 0.0,
+      "rhythm": 0.0,
+      "structure": 0.0,
+      "dynamics": 0.0
+     }
+    },
+    "rename_title": {
+     "R_rule_delta": 0.0,
+     "axis_deltas": {
+      "harmony": 0.0,
+      "voice": 0.0,
+      "rhythm": 0.0,
+      "structure": 0.0,
+      "dynamics": 0.0
+     }
+    },
+    "harmful_control_repeat_first_bar": {
+     "R_rule_delta": -18.66647
+    },
+    "scatter_pitch_probe": {
+     "R_rule_delta": 37.478989
+    }
+   }
+  },
+  {
+   "sample_id": "touhou_basic_01",
+   "style": "touhou",
+   "R_rule": 5.885555,
+   "transforms": {
+    "reorder_tracks": {
+     "R_rule_delta": 0.0,
+     "axis_deltas": {
+      "harmony": 0.0,
+      "voice": 0.0,
+      "rhythm": 0.0,
+      "structure": 0.0,
+      "dynamics": 0.0
+     }
+    },
+    "shuffle_notes_in_track": {
+     "R_rule_delta": 0.0,
+     "axis_deltas": {
+      "harmony": 0.0,
+      "voice": 0.0,
+      "rhythm": 0.0,
+      "structure": 0.0,
+      "dynamics": 0.0
+     }
+    },
+    "rename_title": {
+     "R_rule_delta": 0.0,
+     "axis_deltas": {
+      "harmony": 0.0,
+      "voice": 0.0,
+      "rhythm": 0.0,
+      "structure": 0.0,
+      "dynamics": 0.0
+     }
+    },
+    "harmful_control_repeat_first_bar": {
+     "R_rule_delta": -5.885555
+    },
+    "scatter_pitch_probe": {
+     "R_rule_delta": 15.821392
+    }
+   }
+  }
+ ],
+ "summary": {
+  "samples": 5,
+  "reorder_tracks": {
+   "all_zero": true,
+   "max_abs_delta": 0.0
+  },
+  "shuffle_notes_in_track": {
+   "all_zero": true,
+   "max_abs_delta": 0.0
+  },
+  "rename_title": {
+   "all_zero": true,
+   "max_abs_delta": 0.0
+  },
+  "harmful_control_repeat_first_bar": {
+   "all_zero": false,
+   "max_abs_delta": 77.529192
+  },
+  "scatter_pitch_probe": {
+   "all_zero": false,
+   "max_abs_delta": 37.478989
+  },
+  "harmful_all_detected": true
+ }
+}

@@ -1,0 +1,182 @@
+{
+ "freeze": {
+  "judge_a": {
+   "provider": "openai",
+   "base_url": "https://free.quanthatch.com/v1",
+   "model": "glm-5.3-flash"
+  },
+  "judge_b": {
+   "provider": "zen",
+   "base_url": "https://opencode.ai/zen/v1",
+   "model": "nemotron-3-ultra-free"
+  },
+  "note": "型号仅记录于此 JSON（gitignored）；markdown 中以 Judge-A/Judge-B 代称"
+ },
+ "records": [
+  {
+   "sample_id": "adversarial_01",
+   "style": "pop",
+   "category": "adversarial",
+   "judge_a": {
+    "J1": 85.0,
+    "J2": 20.0,
+    "J3": 52.0,
+    "composite": 47.29
+   },
+   "judge_b": {
+    "J1": 88.0,
+    "J2": 35.0,
+    "J3": 80.0,
+    "composite": 53.42
+   }
+  },
+  {
+   "sample_id": "classical_basic_01",
+   "style": "classical",
+   "category": "basic",
+   "judge_a": {
+    "J1": 80.0,
+    "J2": 92.0,
+    "J3": 74.0,
+    "composite": 79.32
+   },
+   "judge_b": {
+    "J1": 85.0,
+    "J2": 72.0,
+    "J3": 60.0,
+    "composite": 75.45
+   }
+  },
+  {
+   "sample_id": "jazz_basic_03",
+   "style": "jazz",
+   "category": "basic",
+   "judge_a": {
+    "J1": 57.0,
+    "J2": 62.0,
+    "J3": 50.0,
+    "composite": 34.19
+   },
+   "judge_b": {
+    "J1": 72.0,
+    "J2": 65.0,
+    "J3": 30.0,
+    "composite": 33.92
+   }
+  },
+  {
+   "sample_id": "lofi_basic_01",
+   "style": "lofi",
+   "category": "basic",
+   "judge_a": {
+    "J1": 65.0,
+    "J2": 92.0,
+    "J3": 45.0,
+    "composite": 39.44
+   },
+   "judge_b": {
+    "J1": 44.0,
+    "J2": 85.0,
+    "J3": 60.0,
+    "composite": 37.7
+   }
+  },
+  {
+   "sample_id": "pop_basic_04",
+   "style": "pop",
+   "category": "basic",
+   "judge_a": {
+    "J1": 80.0,
+    "J2": 88.0,
+    "J3": 58.0,
+    "composite": 41.33
+   },
+   "judge_b": {
+    "J1": 63.0,
+    "J2": 90.0,
+    "J3": 55.0,
+    "composite": 38.93
+   }
+  },
+  {
+   "sample_id": "touhou_basic_01",
+   "style": "touhou",
+   "category": "basic",
+   "judge_a": {
+    "J1": 58.0,
+    "J2": 78.0,
+    "J3": 26.0,
+    "composite": 25.13
+   },
+   "judge_b": {
+    "J1": 56.0,
+    "J2": 85.0,
+    "J3": 40.0,
+    "composite": 27.66
+   }
+  },
+  {
+   "sample_id": "constraint_01",
+   "style": "pop",
+   "category": "constraint",
+   "judge_a": {
+    "J1": 72.0,
+    "J2": 95.0,
+    "J3": 30.0,
+    "composite": 37.73
+   },
+   "judge_b": {
+    "J1": 69.0,
+    "J2": 100.0,
+    "J3": 60.0,
+    "composite": 42.0
+   }
+  },
+  {
+   "sample_id": "hard_01",
+   "style": "jazz",
+   "category": "hard",
+   "judge_a": {
+    "J1": 58.0,
+    "J2": 88.0,
+    "J3": 55.0,
+    "composite": 48.77
+   },
+   "judge_b": {
+    "J1": 44.0,
+    "J2": 30.0,
+    "J3": 35.0,
+    "composite": 36.51
+   }
+  }
+ ],
+ "summary": {
+  "samples_ok": 8,
+  "samples_total": 8,
+  "J1": {
+   "pearson": 0.68,
+   "spearman": 0.527,
+   "mean_a": 69.375,
+   "mean_b": 65.125,
+   "mean_diff": 4.25
+  },
+  "J2": {
+   "pearson": 0.585,
+   "spearman": 0.588,
+   "mean_a": 76.875,
+   "mean_b": 70.25,
+   "mean_diff": 6.625
+  },
+  "J3": {
+   "pearson": 0.158,
+   "spearman": 0.073,
+   "mean_a": 48.75,
+   "mean_b": 52.5,
+   "mean_diff": -3.75
+  },
+  "composite": {
+   "pearson": 0.934,
+   "spearman": 0.69
+  }
+ }
+}
