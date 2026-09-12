@@ -42,6 +42,7 @@
 | E3 对抗性 | `evals/experiments/e3_adversarial.py` |
 | E4 异构 Judge | `evals/experiments/e4_hetero_judge.py` |
 | E5 无害变形不变性（IVR） | `evals/experiments/e5_invariance.py` |
+| 人工听感对照（单标注者初步） | `evals/runners/human_correlation.py` + `human_ratings.jsonl` |
 | 实验结果 | [evals/results/experiments.md](../evals/results/experiments.md)、[docs/report.md §5](report.md) |
 | 失败样本重测归因 | [evals/results/rerun_failed.md](../evals/results/rerun_failed.md) |
 
