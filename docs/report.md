@@ -109,20 +109,20 @@ LLM 评委的两大风险是**分数漂移**和**话术骗分**，三个维度�
 
 ### 4.1 样本集
 
-38 个样本，四个类别覆盖不同能力面：
+46 个样本，四个类别覆盖不同能力面：
 
 | 类别 | 数量 | 考察点 | 示例 |
 |------|------|--------|------|
 | basic | 20（5 风格 × 4） | 各风格的基础生成质量与风格特征 | "A bright, upbeat pop song about the joy of a sunny morning walk" |
 | constraint | 8 | 显式约束遵守（BPM/调性/时长/乐器） | "A pop song at exactly 120 BPM in the key of G major, 32 bars long" |
 | hard | 6 | 强乐理约束下的长程一致性 | "A full jazz piece using only ii-V-I progressions throughout all sections" |
-| adversarial | 4 | 自相矛盾/无意义输入的优雅降级 | "Write a 300 BPM lullaby that is both extremely fast and very soothing" |
+| adversarial | 12（首轮 4 + 门映射扩充 8） | 自相矛盾/无意义输入的优雅降级；扩充批与四道门一一对应（复读/密度/空轨/音域/话术骗分等） | "Write a 300 BPM lullaby that is both extremely fast and very soothing" |
 
 ### 4.2 实验过程与环境
 
 - **流程**：每个样本独立走完整五阶段流水线（约 7–11 次 LLM 调用），随后规则评估 + 三维 Judge（3 次调用）；无人工干预；
 - **模型**：OpenCode Zen 免费档（OpenAI 兼容 Chat Completions 协议，模型经 `MODEL_NAME` 环境变量注入，默认 `hy3-free`）；生成与评委使用同一模型（局限见 §10）；
-- **并发**：4 路并发，单样本全程 15–30 分钟，全量 38 样本约 4 小时；
+- **并发**：4 路并发，单样本全程 15–30 分钟，首轮全量 38 样本约 4 小时；对抗扩充批（adversarial_05–12，2 路并发）在评估器迭代（G_balance 核心轨检查、规则轴顺序无关性修复）之后评测，产物同口径入库；
 - **产物**：每样本落盘 `composition.json` / `rule_report.json` / `judge_report.json` / MIDI，评分汇总至 `results.csv`——全部分析基于这些原始产物，可复核；
 - **评测过程中的两处修正**（对结果有效性的诚实声明）：① 首轮发现 `evaluate_judge` 未收到用户 prompt、J2 全部退化为空洞高分（见 §9 模式 2），修复调用点后对全部 29 个完成样本仅重评 J2 维度（输入不变，仍是同一批 composition），J1/J3 与规则轨未受影响；② 8 个生成失败样本做了失败重测用于归因（主表保持首轮原样，重测数据单列，见 [rerun_failed.md](../evals/results/rerun_failed.md)）。
 
@@ -205,6 +205,8 @@ composite 层面的严格排序在 2/5 样本成立、违反 2/5、1 个因 Judg
 
 
 ## 6. 评测结果
+
+口径说明：§6 的统计基于首轮 38 样本；对抗扩充批（adversarial_05–12，在评估器修复后评测）的逐条结果见 §5「E3 扩充」，46 行合并表见 [results.csv](../evals/results/results.csv)。
 
 ### 6.1 总体
 

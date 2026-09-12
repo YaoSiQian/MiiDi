@@ -50,7 +50,7 @@
 
 | 交付项 | 文件 |
 |--------|------|
-| 全量评测结果表（38 样本） | [evals/results/results.csv](../evals/results/results.csv) |
+| 全量评测结果表（46 样本，含拦截层标签列） | [evals/results/results.csv](../evals/results/results.csv) |
 | 可读版结果与汇总 | [evals/results/results.md](../evals/results/results.md)、[evals/results/summary.md](../evals/results/summary.md) |
 | 逐样本原始产物（composition / rule_report / judge_report / MIDI） | `evals/results/<sample_id>/` |
 | 分析报告（结果 / 结论 / 失败模式 / 典型模式 / 局限） | [docs/report.md §6–§10](report.md) |

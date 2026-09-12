@@ -1,0 +1,195 @@
+{
+ "J1": 82.0,
+ "J2": 60.0,
+ "J3": 56.0,
+ "per_item": {
+  "J1": [
+   {
+    "item": "checklist item 1",
+    "verdict": "yes",
+    "evidence": "Ensemble matches the roster: a lead voice ('Square Lead' — actually program 81 Saw Lead, still in the style's lead roster), a 3-timbre harmonic bed (Strings 48, Harpsichord 6, Piano 0), synth bass, and a drum kit. Minor nit: bass uses program 38 instead of the table's 36, and only one lead voice instead of the square+saw pair."
+   },
+   {
+    "item": "checklist item 2",
+    "verdict": "yes",
+    "evidence": "Square Lead sits D4-A6 (ticks 0-69000), inside the C4-C8 lead zone; Synth Bass stays C2-A3 (pitches 36-57, e.g. bar 0 alternating 45/57), well below C5; Harpsichord E3-D5 and Piano E3-A5 are within their stated ranges."
+   },
+   {
+    "item": "checklist item 3",
+    "verdict": "yes",
+    "evidence": "Every onset in all tracks lies on the 120-tick (16th) grid with zero swing; Drum Kit bar 2 (ticks 1920-3840) shows a straight kick/snare backbeat with 8th-note hats, and the Synth Bass pumps root-octave 16ths from tick 0 — relentless straight drive, though the bass runs 16ths rather than the specified locked 8ths."
+   },
+   {
+    "item": "checklist item 4",
+    "verdict": "yes",
+    "evidence": "A-minor diatonic vocabulary with dominant-tonic closes: E7 at bar 7 resolves to Am at bar 8, E7 bar 11 to Am bar 12, E7 bars 31-33 to the final Am at bar 34 with crash+kick accent (tick 65280) — hard authentic closes exactly as the style prescribes."
+   },
+   {
+    "item": "checklist item 5",
+    "verdict": "partial",
+    "evidence": "Rhythmic density is high (continuous 16ths in lead/bass/harpsichord), but the harmonic bed is arpeggiated single-note lines, not stacked chord pads: Strings Wall bar 4 repeats only pitch 69 (A4) as a root pedal, and Harpsichord Motor bar 0 spells Am as a 16th arpeggio (57-60-64-69-72) rather than simultaneous chord tones."
+   },
+   {
+    "item": "checklist item 6",
+    "verdict": "yes",
+    "evidence": "No prohibited elements: Drum Kit (is_drum track) is idiomatic for Touhou rock, and no out-of-style timbres (no sitar, no orchestral soloists) appear; velocities vary musically (48-124) rather than sitting flat."
+   },
+   {
+    "item": "checklist item 7",
+    "verdict": "partial",
+    "evidence": "The defining 3+ timbre chord-pad stack exists only in bars 4-7 (Strings+Harpsichord+Piano). Harpsichord Motor's last onset is tick 15240 (end of bar 7), leaving only Strings+Piano for bars 8-19, and during the bridge (bars 20-23, ticks 38400-46080) Strings are also silent, so Piano Counter alone carries the harmony — the texture thins exactly where the style forbids it."
+   },
+   {
+    "item": "checklist item 8",
+    "verdict": "yes",
+    "evidence": "meta.bpm = 170, at the top edge of the style's 120-170 range, appropriate for the 'Sixteenth Barrage' character."
+   }
+  ],
+  "J2": [
+   {
+    "item": "Touhou style",
+    "verdict": "satisfied",
+    "evidence": "170 BPM A-minor track with square-lead melody (program 81), arpeggiated 'Harpsichord Motor', string pads, driving synth bass and dense drum kit; meta.style = 'touhou'. Idiomatically consistent with the requested genre."
+   },
+   {
+    "item": "Every sixteenth note has a hit in every track",
+    "verdict": "violated",
+    "evidence": "Only Square Lead and Synth Bass maintain an unbroken 120-tick (sixteenth) grid across all 36 bars (ticks 0–69000). Harpsichord Motor stops entirely after tick 15240 (bar 8), silent for 28 of 36 bars. Strings Wall has no notes before tick 7680 (bars 0–4) and none between ticks 38280–46080 (bridge, bars 20–24), plus a one-beat gap at ~59040–59520. Piano Counter drops from sixteenths to 240-tick eighth notes from bar 24 onward and is silent after tick 61320 (outro, bars 32–36). Drum Kit is sparse in the intro (hats only on quarters/eighths: 0, 480, 960...) and bridge (bars 20–24, e.g., gaps 44160→44400→44640)."
+   },
+   {
+    "item": "Insanely dense / as many notes as possible",
+    "verdict": "violated",
+    "evidence": "Density is high in the main sections (2 of 6 tracks at 100% sixteenth coverage, drums/strings fully dense bars 4–20 and 24–32), but aggregate coverage is roughly 70% of the theoretical maximum: Harpsichord Motor (~22% coverage), Piano Counter (~61%), Strings Wall (~77%) leave large empty sixteenth slots, contradicting 'every single sixteenth note' and 'as many notes as possible'."
+   },
+   {
+    "item": "BPM",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify BPM; composition uses 170."
+   },
+   {
+    "item": "Key/Tonality",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify key; composition is in A minor."
+   },
+   {
+    "item": "Duration",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify length; composition is 36 bars."
+   },
+   {
+    "item": "Specified instruments",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify instruments; composition uses programs 81, 48, 6, 0, 38 plus drum kit."
+   }
+  ],
+  "J3": [
+   {
+    "item": "rubric",
+    "verdict": 3,
+    "evidence": "Competent but flat. Harmony is clean and functional (Am-F-G/E7 progressions with correct chord-tone arpeggios, e.g. Square Lead bar 11 spells E-G#-B-D over E7 and resolves to A4 into bar 12; bar 7 melody ends on A4 pickup to Am). Form is clear (intro/verse/chorus/bridge/chorus2/outro, 36 bars) with real orchestration changes (Harpsichord Motor plays only bars 0-7, Strings Wall enters bar 4, bridge bars 20-23 thinned to piano/bass/drums) and the intro theme returns in chorus2 (bar 24: A4-C5-E5-A5, tick 46080). However, the piece is severely mechanical: all 688 Square Lead notes are exactly 120 ticks — a 36-bar unbroken sixteenth stream at 170 BPM with no rests, held notes, syncopation, or phrasing; accompaniment is copy-paste transposition (Synth Bass identical root-octave pump every bar, Strings Wall retriggering one pitch as 16 sixteenths per bar, Harpsichord repeating one up-down arpeggio shape). Dynamics exist (downbeat velocity accents ~96-104, drum-fill crescendos) but the relentless uniform density (G_density 0.5, G_repetition 0.0 gate) and absence of a distinct sung hook keep it at 'technically correct but formulaic' rather than engaging."
+   }
+  ]
+ },
+ "evidence": [
+  {
+   "track": "Square Lead",
+   "bar": 0,
+   "text": "Relentless 16th-note melody starts at tick 0 and never rests through bar 36 ('energy from first bar to last'), but the track is named Square Lead while using program 81 (Saw Lead)."
+  },
+  {
+   "track": "Strings Wall",
+   "bar": 4,
+   "text": "Strings enter at tick 7680 playing a single-pitch 16th pedal (A4) per bar instead of a multi-note chord pad — harmonic function is correct but the vertical pad stacking of the style is absent."
+  },
+  {
+   "track": "Harpsichord Motor",
+   "bar": 8,
+   "text": "Harpsichord drops out after tick 15240 (bar 7 end); for bars 8-19 the bed is only Strings+Piano, and in bridge bars 20-23 only Piano Counter remains — a noticeable thinning of the harmonic wall."
+  },
+  {
+   "track": "Synth Bass",
+   "bar": 0,
+   "text": "Program 38 octave-pump bass (45/57 alternating) on straight 16ths — driving and low-registered, though the style specifies locked 8th-note drive on program 36."
+  },
+  {
+   "track": "Drum Kit",
+   "bar": 34,
+   "text": "Final cadence: E7 bars 31-33 resolve to Am at bar 34 (tick 65280) with crash (note 59) + kick accent — a full-band authentic close; earlier fills (ticks 22080-22320, 45120-45960, 67200-68520 tom/snare crescendos) reinforce section accents."
+  },
+  {
+   "track": "Square Lead",
+   "bar": 0,
+   "text": "Continuous sixteenth-note grid (120-tick intervals) from tick 0 to 69000 — fully satisfies the density demand for this track."
+  },
+  {
+   "track": "Synth Bass",
+   "bar": 0,
+   "text": "Continuous sixteenth-note alternating octave pattern from tick 0 to 69000 — fully satisfies the density demand for this track."
+  },
+  {
+   "track": "Harpsichord Motor",
+   "bar": 8,
+   "text": "Final note at tick 15240; track is completely silent from bar 8 to the end (28 of 36 bars), the largest violation of 'every track'."
+  },
+  {
+   "track": "Strings Wall",
+   "bar": 0,
+   "text": "No notes until tick 7680 (intro bars 0–4 silent) and none between ticks 38280–46080 (bridge bars 20–24 silent); otherwise dense repeated-note sixteenths."
+  },
+  {
+   "track": "Piano Counter",
+   "bar": 24,
+   "text": "Note spacing widens from 120 to 240 ticks starting at bar 24 (eighth-note density), and the track ends at tick 61320, leaving the outro (bars 32–36) empty."
+  },
+  {
+   "track": "Drum Kit",
+   "bar": 0,
+   "text": "Intro bars 0–4 use quarter/eighth hats and kicks (0, 480, 960, 1440...) rather than sixteenth hits; bridge bars 20–24 similarly sparse with 240-tick gaps (44160→44400→44640)."
+  },
+  {
+   "track": "Drum Kit",
+   "bar": 4,
+   "text": "From bar 4 through bar 20 and bars 24–32, hi-hat (note 42) fires on every 120-tick sixteenth position — strong compliance in these sections."
+  },
+  {
+   "track": "Square Lead",
+   "bar": 0,
+   "text": "Every melody note in the entire piece has duration exactly 120 ticks (sixteenths), including this bar — no rests, ties, dotted rhythms, or articulation variation across all 36 bars; rhythm axis is a single cell looped ~576 times."
+  },
+  {
+   "track": "Square Lead",
+   "bar": 11,
+   "text": "E7 bar spelled correctly as ascending E-G#-B-D arpeggio (E5, G#4, B4, D5...), ending on A4 pickup that resolves into the Am downbeat of bar 12 — competent dominant voice-leading, no theory errors."
+  },
+  {
+   "track": "Square Lead",
+   "bar": 24,
+   "text": "Chorus2 restates the intro theme (A4-C5-E5-A5 at tick 46080, matching bar 0's opening) over the same Am-F-G progression — the piece's one clear thematic recall, but it is a literal return rather than developed variation."
+  },
+  {
+   "track": "Strings Wall",
+   "bar": 4,
+   "text": "Entire track is one pitch per bar retriggered as sixteen identical 110-tick sixteenths (A3 here, then G3, F3...). Harmonically it tracks the chart (roots and b7 over E7 in bars 7/11) but it is a static ostinato wall contributing to the repetition gate failure."
+  },
+  {
+   "track": "Synth Bass",
+   "bar": 1,
+   "text": "Root-octave alternation (F2/F3, with E3 passing tone) — the exact same rhythmic/contour pattern is transposed to every bar of the piece (A, G, E, D, C...), making the bass line formulaic despite correct chord roots."
+  },
+  {
+   "track": "Harpsichord Motor",
+   "bar": 3,
+   "text": "Plays E-G#-B arpeggio under the charted Am — a dominant (V) substitution that works musically and avoids clashing with the melody's Am tones, but it is the same up-down arpeggio cell transposed, as in every other bar of its 8-bar run."
+  },
+  {
+   "track": "Drum Kit",
+   "bar": 23,
+   "text": "Snare build into chorus2: repeated 38-snare hits with velocity ramp 88→98→106→112→118→124 (ticks 44640-45960) — an effective, idiomatic dynamic crescendo; similar kick+snare ramp closes the piece in bars 35-36 into the final crash."
+  },
+  {
+   "track": "Drum Kit",
+   "bar": 12,
+   "text": "Crash (49) marks every section downbeat (bars 4, 12, 24, etc.) with kick+hat backbeat pattern (kick 1/3, snare 2/4, accented sixteenth hats) — solid, style-appropriate groove, but hats run constant sixteenths adding to the unbroken density."
+  }
+ ]
+}

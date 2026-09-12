@@ -1,0 +1,210 @@
+{
+ "J1": 69.0,
+ "J2": 55.0,
+ "J3": 74.0,
+ "per_item": {
+  "J1": [
+   {
+    "item": "checklist item 1",
+    "verdict": "partial",
+    "evidence": "track 'Violins' bar 0: melody uses GM program 48 (String Ensemble) instead of Violin (40); no piano track present; 'Harp' (46), 'Horns' (60) and 'Timpani' (47) are outside the specified Violin/Piano/Cello/Flute roster, though 'Woodwinds' (73) and 'Cellos & Basses' (43, close to Cello 42) are near-style"
+   },
+   {
+    "item": "checklist item 2",
+    "verdict": "yes",
+    "evidence": "track 'Violins' bars 0-31: melody spans A4-D6 (69-86), inside G3-E6; 'Woodwinds' stays G4-C7 (67-96) within flute range; 'Cellos & Basses' sits C2-Eb3 (36-50), a proper bass register"
+   },
+   {
+    "item": "checklist item 3",
+    "verdict": "yes",
+    "evidence": "track 'Harp' bar 0: even eighth-note arpeggiations (240-tick notes) over 'Violins' half/quarter-note cantabile; pulse lives in the notation, no backbeat or swing anywhere"
+   },
+   {
+    "item": "checklist item 4",
+    "verdict": "yes",
+    "evidence": "harmony bars 4-11: C-Am-Dm-G7 diatonic cycle; bars 13-14 A7->Dm and bars 16-18 Bm7b5-E7->Am secondary-dominant tonicizations; bars 29-31 Gsus4->G7->C authentic cadence — textbook functional harmony"
+   },
+   {
+    "item": "checklist item 5",
+    "verdict": "partial",
+    "evidence": "track 'Horns' bars 12-18 (ticks 23040-34560): four-note stacked chords per bar create dense vertical blocks; elsewhere (e.g., 'Harp' bar 0, 'Violins' verse bars 4-11) texture is transparent and chamber-like"
+   },
+   {
+    "item": "checklist item 6",
+    "verdict": "no",
+    "evidence": "track 'Timpani' bar 0 (tick 0, note 36) and bar 31 (tick 59520): timpani is percussion, which the style explicitly prohibits ('avoid percussion of any kind'); 'Horns' bar 12 adds brass, also on the avoid list, though used as soft pads rather than fanfares"
+   },
+   {
+    "item": "checklist item 7",
+    "verdict": "partial",
+    "evidence": "track 'Cellos & Basses' bar 0: tonic pedal under 'Woodwinds' thirds and 'Harp' arpeggio is idiomatic voice-led layering; but 'Horns' bars 12-18 and 'Timpani' bar 14 (tick 26880) push it toward orchestral tutti rather than transparent chamber texture"
+   },
+   {
+    "item": "checklist item 8",
+    "verdict": "yes",
+    "evidence": "meta bpm 84 in 4/4 ('Adagio Pastorale'): slightly quick for a strict adagio but well within classical style's typical tempo span and appropriate to the pastoral character"
+   }
+  ],
+  "J2": [
+   {
+    "item": "BPM",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify tempo; composition uses 84 BPM."
+   },
+   {
+    "item": "Key/Tonality",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify key; composition is in C major."
+   },
+   {
+    "item": "Duration",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify length; composition is 32 bars."
+   },
+   {
+    "item": "Strings",
+    "verdict": "satisfied",
+    "evidence": "Violins track uses program 48 (string ensemble) as melody; Cellos & Basses (program 43) provide the bass line."
+   },
+   {
+    "item": "Woodwinds",
+    "verdict": "satisfied",
+    "evidence": "Woodwinds track present on program 73, playing sustained harmony dyads throughout (e.g., bars 0-3, 4-11)."
+   },
+   {
+    "item": "Brass",
+    "verdict": "satisfied",
+    "evidence": "Horns track on program 60 (French Horn) provides harmonic support from bar 0 to the end."
+   },
+   {
+    "item": "Harp",
+    "verdict": "satisfied",
+    "evidence": "Harp track on program 46 plays continuous arpeggiated eighth-note figures (61 notes across bars 0-31)."
+   },
+   {
+    "item": "8 tracks total",
+    "verdict": "violated",
+    "evidence": "Prompt requests 8 tracks; composition contains only 6 tracks (Violins, Woodwinds, Horns, Harp, Cellos & Basses, Timpani)."
+   },
+   {
+    "item": "Four auxiliary tracks with only one or two quiet notes each",
+    "verdict": "violated",
+    "evidence": "No track matches the sparse auxiliary description. The only non-core track, Timpani, has 10 notes at moderate velocities (42-63), e.g., bars 0-1, 26-27, 30-31; Cellos & Basses has ~85 notes. Zero tracks contain just 1-2 quiet notes."
+   },
+   {
+    "item": "Rich orchestral character",
+    "verdict": "satisfied",
+    "evidence": "Full orchestral texture with layered strings, woodwinds, horns, harp and timpani; dynamic arc builds from ~50 to velocities above 90 in the chorus (bars 24-36) before receding, consistent with a rich, pastoral orchestral adagio."
+   }
+  ],
+  "J3": [
+   {
+    "item": "rubric",
+    "verdict": "4",
+    "evidence": "Coherent pastoral writing with a real dynamic architecture: quiet verse (Violins vel. 54-74, bars 2-11), a genuine chorus climax (Violins D6 vel. 102 at bar 14 over 4-voice Horns crescendoing vel. 60-78, bars 12-18), subdued bridge (vel. 52-72, bars 20-27), and a decrescendo outro fading 58->36 (bars 28-31). Harmony is functionally literate (A7->Dm at bar 13; Bm7b5-E7-Am tonicization, bars 16-18) and the melody is mostly consonant, stepwise, and chord-tone anchored. It falls short of 5 due to a cross-relation clash (Violin C-natural 6 vs Woodwind C#5 over A7, bar 13), Woodwind 'chirp' artifacts (e.g., 120-tick C7 at bar 3, vel. 48), the Harp texture abandoning the piece after bar 8, and the melody dropping below accompaniment velocity at the final cadence (bars 30-31) - the same balance failure the rule gate flagged (G_balance = 0.400)."
+   }
+  ]
+ },
+ "evidence": [
+  {
+   "track": "Timpani",
+   "bar": 0,
+   "text": "Percussion instrument present from the first bar despite the style's explicit no-percussion rule; used sparingly (10 hits) but still a prohibition breach"
+  },
+  {
+   "track": "Violins",
+   "bar": 0,
+   "text": "Melody enters on A4 (vel 54) with program 48 instead of solo Violin (40); long 1920-tick phrases give a proper singing classical line"
+  },
+  {
+   "track": "Horns",
+   "bar": 12,
+   "text": "Four simultaneous horn pitches (A-C#-E-G spelling A7) — dense vertical stacking the style asks composers to avoid"
+  },
+  {
+   "track": "Harp",
+   "bar": 0,
+   "text": "Rising and falling C-major arpeggio in even eighths — classic classical figuration providing pulse without drums"
+  },
+  {
+   "track": "Violins",
+   "bar": 14,
+   "text": "Velocity climbs to 102 (from 54 at bar 0) through the chorus — dynamics shape the phrase rather than added layers, as the style requests"
+  },
+  {
+   "track": "Cellos & Basses",
+   "bar": 31,
+   "text": "Final low C (36) under G7->C resolution in all voices closes with a clean functional authentic cadence"
+  },
+  {
+   "track": "all",
+   "bar": 0,
+   "text": "Track count is 6, not the 8 explicitly requested in the prompt."
+  },
+  {
+   "track": "Timpani",
+   "bar": 0,
+   "text": "Timpani (program 47) has 10 notes spanning the whole piece (e.g., 0-1920, 26880-28800, 59520-61440 ticks) — it is not one of the requested 'one or two quiet notes' auxiliary tracks."
+  },
+  {
+   "track": "all",
+   "bar": 0,
+   "text": "No track in the composition contains only 1-2 quiet notes; the four requested sparse auxiliary tracks are entirely absent."
+  },
+  {
+   "track": "Violins",
+   "bar": 0,
+   "text": "Strings requirement met: program 48 carries the melody from bar 0 through bar 31."
+  },
+  {
+   "track": "Harp",
+   "bar": 0,
+   "text": "Harp requirement met: program 46 arpeggios run continuously from bar 0."
+  },
+  {
+   "track": "Horns",
+   "bar": 12,
+   "text": "Brass requirement met: horn pads thicken to 3-4 voices in the chorus (bars 12-20), supporting the 'rich' descriptor."
+  },
+  {
+   "track": "Violins",
+   "bar": 14,
+   "text": "Climactic whole-note D6 at velocity 102 - the melodic and dynamic peak, well-placed in the chorus; supported by Timpani D (t=26880) and doubled Cello/Bass octaves (D3/D2, vel. 62/58)."
+  },
+  {
+   "track": "Violins",
+   "bar": 13,
+   "text": "C-natural 6 (t=26400) sounds against Woodwinds' C#5 (t=24960, dur 1680) over the A7 chord - a simultaneous cross-relation/minor-2nd clash on the secondary dominant; the one clear part-writing error."
+  },
+  {
+   "track": "Woodwinds",
+   "bar": 3,
+   "text": "120-tick C7 (pitch 96, vel. 48) at t=7200, with similar chirps at bars 1, 7, 11, 19, 23, 25, 27, 30 - brief high-register staccato fragments that read as artifacts rather than musical gestures."
+  },
+  {
+   "track": "Harp",
+   "bar": 8,
+   "text": "Idiomatic wave-pattern arpeggios (C-G-C-E-G-E-C-G, bars 0-7) define the pastoral character but stop entirely at t=15360; the remaining 24 bars lose this texture, flattening the orchestral palette."
+  },
+  {
+   "track": "Violins",
+   "bar": 30,
+   "text": "Outro melody velocities (F5=46, D5=42, B4=40, final C5=36) fall below Woodwinds (48-50) and Horns (48-54), burying the melody at the final cadence - consistent with the severe G_balance=0.400 penalty."
+  },
+  {
+   "track": "Horns",
+   "bar": 12,
+   "text": "Chorus arrival expands texture from 3-voice to 4-voice chords with a built-in velocity crescendo (60->78 across bars 12-18) - effective orchestral swell reinforcing the formal climax."
+  },
+  {
+   "track": "Harmony",
+   "bar": 16,
+   "text": "Bm7b5-E7-Am progression (bars 16-18) plus A7->Dm (bar 13) shows competent secondary-dominant tonicization; melody correctly supplies G#5 and B5 over E7 at bar 17, confirming stylistic understanding."
+  },
+  {
+   "track": "Timpani",
+   "bar": 18,
+   "text": "Section-boundary rolls tuned to chord roots (A at bars 18/24 over Am, C at bar 8/31, D at bar 14) - correct baroque/classical timpani practice marking structural joints."
+  }
+ ]
+}

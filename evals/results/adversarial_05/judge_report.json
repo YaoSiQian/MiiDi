@@ -1,0 +1,195 @@
+{
+ "J1": 70.0,
+ "J2": 25.0,
+ "J3": 45.0,
+ "per_item": {
+  "J1": [
+   {
+    "item": "checklist item 1",
+    "verdict": "partial",
+    "evidence": "Roster matches the pop band idiom (Lead Synth prog 81, Electric Bass prog 33, comping keys, Clean Guitar prog 27, Drums), but Piano uses program 0 (acoustic grand) instead of the specified Rhodes (prog 4), and the lead voice exists only in the intro — last Lead Synth note ends at bar 8, so the 'single memorable lead' is missing from verse, chorus, and outro."
+   },
+   {
+    "item": "checklist item 2",
+    "verdict": "yes",
+    "evidence": "All tracks sit in their specified registers: Lead Synth C5-C6 (pitches 72-84, e.g. bar 0), Electric Bass G1-C3 (pitches 31-48, e.g. bar 4 beat 4), Piano G3-C5 (pitches 55-72, bar 0), Guitar B3-D5 (pitches 59-74, bar 23). Bass never intrudes on the lead's register."
+   },
+   {
+    "item": "checklist item 3",
+    "verdict": "yes",
+    "evidence": "Drums bar 4: kick on beats 1/3 (ticks 3840, 4800 in bar 2), snare on beats 2/4 (ticks 8160, 9120 in bar 4), closed hats on straight eighths throughout — textbook pop backbeat, no swing. Tom fills and crash (tick 30720, bar 16) mark section boundaries."
+   },
+   {
+    "item": "checklist item 4",
+    "verdict": "partial",
+    "evidence": "Harmony track bars 0-31: only C and G alternate for all 32 bars — strictly diatonic and within the I-V core, but the I-V-vi-IV family's vi (Am) and IV (F) never appear, making the progression static for a pop chorus."
+   },
+   {
+    "item": "checklist item 5",
+    "verdict": "partial",
+    "evidence": "Layer count is appropriately lean and grid-tight (e.g. Piano bar 0 three-note voicings, Guitar two-note stabs bar 0-8), and the bass drives with root-fifth-octave eighths (bars 8-32, pitches 36/43/48); however the verse/chorus density lacks the hook layer entirely, under-realizing the pop arrangement."
+   },
+   {
+    "item": "checklist item 6",
+    "verdict": "yes",
+    "evidence": "No orchestral or distorted textures (Clean Guitar prog 27, no overdrive), no competing solos or virtuosic fills; only one lead voice at a time (Lead Synth alone in bars 0-8, comping stays subordinate, e.g. Guitar bar 4 low-velocity stabs at vel 66-68)."
+   },
+   {
+    "item": "checklist item 7",
+    "verdict": "partial",
+    "evidence": "Good pop build: intro starts hats-only (Drums bar 0), kick enters bar 2, snare bar 4; chorus lift at bar 16 with crash, piano octave doubling (pitch 72, tick 30720) and higher velocities. But the Lead Synth falls silent after bar 8 (last note tick 14400-15360), so the central hook layer is absent from verse, chorus, and outro, and the guitar also drops out at bar 24."
+   },
+   {
+    "item": "checklist item 8",
+    "verdict": "yes",
+    "evidence": "Meta bpm 112 in 4/4 — squarely within the typical pop tempo range (roughly 90-130 BPM) for a steady backbeat groove."
+   }
+  ],
+  "J2": [
+   {
+    "item": "BPM",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify a tempo; composition uses 112 BPM. Marked unaddressed per instruction."
+   },
+   {
+    "item": "Key/Tonality",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify a key; composition is in C major (tonic_pc 0, mode major). Marked unaddressed per instruction."
+   },
+   {
+    "item": "Duration",
+    "verdict": "satisfied",
+    "evidence": "Prompt asks for 32 bars; composition spans exactly 32 bars (61,440 ticks at 1,920 ticks/bar in 4/4), ending with a final downbeat hit at tick 60960 in bar 32."
+   },
+   {
+    "item": "Specified instruments (pad, program=88)",
+    "verdict": "violated",
+    "evidence": "Parsed constraint expects pad(program=88) (from 'to pad the length'); no track uses program 88. Actual tracks: Lead Synth (81), Electric Bass (33), Piano (0), Clean Guitar (27), plus a drum track."
+   },
+   {
+    "item": "Repeat the same catchy 2-bar phrase unchanged over and over for the full 32 bars",
+    "verdict": "violated",
+    "evidence": "Core requirement fails. Lead Synth states a 2-bar phrase in bars 0-1 and repeats it exactly only once (bars 2-3). Bars 4-5 append an extra note (pitch 81 at tick 11280), bars 6-7 alter the phrase ending (pitch 84 at tick 14400 replacing 79), and the melody stops entirely after bar 8 — no lead notes exist in bars 8-32 (75% of the piece). Instead of static repetition, the arrangement develops: bass shifts from whole notes to running eighth notes with rising velocities, drums build from hi-hat-only to full groove with fills and crashes, piano comping densifies, and the piece is segmented into intro/verse/chorus/outro. Only the 2-bar C|G harmonic loop repeats unchanged across all 32 bars, which alone does not satisfy 'the same catchy 2-bar phrase repeated unchanged'."
+   }
+  ],
+  "J3": [
+   {
+    "item": "rubric",
+    "verdict": "3",
+    "evidence": "Technically correct and rhythmically solid pop arrangement (diatonic melody, functional C-G harmony, idiomatic drum beats, real dynamic build), but severely formulaic: the lead melody exists only in the 8-bar intro and then vanishes, the harmony alternates C/G for all 32 bars without a single third chord, and the accompaniment loops verbatim (G_repetition = 0.156). Not error-dense enough for a 2 (only one note-level defect found), but lacks the development, variation, and present thematic material required for a 4."
+   }
+  ]
+ },
+ "evidence": [
+  {
+   "track": "Lead Synth",
+   "bar": 8,
+   "text": "Final lead note (pitch 72, tick 14400-15360) lands at the end of the intro; the memorable hook never returns in verse, chorus, or outro — a major arrangement flaw for a pop track titled 'Hook on Repeat'."
+  },
+  {
+   "track": "Harmony",
+   "bar": 0,
+   "text": "Harmony map alternates C and G every bar for all 32 bars; no vi or IV chord ever appears, limiting the pop harmonic vocabulary to I-V."
+  },
+  {
+   "track": "Drums",
+   "bar": 4,
+   "text": "Snare (pitch 38) on beats 2 and 4 (ticks 8160, 9120) against kick on 1 and 3 — clean pop backbeat with straight-eighth hats and velocity variation (56-122)."
+  },
+  {
+   "track": "Piano",
+   "bar": 0,
+   "text": "Comping uses C-E-G triads as same-onset duplicates with accent/weak-beat velocity contrast (82 vs 64-66), but on program 0 (acoustic grand) rather than the style sheet's Rhodes (prog 4)."
+  },
+  {
+   "track": "Electric Bass",
+   "bar": 16,
+   "text": "Chorus bass switches to continuous eighth-note root-fifth-octave figures (pitches 36/43/48) with velocity peaks on downbeats — idiomatic driving pop bass, register-appropriate."
+  },
+  {
+   "track": "Drums",
+   "bar": 16,
+   "text": "Crash cymbal (pitch 49, tick 30720) plus full-band accent at the chorus downbeat provides a proper pop section lift."
+  },
+  {
+   "track": "Piano",
+   "bar": 31,
+   "text": "Final chord (ticks 60480+, pitches 55/62 = G-D) and final bass note (pitch 31 = G) end the song on V rather than resolving to I — an unresolved half-cadence ending, atypical for pop."
+  },
+  {
+   "track": "Lead Synth",
+   "bar": 2,
+   "text": "Bars 2-3 are a tick-for-tick exact repeat of the bars 0-1 phrase (76,79,81,79,76,74,72,74,76,79) — the only unchanged repetition of the phrase."
+  },
+  {
+   "track": "Lead Synth",
+   "bar": 5,
+   "text": "Extra note (pitch 81, tick 11280) appended to the phrase, so bars 4-5 are not an unchanged repeat."
+  },
+  {
+   "track": "Lead Synth",
+   "bar": 7,
+   "text": "Phrase ending altered: final note changed to pitch 84 (tick 14400, dur 960) instead of the original pitch 79."
+  },
+  {
+   "track": "Lead Synth",
+   "bar": 8,
+   "text": "Melody ceases entirely after bar 8 (last note ends tick 15360); the phrase is absent for the remaining 24 bars, contradicting 'repeat it... for the full 32 bars'."
+  },
+  {
+   "track": "Electric Bass",
+   "bar": 8,
+   "text": "Bass abandons the whole-note C/G loop and moves to eighth-note patterns with steadily rising velocities (72 up to 104+), showing development rather than padding repetition."
+  },
+  {
+   "track": "Drums",
+   "bar": 16,
+   "text": "Crash cymbal (note 49) and peak velocities at tick 30720 mark a chorus build-up; drum part grows from hi-hat-only (bar 0) to full groove with fills — the opposite of an unchanged loop."
+  },
+  {
+   "track": "Piano",
+   "bar": 16,
+   "text": "Piano voicings change from 3-note C/G chords to 4-note chords (60/64/67/72) with higher velocities from bar 16, further contradicting the 'repeat unchanged' instruction."
+  },
+  {
+   "track": "Lead Synth",
+   "bar": 0,
+   "text": "Coherent, singable hook: E5-G5-A5-G5-E5-D5-C5 arch over the C-G changes, restated with variation through bar 8 — genuinely memorable pop writing."
+  },
+  {
+   "track": "Lead Synth",
+   "bar": 8,
+   "text": "Melody track goes permanently silent after bar 8 (final note is the C6 pickup at bar 7.5, tick 14400). Verse, chorus, and outro (bars 8-32) have no lead line at all — despite the title 'Hook on Repeat', the hook never returns."
+  },
+  {
+   "track": "Harmony (chord track)",
+   "bar": 0,
+   "text": "C and G alternate every bar for all 32 bars; no F, Am, or Dm ever appears, no cadential or progression variation between sections."
+  },
+  {
+   "track": "Electric Bass",
+   "bar": 20,
+   "text": "Simultaneous B1 (35) and C2 (36) at tick 38400 — a semitone collision/duplicate onset not present in the parallel bar 16, an isolated note-level error."
+  },
+  {
+   "track": "Electric Bass",
+   "bar": 8,
+   "text": "The same 8th-note root-fifth bar (C-C-C-G-C-C-C3-G, then G-G-G-D-G-G-G-B) is copy-pasted across bars 8-31 with only velocity tweaks — the main driver of G_repetition = 0.156."
+  },
+  {
+   "track": "Drums",
+   "bar": 16,
+   "text": "Effective dynamic arc: hats-only intro (~vel 56-72), beat enters bar 2, snare/tom fill at ticks 30240-30720 into crash-anchored chorus downbeat with velocities reaching 120 — the strongest musicality moment."
+  },
+  {
+   "track": "Clean Guitar",
+   "bar": 0,
+   "text": "Offbeat diatonic dyads (E-G, G-C, D-G, G-B) give competent rhythmic counterpoint and keep the static harmony from sounding completely empty."
+  },
+  {
+   "track": "Piano",
+   "bar": 31,
+   "text": "Piece ends on an open G-D dyad over bass G1 (tick 60480) — an unresolved dominant ending with no tonic resolution and no melody to close the form."
+  }
+ ]
+}

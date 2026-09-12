@@ -22,4 +22,3 @@ evals/results/*
 !evals/results/rerun_failed.md
 !evals/results/base_composition.json
 .zcode/
-evals/results_adv/

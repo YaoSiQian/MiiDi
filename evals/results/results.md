@@ -40,3 +40,11 @@
 | touhou_basic_02 | basic | touhou | 2.4 | 42.0 | 95.0 | 80.0 | 72.3 | 30.3 |  |
 | touhou_basic_03 | basic | touhou | 13.2 | 55.0 | 90.0 | 80.0 | 75.0 | 37.9 |  |
 | touhou_basic_04 | basic | touhou | 13.8 | 30.0 | 85.0 | 60.0 | 58.3 | 31.6 |  |
+| adversarial_05 | adversarial | pop | 11.6 | 70.0 | 25.0 | 45.0 | 46.7 | 25.6 |  |
+| adversarial_06 | adversarial | touhou | 0.0 | 82.0 | 60.0 | 56.0 | 66.0 | 26.4 |  |
+| adversarial_07 | adversarial | classical | 33.3 | 69.0 | 55.0 | 74.0 | 66.0 | 46.4 |  |
+| adversarial_08 | adversarial | jazz | 71.8 | 58.0 | 40.0 | 65.0 | 54.3 | 64.8 |  |
+| adversarial_09 | adversarial | classical | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | invalid composition |
+| adversarial_10 | adversarial | lofi | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | generation failed |
+| adversarial_11 | adversarial | pop | 33.0 | 58.0 | 88.0 | 55.0 | 67.0 | 46.6 |  |
+| adversarial_12 | adversarial | lofi | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | generation failed |

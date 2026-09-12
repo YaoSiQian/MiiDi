@@ -1,0 +1,190 @@
+{
+ "J1": 58.0,
+ "J2": 88.0,
+ "J3": 55.0,
+ "per_item": {
+  "J1": [
+   {
+    "item": "checklist item 1",
+    "verdict": "partial",
+    "evidence": "Track roster has the right roles (melody/harmony/bass/drums), but Lead uses program 53 (Voice Oohs) instead of the specified sawtooth lead (81), Piano uses program 0 (Acoustic Grand) instead of Rhodes (4), and the optional warm pad (89) chorus double is absent."
+   },
+   {
+    "item": "checklist item 2",
+    "verdict": "yes",
+    "evidence": "Lead spans G4-A5 (bars 0-23, within C4-C6), Electric Bass stays C2-A2 (bars 0-23, within E1-G3, well below the lead), Piano voicings sit C3-A4 (bars 0-22, within C3-C5). All registers correct."
+   },
+   {
+    "item": "checklist item 3",
+    "verdict": "no",
+    "evidence": "Drums track is a single side-stick hit (note 37) once per bar from bar 4.5 onward at velocities 15-28 — no kick, no snare on 2/4, no hi-hats, so there is no backbeat. Lead plays one whole note per bar (e.g., bar 0: G4 held 1920 ticks) and bass one half-note root per bar (bar 0: C2, 960 ticks), so nothing grooves."
+   },
+   {
+    "item": "checklist item 4",
+    "verdict": "yes",
+    "evidence": "Harmony is textbook diatonic pop: chorus bars 12-18 run C-G-Am-F (I-V-vi-IV), verse uses C-G-Am-F family, and the outro adds color with Am7 (bar 20) and Fadd9 (bar 21) resolving to C (bar 22)."
+   },
+   {
+    "item": "checklist item 5",
+    "verdict": "partial",
+    "evidence": "Density is clean and uncluttered (no clutter violation), but far below pop energy: Piano holds one chord for 1.5 bars (bar 0: C-G-E held 2880 ticks), Bass plays one root per bar, and Drums one click per bar — the rhythm section never drives."
+   },
+   {
+    "item": "checklist item 6",
+    "verdict": "yes",
+    "evidence": "No orchestral colors, no distorted textures, no competing solos or fills; a single lead voice runs the entire 24 bars (Lead track, bars 0-23)."
+   },
+   {
+    "item": "checklist item 7",
+    "verdict": "partial",
+    "evidence": "Four tidy layers with one lead at a time is right, but the texture is a stack of sustained pads rather than a band playing tightly on the grid — e.g., Piano chords at bars 20-21 are just two-note shells (C4-G4, C4-A4) held across whole bars, and the chorus (bars 12-19) gets no pad lift or added rhythmic activity."
+   },
+   {
+    "item": "checklist item 8",
+    "verdict": "yes",
+    "evidence": "84 BPM in 4/4 (meta) sits in the pop ballad range (roughly 70-90), consistent with the slow 'Held Breath' character."
+   }
+  ],
+  "J2": [
+   {
+    "item": "BPM",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify tempo; composition uses 84 BPM."
+   },
+   {
+    "item": "Key/Tonality",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify key; composition is in C major."
+   },
+   {
+    "item": "Duration",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify length; composition is 24 bars (intro 4, verse 8, chorus 8, outro 4)."
+   },
+   {
+    "item": "Specified instruments",
+    "verdict": "unaddressed",
+    "evidence": "Prompt does not specify instruments; composition uses Lead (program 53), Electric Bass (33), Piano (0), and Drums."
+   },
+   {
+    "item": "Exactly one single note per bar in the melody",
+    "verdict": "satisfied",
+    "evidence": "Lead track contains exactly 24 notes across 24 bars. Each note is a full-bar whole note (1920 ticks) starting on the downbeat (t=0, 1920, 3840, ... 44160). No bar contains zero or more than one melody note — the constraint holds exactly."
+   },
+   {
+    "item": "Extremely sparse texture",
+    "verdict": "satisfied",
+    "evidence": "Total density is ~4.7 notes/bar: melody 1 whole note/bar, bass 1 half-bar note/bar, piano one 3–5 note chord every 2 bars, drums one quiet side-stick per bar. No counterpoint, arpeggios, or fills anywhere."
+   },
+   {
+    "item": "Ambient pop style",
+    "verdict": "satisfied",
+    "evidence": "Pop harmonic language (C–F–G–Am loop, meta style 'pop') delivered with ambient traits: slow 84 BPM, sustained whole-note melody, soft dynamics (melody vel. 56–80), and near-silent percussion."
+   },
+   {
+    "item": "Almost nothing else",
+    "verdict": "satisfied",
+    "evidence": "Beyond the melody, accompaniment is reduced to near-minimum: one bass root note per bar, a single sustained piano chord per 2 bars, and one muted rim click (vel. 15–28) per bar. Even the chorus adds no density — no hooks, fills, or layers."
+   }
+  ],
+  "J3": [
+   {
+    "item": "rubric",
+    "verdict": "3",
+    "evidence": "Technically flawless but rhythmically inert: the Lead track plays exactly one whole note per bar for all 24 bars (e.g., Lead bar 0 G4, bar 1 C5, each dur=1920 ticks), the Electric Bass plays a single half-note root per bar (Bass bar 0 C2, bar 2 F2), and the Drums track contains only one side-stick hit per bar (Drums bar 4 beat 3, note 37) with no kick, snare, or hi-hat groove. Harmony, voicing, and dynamics are correct and even well-arched, but the total absence of rhythmic subdivision, syncopation, or articulation makes the piece sound mechanical — 'competent but flat' rather than engaging."
+   }
+  ]
+ },
+ "evidence": [
+  {
+   "track": "Drums",
+   "bar": 5,
+   "text": "Only one side-stick hit per bar (onsets every 1920 ticks, note 37, velocities 15-28); no kick/snare/hat pattern, so the pop backbeat is entirely missing."
+  },
+  {
+   "track": "Lead",
+   "bar": 0,
+   "text": "Melody is one whole note per bar for all 24 bars (e.g., G4 bar 0, C5 bar 1) — no syncopation or hook phrasing, and program 53 (Voice Oohs) instead of the style's sawtooth lead."
+  },
+  {
+   "track": "Electric Bass",
+   "bar": 12,
+   "text": "Root-only half notes (C2) with no fifth motion or rhythmic subdivision; velocities form a mechanical linear crescendo (48→72→46) rather than groove accents."
+  },
+  {
+   "track": "Piano",
+   "bar": 14,
+   "text": "Five-note G chord (D3-G3-B3-D4-G4) held 1.5 bars — voicings and harmony are correct but comping is static sustained blocks, not on-grid pop comping."
+  },
+  {
+   "track": "Harmony",
+   "bar": 12,
+   "text": "Chorus progression C-G-Am-F (bars 12-19) is a model I-V-vi-IV pop loop; strongest style-adherent element of the piece."
+  },
+  {
+   "track": "Lead",
+   "bar": 0,
+   "text": "One whole note per bar for all 24 bars (G4, C5, A4, C5...), each exactly 1920 ticks starting on the bar downbeat — the 'one single note per bar' rule is met with zero deviations."
+  },
+  {
+   "track": "Electric Bass",
+   "bar": 0,
+   "text": "Single root note per bar (C2, F2, G2, A2...), 960 ticks each, tracking the harmony — minimal support consistent with 'almost nothing else'."
+  },
+  {
+   "track": "Piano",
+   "bar": 0,
+   "text": "One 3–5 note chord every 2 bars, sustained ~2880–3120 ticks — functions as sparse ambient padding rather than active comping."
+  },
+  {
+   "track": "Drums",
+   "bar": 4,
+   "text": "Only a single side-stick hit (note 37) per bar at very low velocity (15–28), starting mid-verse; no kick/snare groove — keeps the texture near-silent."
+  },
+  {
+   "track": "All",
+   "bar": 12,
+   "text": "Chorus does not increase density (still 1 melody note + 1 bass note + 1 chord + 1 click per bar), preserving extreme sparseness across the entire arrangement."
+  },
+  {
+   "track": "Lead",
+   "bar": 0,
+   "text": "Melody is one sustained whole note per bar for the entire piece (24 notes, all dur=1920); no rhythmic figure, motif rhythm, or hook ever develops — stylistically fatal for pop at 84 BPM."
+  },
+  {
+   "track": "Lead",
+   "bar": 18,
+   "text": "Effective climax: F5 (vel 80) → A5 (bar 19, highest note, vel 74), the peak of a coordinated dynamic/register arc across all tracks; melody then descends G5–E5–C5 to resolve on the tonic in bar 23."
+  },
+  {
+   "track": "Lead",
+   "bar": 12,
+   "text": "Every melody note is a chord tone (bar 12 E5 and bar 13 G5 over C; bar 20 G5 as the 7th over Am7; bar 21 G5 as the 9th over Fadd9) — zero wrong notes, but also zero tension, passing tones, or melodic risk."
+  },
+  {
+   "track": "Drums",
+   "bar": 4,
+   "text": "Drums enter at bar 4 but consist solely of a single rimshot (note 37) on beat 3 of every bar through bar 23; no backbeat, kick pattern, or fill at the verse/chorus boundary (bar 12) — the pop groove is missing entirely, consistent with G_density=0.50."
+  },
+  {
+   "track": "Electric Bass",
+   "bar": 20,
+   "text": "Bass correctly tracks harmony roots including the outro changes (A2 under Am7 at bar 20, F2 under Fadd9 at bar 21, C2 resolution at bar 22), but plays only one half note per bar with a two-beat hole — functional, not groovy."
+  },
+  {
+   "track": "Piano",
+   "bar": 14,
+   "text": "Chorus voicings thicken from 3 notes to 4–5 (bar 14: D3-G3-B3-D4-G4 over G) with smooth common-tone voice leading; chords are held 6 beats of each 8-beat slot, creating a gentle 'breathing' pulse that is the piece's only rhythmic idea."
+  },
+  {
+   "track": "Piano",
+   "bar": 22,
+   "text": "Outro thins to a two-note G3+E4 dyad over the final C chord — a deliberate, well-executed wind-down matching the fading velocities in all tracks (drums 28→15, melody 80→56)."
+  },
+  {
+   "track": "Harmony",
+   "bar": 0,
+   "text": "Progression is entirely diatonic C-major pop (C–F–C–G–Am–F, then I–V–vi–F loop, Am7–Fadd9–C outro) with a clear intro/verse/chorus/outro map; structurally sound but formulaic, mirroring the 'correct yet flat' character (harmony axis 0.90 vs rhythm 0.54)."
+  }
+ ]
+}
