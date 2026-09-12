@@ -150,13 +150,25 @@
   function setupUi() {
     document.title = "MiiDi Demo — 演示模式";
 
+    // 融合像素字体（与 demo 录屏字幕同款）；加载失败时回退 monospace
+    const fontCss = document.createElement("style");
+    fontCss.textContent = `
+      @font-face {
+        font-family: "Fusion Pixel 12px Monospaced zh_hans";
+        src: url("https://fusion-pixel-font.takwolf.com/fusion-pixel-12px-monospaced-zh_hans.otf.woff2")
+          format("woff2");
+        font-display: swap;
+      }`;
+    document.head.appendChild(fontCss);
+
     const banner = document.createElement("div");
     banner.style.cssText =
       "position:fixed;top:0;left:0;right:0;z-index:9999;display:flex;gap:12px;" +
-      "align-items:center;justify-content:center;background:#1c1c1e;color:#fff;" +
-      "padding:7px 12px;font-size:12px;font-family:inherit;letter-spacing:0.3px;";
+      "align-items:center;justify-content:center;background:#000;color:#fff;" +
+      "border-bottom:2px solid #fff;padding:9px 12px;font-size:12px;" +
+      "font-family:'Fusion Pixel 12px Monospaced zh_hans',monospace;letter-spacing:0.5px;";
     banner.innerHTML =
-      "<span>🎬 演示模式 — 所有数据已预生成，生成过程为模拟回放</span>" +
+      "<span>🎬 演示模式 —— 所有数据已预生成，生成过程为模拟回放</span>" +
       '<a href="https://github.com/YaoSiQian/MiiDi" target="_blank" ' +
       'style="color:#7fd4ff;text-decoration:underline;">查看项目</a>' +
       '<span style="cursor:pointer;opacity:0.7;position:absolute;right:12px;" id="demo-banner-close">✕</span>';
