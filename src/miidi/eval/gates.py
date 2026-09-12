@@ -40,11 +40,32 @@ def gate_balance(ctx: EvaluationContext) -> float:
         if t.is_drum or not t.notes:
             continue
         masses.append(sum(n[1] for n in t.notes))
-    if len(masses) < 2:
-        return 1.0
-    total = sum(masses)
-    smin = min(masses) / total
-    return band(smin, 0.05, 0.10, 1.01, 1.01, floor=0.4)
+    mass_factor = 1.0
+    if len(masses) >= 2:
+        total = sum(masses)
+        smin = min(masses) / total
+        mass_factor = band(smin, 0.05, 0.10, 1.01, 1.01, floor=0.4)
+    return mass_factor * _core_presence_factor(ctx)
+
+
+# 每缺一条必需核心轨乘上的惩罚系数（E1 实验发现删旋律轨曾出现"删轨反升"盲区，
+# 此检查是其修复闭环的一部分）
+_CORE_MISSING_PENALTY = 0.6
+_MIN_CORE_NOTES = 4
+
+
+def _core_presence_factor(ctx: EvaluationContext) -> float:
+    required = ["melody", "bass"]
+    has_drum_track = any(t.is_drum for t in ctx.comp.tracks)
+    if ctx.defaults.drum_patterns and has_drum_track:
+        # 风格期望鼓且曲中带鼓轨时才要求其实质内容；完全不含鼓轨视为
+        # prompt 驱动的织体选择（如 "just piano and vocals"），不惩罚
+        required.append("drums")
+    missing = 0
+    for role in required:
+        if not any(t.role == role and len(t.notes) >= _MIN_CORE_NOTES for t in ctx.comp.tracks):
+            missing += 1
+    return _CORE_MISSING_PENALTY**missing
 
 
 def _pctl(sorted_xs: list[int], q: float) -> float:

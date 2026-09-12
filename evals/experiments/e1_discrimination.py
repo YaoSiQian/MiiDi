@@ -14,6 +14,9 @@ class DegradationOp(Enum):
     REMOVE_TRACK = "remove_track"
     SCATTER_ONSET = "scatter_onset"
     REPEAT_FIRST_BAR = "repeat_first_bar"
+    # 删旋律核心轨：E1 曾发现该退化在总分上"删轨反升"（band 平台区吸收损失），
+    # 是 G_balance 核心轨检查修复闭环对应的盲区探针
+    REMOVE_CORE_TRACK = "remove_core_track"
 
 
 # Which axis each degradation operator should primarily affect
@@ -23,6 +26,8 @@ ATTRIBUTION_TARGETS: dict[DegradationOp, list[tuple[str, float]]] = {
     DegradationOp.REMOVE_TRACK: [("harmony", 0.1), ("voice", 0.1)],
     DegradationOp.SCATTER_ONSET: [("rhythm", 0.2)],
     DegradationOp.REPEAT_FIRST_BAR: [("structure", 0.15), ("rhythm", 0.1)],
+    # 删旋律轨的靶点是 G_balance 门而非某个轴，轴级归因留空
+    DegradationOp.REMOVE_CORE_TRACK: [],
 }
 
 
@@ -50,6 +55,14 @@ def degrade_composition(comp: Composition, op: DegradationOp, seed: int = 42) ->
 
     if op == DegradationOp.REMOVE_TRACK and len(new_tracks) > 1:
         new_tracks = new_tracks[:-1]
+
+    if op == DegradationOp.REMOVE_CORE_TRACK:
+        for i, t in enumerate(new_tracks):
+            if t.role == "melody":
+                del new_tracks[i]
+                break
+        else:
+            new_tracks = [t for t in new_tracks if t.is_drum or t.role != "bass"] or new_tracks
 
     return comp.model_copy(update={"tracks": new_tracks})
 

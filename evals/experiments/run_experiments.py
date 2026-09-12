@@ -33,6 +33,7 @@ OP_LABELS = {
     DegradationOp.REMOVE_TRACK: "remove_track（删除末轨）",
     DegradationOp.SCATTER_ONSET: "scatter_onset（起拍抖动 ±60 tick）",
     DegradationOp.REPEAT_FIRST_BAR: "repeat_first_bar（首小节复制全曲）",
+    DegradationOp.REMOVE_CORE_TRACK: "remove_core_track（删除旋律核心轨）",
 }
 
 

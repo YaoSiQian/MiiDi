@@ -43,25 +43,55 @@ def test_density_extremes():
     assert gate_density(ctx_of(stuffed)) <= 0.6
 
 
+def _melody(role="melody", name="Lead", program=73):
+    return {"name": name, "role": role, "program": program, "notes": list(VARIED)}
+
+
+def _bass():
+    return {
+        "name": "Bass",
+        "role": "bass",
+        "program": 33,
+        "notes": [(b * 1920, 1920, p, 80) for b, p in enumerate([48, 50, 43, 45])],
+    }
+
+
 def test_balance_stub_track_penalized():
-    tracks = [
+    balanced = [_melody(), _bass()]
+    assert gate_balance(ctx_of(balanced)) == 1.0
+    stub = {"name": "Stub", "role": "color", "program": 73, "notes": [(0, 120, 90, 80)]}
+    assert gate_balance(ctx_of(balanced + [stub])) <= 0.7
+
+
+def test_balance_missing_core_track_penalized():
+    # 只有和声轨：缺 melody / bass 核心轨，乘法门必须惩罚（删轨反升盲区的修复）
+    harmony_only = [
         {
-            "name": "A",
+            "name": "Pad",
             "role": "harmony",
             "program": 0,
             "notes": [(b * 1920, 1920, p, 80) for b, p in enumerate([60, 62, 64, 65])],
-        },
-        {
-            "name": "B",
-            "role": "harmony",
-            "program": 0,
-            "notes": [(b * 1920, 1920, p, 80) for b, p in enumerate([67, 69, 71, 72])],
-        },
-        {"name": "Stub", "role": "color", "program": 73, "notes": [(0, 120, 90, 80)]},
+        }
     ]
-    balanced = tracks[:2]
-    assert gate_balance(ctx_of(balanced)) == 1.0
-    assert gate_balance(ctx_of(tracks)) <= 0.7
+    assert gate_balance(ctx_of(harmony_only)) < 1.0
+    # 缺两条核心轨的惩罚应重于缺一条
+    assert gate_balance(ctx_of([_melody(), harmony_only[0]])) > gate_balance(
+        ctx_of(harmony_only)
+    )
+
+
+def test_balance_drums_required_only_when_style_expects_them():
+    from miidi.eval.style import StyleDefaults
+
+    melody_bass = [_melody(), _bass()]
+    pop_defaults = StyleDefaults(drum_patterns={"kick": [0]})
+    classical_defaults = StyleDefaults()
+    # classical 无鼓期望 / pop 但整曲不含鼓轨（prompt 驱动的织体）→ 不惩罚
+    assert gate_balance(ctx_of(melody_bass, classical_defaults)) == 1.0
+    assert gate_balance(ctx_of(melody_bass, pop_defaults)) == 1.0
+    # pop 且带鼓轨但被掏空（<4 音）→ 惩罚
+    gutted_drums = {"name": "Drums", "role": "drums", "is_drum": True, "notes": [(0, 120, 36, 90)]}
+    assert gate_balance(ctx_of(melody_bass + [gutted_drums], pop_defaults)) < 1.0
 
 
 def test_spread_real_vs_fake():
